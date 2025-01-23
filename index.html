@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=
+        , initial-scale=1.0">
+        <title>The Chill Zone</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="script.js"></script>
+        <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/L57zM3xW/headphones.png">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&family=IBM+Plex+Mono:wght@300&family=Inconsolata:wght@200..900&family=Saira+Condensed:wght@200&display=swap" rel="stylesheet">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&family=IBM+Plex+Mono:wght@300&family=Inconsolata:wght@200..900&family=Open+Sans:ital,wght@0,600;1,600&family=Saira+Condensed:wght@200&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+
+        <div id="rainGif">
+            <img src="https://i.pinimg.com/originals/91/95/f4/9195f4dd1b69f90038f627c8af422429.gif" id="rainGifImage">
+        </div>
+
+        <div id="snowGif">
+            <img src="https://64.media.tumblr.com/9a0af59a52e973ef466799b12d1612ec/tumblr_inline_ovx8vzLyv61s9cck3_640.gif" id="snowGifImage">
+        </div>
+
+        <div id="lightningGif">
+            <img src="https://img1.picmix.com/output/stamp/thumb/4/0/2/6/1586204_68556.gif" id="lightningGifImage">
+        </div>
+
+        <div id="blizzardGif">
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eac505fd-b39a-4325-b2b2-74554c915c6f/d6thf5m-14809e46-d300-4ea4-bbcb-270d422fe4b3.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2VhYzUwNWZkLWIzOWEtNDMyNS1iMmIyLTc0NTU0YzkxNWM2ZlwvZDZ0aGY1bS0xNDgwOWU0Ni1kMzAwLTRlYTQtYmJjYi0yNzBkNDIyZmU0YjMuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.xVSN4etwVZekVmovyqH8s9IO83i8Q1ZgNmPokKlsp1Y" id="blizzardGifImage">
+        </div>
+
+
+        <div class="container1">
+            <div class="container2">
+                <div class="hrs_container">
+                    <h1 class="timeNumber" id="hrs">00</h1>
+                </div>
+                
+                <div class="colon">:</div>
+
+                <div class="min_container">
+                    <h1 class="timeNumber" id="min">00</h1>
+                </div>
+
+                <div class="colon">:</div>
+
+                <div class="sec_container">
+                    <h1 class="timeNumber" id="sec">00</h1>
+                </div>
+
+                <div class="ampm_container">
+                    <h1 class="timeNumber" id="ampm">00</h1>
+                </div>
+            </div>
+
+            <div class="timeDescriptionContainer">
+                <div class="hoursDescContainer">
+                    <h1 id="timeDescriptionText">HOURS</h1>
+                </div>
+
+                <div class="minutesDescContainer">
+                    <h1 id="timeDescriptionText">MINUTES</h1>
+                </div>
+
+                <div class="secondsDescContainer">
+                    <h1 id="timeDescriptionText">SECONDS</h1>
+                </div>
+
+                <div class="ampmDescContainer">
+                    <h1 id="timeDescriptionText">AM/PM</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row2container">
+            <div class="particleContainer">
+                <h2 id="particleTitleText">particles</h2>
+
+                <div class="particlesDescriptionTitles">
+                    <h4>Rain 💧</h4>
+                    <h4>Snow ☃️</h4>
+                </div>
+
+                <div class="particleButtonsContainer">
+                    <button id="particlesButtonRain" onclick="enableParticles()">Enable</button>
+                    <button id="particlesButtonSnow" onclick="enableParticles()">Enable</button>
+                </div>
+            </div>
+
+            <div class="weatherContainer">
+                <h2 id="weatherTitleText">weather</h2>
+
+                <div class="weatherDescriptionTitles">
+                    <h4>Storm ⛈️</h4>
+                    <h4>Blizzard ❄</h4>
+                </div>
+
+                <div class="weatherButtonsContainer">
+                    <button id="weatherButtonsStorm" onclick="enableStorm()">Enable</button>
+                    <button id="weatherButtonsBlizzard" onclick="enableBlizzard()">Enable</button>
+                </div>
+            </div>
+
+            <div class="wallpaperContainer">
+                <h2 id="wallpaperTitleText">wallpaper</h2>
+
+                <div class="picNbuttonContainer">
+                    <div class="wallpaperImagePreviews">
+                        <img src="https://i.postimg.cc/3R1Bzp5M/bg1.png" id="bg1Preview" alt="Sunset over a pixelated city">
+                        <img src="https://i.postimg.cc/3NbZxTxn/bg2.png" id="bg2Preview" alt="Studying from the bedroom on a rainy, gloomy day">
+                        <img src="https://i.postimg.cc/MGqxD2zs/Screenshot-2024-12-22-8-37-59-PM.png" id="bg3Preview" alt="Rainy Anime City">
+                        <img src="https://i.postimg.cc/vZx0Dc99/bg4.png" id="bg4Preview" alt="Mountainous landscape with a house on a cliff">
+                    </div>
+
+                    <div class="wallpaperButtonsContainer">
+                        <button id="wallpaperBg1Btn" class="wallpaperButton" onclick="background1Transition()">Chosen</button>
+                        <button id="wallpaperBg2Btn" class="wallpaperButton" onclick="background2Transition()">Choose</button>
+                        <button id="wallpaperBg3Btn" class="wallpaperButton" onclick="background3Transition()">Choose</button>
+                        <button id="wallpaperBg4Btn" class="wallpaperButton">Choose</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footerContainer">
+                <div class=""></div>
+            </div>
+        </footer>
+    </body>
+</html>
