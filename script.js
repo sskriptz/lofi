@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
 
     let hrs = document.getElementById("hrs");
@@ -157,8 +156,11 @@ document.addEventListener("DOMContentLoaded", () => {
         wallpaperBg1Btn.textContent = "Chosen";
         wallpaperBg1Btn.disabled = true;
         wallpaperBg2Btn.disabled = false;
+        wallpaperBg2Btn.textContent = "Choose";
         wallpaperBg3Btn.disabled = false;
+        wallpaperBg3Btn.textContent = "Choose";
         wallpaperBg4Btn.disabled = false;
+        wallpaperBg4Btn.textContent = "Choose";
     }
 
     let wallpaperBg1Btn = document.getElementById("wallpaperBg1Btn");
@@ -175,10 +177,13 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.backgroundImage = "url('https://i.pinimg.com/originals/66/29/ac/6629ac69eee96adbe0880b4f06afdc26.gif')";
     
         wallpaperBg1Btn.disabled = false;
+        wallpaperBg1Btn.textContent = "Choose";
         wallpaperBg2Btn.textContent = "Chosen";
         wallpaperBg2Btn.disabled = true;
         wallpaperBg3Btn.disabled = false;
+        wallpaperBg3Btn.textContent = "Choose";
         wallpaperBg4Btn.disabled = false;
+        wallpaperBg4Btn.textContent = "Choose";
     }
 
     let wallpaperBg2Btn = document.getElementById("wallpaperBg2Btn");
@@ -195,10 +200,13 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.backgroundImage = "url('https://s.widget-club.com/images/YyiR86zpwIMIfrCZoSs4ulVD9RF3/293280da671a76a539b89abbce741e3c/309059649f6c758fb2223a2fea97527d.jpg')";
     
         wallpaperBg1Btn.disabled = false;
+        wallpaperBg1Btn.textContent = "Choose";
         wallpaperBg2Btn.disabled = false;
+        wallpaperBg2Btn.textContent = "Choose";
         wallpaperBg3Btn.textContent = "Chosen";
         wallpaperBg3Btn.disabled = true;
         wallpaperBg4Btn.disabled = false;
+        wallpaperBg4Btn.textContent = "Choose";
     }
 
     let wallpaperBg3Btn = document.getElementById("wallpaperBg3Btn");
@@ -215,8 +223,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.backgroundImage = "url('https://i.postimg.cc/fWGb9PSP/Untitled-design-2.png')";
 
         wallpaperBg1Btn.disabled = false;
+        wallpaperBg1Btn.textContent = "Choose";
         wallpaperBg2Btn.disabled = false;
+        wallpaperBg2Btn.textContent = "Choose";
         wallpaperBg3Btn.disabled = false;
+        wallpaperBg3Btn.textContent = "Choose";
         wallpaperBg4Btn.textContent = "Chosen";
         wallpaperBg4Btn.disabled = true;
     }
@@ -230,19 +241,176 @@ document.addEventListener("DOMContentLoaded", () => {
         var wallpaperBg1Button = document.getElementById("wallpaperBg1Btn");
 
         wallpaperBg1Button.disabled = true;
+
+        wallpaperBg2Btn.textContent = "Choose";
+        wallpaperBg3Btn.textContent = "Choose";
+        wallpaperBg4Btn.textContent = "Choose";
     } else if (document.getElementById("wallpaperBg2Btn").textContent=="Chosen") {
         var wallpaperBg2Button = document.getElementById("wallpaperBg2Btn");
 
         wallpaperBg2Button.disabled = true;
+
+        wallpaperBg1Btn.textContent = "Choose";
+        wallpaperBg3Btn.textContent = "Choose";
+        wallpaperBg4Btn.textContent = "Choose";
     } else if (document.getElementById("wallpaperBg3Btn").textContent=="Chosen") {
         var wallpaperBg3Button = document.getElementById("wallpaperBg3Btn");
 
         wallpaperBg3Button.disabled = true;
+
+        wallpaperBg1Btn.textContent = "Choose";
+        wallpaperBg2Btn.textContent = "Choose";
+        wallpaperBg4Btn.textContent = "Choose";
     } else if (document.getElementById("wallpaperBg4Btn").textContent=="Chosen") {
         var wallpaperBg4Button = document.getElementById("wallpaperBg4Btn");
 
         wallpaperBg4Button.disabled = true;
+
+        wallpaperBg1Btn.textContent = "Choose";
+        wallpaperBg2Btn.textContent = "Choose";
+        wallpaperBg3Btn.textContent = "Choose";
     }
+
+
+    // Audio player code
+
+
+    const songs = [
+        { title: "", artist: "", src: ""},
+        { title: "CARNIVAL", artist: "Kanye West, Ty Dolla $ign", src: "https://www.dropbox.com/scl/fi/jdm2pc5i0z4tssbtf6t2c/12-Carnival.mp3?rlkey=n9ncc8egcnwes2a9bw5660dky&st=cn0g5e0o&raw=1" },
+        { title: "BURN", artist: "Kanye West, Ty Dolla $ign", src: "https://www.dropbox.com/scl/fi/kptzdit2rgx87d1uizdzb/09-Burn.mp3?rlkey=ukc7xnuxbvr1epg27ps2dg5be&st=py6tbav3&raw=1" },
+        { title: "Magnolia", artist: "Playboi Carti", src: "https://www.dropbox.com/scl/fi/91dvrw5bzro2p89fddcyf/spotifydown.com-Magnolia-Playboi-Carti.mp3?rlkey=z6zq0vva6dimgy39ywilvtuwf&st=3l1tw5pz&raw=1" },
+        { title: "IDGAF", artist: "BoyWithUke, blackbear", src: "https://www.dropbox.com/scl/fi/5c858z7y3ouz8nqem6jxd/spotifydown.com-IDGAF-with-blackbear-BoyWithUke.mp3?rlkey=1fa4hysag7ggge2u6sh5nyawh&st=m0l0ao9o&raw=1" },
+        { title: "Save Your Tears", artist: "The Weeknd", src: "https://www.dropbox.com/scl/fi/20acf6hqe3zrbb4ywg9v4/spotifydown.com-Save-Your-Tears-The-Weeknd.mp3?rlkey=klhtvkr7f4wwuzwnui1a2bwzi&st=edx0mba0&raw=1" },
+    ];
+
+    let currentSongIndex = 0;
+    let isAutoplayEnabled = true; // Default to autoplay ON
+    let isDragging = false;
+
+    const audio = document.getElementById("audio");
+    const songTitle = document.getElementById("song-title");
+    const songArtist = document.getElementById("song-artist");
+    const progress = document.getElementById("progress");
+    const progressBar = document.getElementById("progress-bar");
+    const progressThumb = document.getElementById("progress-thumb");
+    const currentTime = document.getElementById("current-time");
+    const totalDuration = document.getElementById("total-duration");
+    const playButton = document.getElementById("play-button");
+    const prevButton = document.getElementById("prev-button");
+    const nextButton = document.getElementById("next-button");
+    const volumeSlider = document.getElementById("volume-slider");
+    const playlistDropdown = document.getElementById("playlist-dropdown");
+    const autoplayButton = document.getElementById("autoplay-button");
+
+    function populatePlaylist() {
+        playlistDropdown.innerHTML = "";
+        songs.forEach((song, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = `${song.title} - ${song.artist}`;
+            playlistDropdown.appendChild(option);
+        });
+    }
+
+    function loadSong(index) {
+        if (index === 0) { // Check if the first item (empty) is selected
+            songTitle.textContent = "Nothing is selected";
+            songArtist.textContent = "";
+            audio.src = ""; // Clear audio source
+            audio.pause();
+            playButton.textContent = "▶";
+            return;
+        }
+    
+        currentSongIndex = index;
+        const song = songs[index];
+        songTitle.textContent = song.title;
+        songArtist.textContent = song.artist;
+        audio.src = song.src;
+        playlistDropdown.value = currentSongIndex; // Update dropdown selection
+        audio.currentTime = 0; // Reset the progress bar
+    
+        audio.play(); // Play the song immediately
+        playButton.textContent = audio.paused ? "▶" : "❚❚";
+    }
+    
+
+    function playPause() {
+        if (audio.paused) {
+            audio.play();
+            playButton.textContent = "❚❚";
+            // Change document title to song title when playing
+            const song = songs[currentSongIndex];
+        } else {
+            audio.pause();
+            playButton.textContent = "▶";
+            // Change document title to "Spotify Clone" when paused
+        }
+    }
+
+    function nextSong() {
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        loadSong(currentSongIndex);
+    }
+
+    function prevSong() {
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        loadSong(currentSongIndex);
+    }
+
+    autoplayButton.addEventListener("click", () => {
+        isAutoplayEnabled = !isAutoplayEnabled;
+        autoplayButton.textContent = `Autoplay: ${isAutoplayEnabled ? "On" : "Off"}`;
+    });
+
+    audio.addEventListener("ended", () => {
+        if (isAutoplayEnabled) {
+            nextSong(); // Go to next song when current ends
+        }
+    });
+
+    playButton.addEventListener("click", playPause);
+    nextButton.addEventListener("click", nextSong);
+    prevButton.addEventListener("click", prevSong);
+
+    playlistDropdown.addEventListener("change", (e) => {
+        loadSong(parseInt(e.target.value)); // Load the selected song
+    });
+
+    audio.addEventListener("timeupdate", () => {
+        progress.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        progressThumb.style.left = `${(audio.currentTime / audio.duration) * 100}%`;
+        currentTime.textContent = formatTime(audio.currentTime);
+        totalDuration.textContent = formatTime(audio.duration);
+    });
+
+    volumeSlider.addEventListener("input", () => {
+        audio.volume = volumeSlider.value;
+    });
+
+    progressBar.addEventListener("click", (e) => {
+        const clickX = e.offsetX;
+        const width = progressBar.clientWidth;
+        audio.currentTime = (clickX / width) * audio.duration;
+
+        playButton.textContent = "❚❚";
+    });
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    }
+
+    window.onload = () => {
+        populatePlaylist();
+        loadSong(0); // Load the first song
+
+        songTitle.textContent = "Nothing is playing";
+    };
+
+
 
     // Update the clock every second
     setInterval(() => {
