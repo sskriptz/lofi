@@ -1,6 +1,7 @@
 # lofi
 
 Calm relaxing place tab to chill in:
+ - Has a live clock
  - Comes with an in-built audio player that comes with different sorts of music
  - Add particle effects to the webpage
  - Change the background image
