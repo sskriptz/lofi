@@ -8,9 +8,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 5.5%;
-    margin-left: 30%;
-    margin-right: 30%;
+    margin-top: 2%;
+    margin-left: 5%;
+    margin-right: calc(50% - 5vw);
     border-radius: 15px;
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
@@ -21,75 +21,79 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 1vw;
 }
 
 .timeDescriptionContainer {
     display: flex;
-    gap: 40px;
+    gap: 2vw;
     justify-content: center;
-    padding-bottom: 4%;
+    padding-bottom: 3%;    
     margin-left: 4%;
 }
 
 .timeNumber {
-    font-size: 50px;
+    font-size: calc(1.7vw + 1.2vh);
     font-family: "Inconsolata", monospace;
 }
 
 #timeDescriptionText {
     display: flex;
-    font-size: 15px;
+    font-size: calc(0.75vw + 0.5vh);
     font-family: "Inconsolata", monospace;
 }
 
 .colon {
-    font-size: 40px;
+    font-size: calc(1.1vw + 0.75vh);
 }
 
 #ampm {
-    font-size: 25px;
+    font-size: calc(0.9vw + 0.65vh);
     margin-left: 65%;
 }
 
 .row2container {
     display: flex;
-    justify-content: center;
-    gap: 4vh;
+    justify-content: left;
+    gap: 1.3%;
+    margin-left: 5%;
+    height: 28vh;
+    margin-top: 1.3%;
 }
 
-/*working on the particle box here*/
-
 .particleContainer {
-    margin-top: 3%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    padding-bottom: 4vh;
-    padding-top: 2vh;
 
     background-color: rgba(255, 255, 255, .7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
 }
 
-
 #particleTitleText {
-    font-size: 25px;
+    font-size: calc(1vw + 0.8vh);
     font-family: "IBM Plex Mono", serif;
     font-weight: 600;
-    padding-left: 15vh;
-    padding-right: 15vh;
+    margin-left: 8.7vw;
+    margin-right: 8.7vw;
+    margin-top: 0;
 }
 
 #particlesButtonRain {
     border: none;
     background-color: transparent;
-    border-radius: 5px;
-    font-size: 15px;
-    padding: 10px;
+    border-radius: 15px;
+    font-size: calc(0.7vw + 0.7vh);
+    padding: 0.8vw;
+}
+
+#particlesButtonRain:hover {
+    animation-name: particlesButtonRain-hover;
+    animation-fill-mode: forwards;
+    cursor: pointer;
 }
 
 #particlesButtonRain:disabled {
@@ -107,34 +111,26 @@ body {
     }
 }
 
-#particlesButtonRain:hover {
-    animation-name: particlesButtonRain-hover;
-    animation-fill-mode: forwards;
-    cursor: pointer;
-}
-
 #rainGif {
     visibility: hidden;
-    position: fixed; /* Keeps it fixed to the viewport */
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* 100% of the viewport width */
-    height: 100vh; /* 100% of the viewport height */
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: center; /* Center the GIF horizontally */
-    align-items: center; /* Center the GIF vertically */
-    background-color: rgba(0, 0, 0, 0.2); /* Optional: dark overlay */
-    z-index: 1; /* Highest stacking level */
-    pointer-events: none; /* Allows interactions with elements underneath */
-    margin: 0; /* Remove any unexpected margin */
-    padding: 0; /* Remove unexpected padding */
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    pointer-events: none;
 }
 
 #rainGifImage {
     visibility: hidden;
     width: 300%;
     max-height: 200%;
-    pointer-events: none; /* Prevents blocking interactions */
+    pointer-events: none;
     opacity: 0.8;
 }
 
@@ -142,49 +138,46 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6vh;
-    margin-left: 1vh;
+    gap: 2vw;
 }
 
 .particlesDescriptionTitles {
     display: flex;
     justify-content: center;
     margin-left: 5.3%;
-    gap: 6.5vh;
+    gap: 3vw;
     font-family: "Space Grotesk", sans-serif;
 }
 
 #snowGif {
     visibility: hidden;
-    position: fixed; /* Keeps it fixed to the viewport */
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* 100% of the viewport width */
-    height: 100vh; /* 100% of the viewport height */
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: center; /* Center the GIF horizontally */
-    align-items: center; /* Center the GIF vertically */
-    background-color: rgba(0, 0, 0, 0.15); /* Optional: dark overlay */
-    z-index: 1; /* Highest stacking level */
-    pointer-events: none; /* Allows interactions with elements underneath */
-    margin: 0; /* Remove any unexpected margin */
-    padding: 0; /* Remove unexpected padding */
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    pointer-events: none;
 }
 
 #snowGifImage {
     visibility: hidden;
     width: 300%;
     max-height: 200%;
-    pointer-events: none; /* Prevents blocking interactions */
+    pointer-events: none;
     opacity: 0.5;
 }
 
 #particlesButtonSnow {
     border: none;
     background-color: transparent;
-    border-radius: 5px;
-    font-size: 15px;
-    padding: 10px;
+    border-radius: 15px;
+    font-size: calc(0.7vw + 0.7vh);
+    padding: 0.8vw;
 }
 
 #particlesButtonSnow:hover {
@@ -208,17 +201,12 @@ body {
     }
 }
 
-/* Working on Weather Container here */
-
 .weatherContainer {
-    margin-top: 3%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    padding-bottom: 4vh;
-    padding-top: 2vh;
 
     background-color: rgba(255, 255, 255, .7);
     backdrop-filter: blur(3px);
@@ -226,18 +214,19 @@ body {
 }
 
 #weatherTitleText {
-    font-size: 25px;
+    font-size: calc(1vw + 0.8vh);
     font-family: "IBM Plex Mono", serif;
     font-weight: 600;
-    padding-left: 15vh;
-    padding-right: 15vh;
+    margin-left: 8.7vw;
+    margin-right: 8.7vw;
+    margin-top: 0;
 }
 
 .weatherDescriptionTitles {
     display: flex;
     justify-content: center;
     margin-left: 6%;
-    gap: 6.5vh;
+    gap: 3vw;
     font-family: "Space Grotesk", sans-serif;
 }
 
@@ -245,16 +234,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8vh;
-    margin-left: 0.5vh;
+    gap: 3vw;
 }
 
 #weatherButtonsStorm {
     border: none;
     background-color: transparent;
-    border-radius: 5px;
-    font-size: 15px;
-    padding: 10px;
+    border-radius: 15px;
+    font-size: calc(0.7vw + 0.7vh);
+    padding: 0.8vw;
 }
 
 #weatherButtonsStorm:hover {
@@ -281,9 +269,9 @@ body {
 #weatherButtonsBlizzard {
     border: none;
     background-color: transparent;
-    border-radius: 5px;
-    font-size: 15px;
-    padding: 10px;
+    border-radius: 15px;
+    font-size: calc(0.7vw + 0.7vh);
+    padding: 0.8vw;
 }
 
 #weatherButtonsBlizzard:hover {
@@ -309,16 +297,14 @@ body {
 
 #lightningGif {
     visibility: hidden;
-    position: fixed; /* Keeps it fixed to the viewport */
-    width: 50vh; /* 100% of the viewport width */
-    height: 50vh; /* 100% of the viewport height */
+    position: fixed;
+    width: 50vw;
+    height: 50vh;
     display: flex;
-    justify-content: center; /* Center the GIF horizontally */
-    align-items: center; /* Center the GIF vertically */
-    z-index: 1; /* Highest stacking level */
-    pointer-events: none; /* Allows interactions with elements underneath */
-    margin: 0; /* Remove any unexpected margin */
-    padding: 0; /* Remove unexpected padding */
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    pointer-events: none;
     margin-left: 70%;
 }
 
@@ -327,43 +313,42 @@ body {
     width: 300%;
     max-height: 200%;
     margin-bottom: 70%;
-    pointer-events: none; /* Prevents blocking interactions */
+    pointer-events: none;
 }
 
 #blizzardGif {
     visibility: hidden;
-    position: fixed; /* Keeps it fixed to the viewport */
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* 100% of the viewport width */
-    height: 100vh; /* 100% of the viewport height */
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: center; /* Center the GIF horizontally */
-    align-items: center; /* Center the GIF vertically */
-    background-color: rgba(0, 0, 0, 0.2); /* Optional: dark overlay */
-    z-index: 1; /* Highest stacking level */
-    pointer-events: none; /* Allows interactions with elements underneath */
-    margin: 0; /* Remove any unexpected margin */
-    padding: 0; /* Remove unexpected padding */
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    pointer-events: none;
 }
 
 #blizzardGifImage {
     visibility: hidden;
     width: 300%;
     max-height: 200%;
-    pointer-events: none; /* Prevents blocking interactions */
+    pointer-events: none;
     opacity: 0.4;
 }
 
 .wallpaperContainer {
-    margin-top: 3%;
+    margin-top: 1.3%;
     display: flex;
+    margin-right: calc(50% - 5vw);
+    margin-left: 5%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    padding-bottom: 4vh;
-    padding-top: 2vh;
+    padding-bottom: 0.7%;
 
     background-color: rgba(255, 255, 255, .7);
     backdrop-filter: blur(3px);
@@ -371,31 +356,21 @@ body {
 }
 
 #bg1Preview {
-    height: 70px;
-    width: 70px;
+    height: calc(3vw + 3vh);
+    width: calc(3vw + 3vhh);
     border: 5px solid rgb(41, 38, 38);
     border-radius: 10px;
-    margin-left: 3vh;
+    margin-left: 3vw;
 }
 
-#bg2Preview {
-    height: 70px;
-    width: 70px;
-    border: 5px solid rgb(41, 38, 38);
-    border-radius: 10px;
-}
-#bg3Preview {
-    height: 70px;
-    width: 70px;
+#bg2Preview, #bg3Preview, #bg4Preview {
+    height: calc(3vw + 3vh);
+    width: calc(3vw + 3vh);
     border: 5px solid rgb(41, 38, 38);
     border-radius: 10px;
 }
 
 #bg4Preview {
-    height: 70px;
-    width: 70px;
-    border: 5px solid rgb(41, 38, 38);
-    border-radius: 10px;
     margin-right: 3vh;
 }
 
@@ -409,20 +384,21 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 1.5vh;
-    gap: 17px;
+    gap: 0.6vw;
 }
 
 .wallpaperImagePreviews {
     display: flex;
-    gap: 10px;
+    margin-right: 1vw;
+    gap: 1.4vw;
 }
 
 .wallpaperButton {
     border: none;
     background-color: transparent;
-    border-radius: 5px;
-    font-size: 15px;
-    padding: 10px;
+    border-radius: 15px;
+    font-size: calc(0.75vw + 0.75vh);
+    padding: 1vw;
 }
 
 .wallpaperButton:hover {
@@ -440,7 +416,6 @@ body {
         background-color: transparent;
     }
 
-
     to {
         background-color: rgba(255, 255, 255, .15);
         backdrop-filter: blur(3px);
@@ -448,18 +423,11 @@ body {
 }
 
 #wallpaperTitleText {
-    font-size: 23px;
+    font-size: calc(1vw + 0.8vh);
     font-family: "IBM Plex Mono", serif;
     font-weight: 600;
-    padding-left: 15vh;
-    padding-right: 15vh;
-    margin-bottom: 8%;
-}
-
-.footerContainer {
-    display: flex;
-    justify-content: center;
-    background-color: black;
+    padding-left: 15vw;
+    padding-right: 15vw;
 }
 
 
@@ -471,7 +439,7 @@ body {
     bottom: 0;
     left: 0;
     background: #282828;
-    padding: 20px;
+    padding: 15px 20px 15px 20px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: row;
@@ -643,4 +611,3 @@ body {
         padding: 15px;
     }
 }
-
