@@ -418,6 +418,161 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
+    // To Do List
+
+    const todoList = document.getElementById('todo-list');
+    const saveButton = document.getElementById('save-btn');
+    const addButton = document.getElementById('add-btn');
+    const removeButton = document.getElementById('remove-btn');
+    const selectAllButton = document.getElementById('select-all-btn');
+    
+    // Function to check if the todo list is empty and disable/enable buttons
+    function checkIfEmpty() {
+        const todoItems = todoList.querySelectorAll('.todo-item');
+        
+        // Disable the buttons if there are no items
+        if (todoItems.length === 0) {
+            removeButton.disabled = true;
+            selectAllButton.disabled = true;
+            removeButton.classList.add('disabled');  // Add a class for styling
+            selectAllButton.classList.add('disabled');  // Add a class for styling
+        } else {
+            removeButton.disabled = false;
+            selectAllButton.disabled = false;
+            removeButton.classList.remove('disabled');  // Remove the class
+            selectAllButton.classList.remove('disabled');  // Remove the class
+        }
+    }
+    
+    // Function to create a new todo item
+    function createTodoItem(title = 'New Task', time = '12:00') {
+        const todoItem = document.createElement('div');
+        todoItem.className = 'todo-item';
+        todoItem.draggable = true;
+    
+        todoItem.innerHTML = `
+            <input type="text" value="${title}" />
+            <input type="time" value="${time}" />
+            <input type="checkbox" class="select-task" />
+        `;
+    
+        todoItem.addEventListener('dragstart', () => {
+            todoItem.classList.add('dragging');
+        });
+    
+        todoItem.addEventListener('dragend', () => {
+            todoItem.classList.remove('dragging');
+        });
+    
+        return todoItem;
+    }
+    
+    // Handle drag-and-drop to reorder items
+    todoList.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const draggingItem = document.querySelector('.dragging');
+        const afterElement = getDragAfterElement(todoList, e.clientY);
+        if (afterElement == null) {
+            todoList.appendChild(draggingItem);
+        } else {
+            todoList.insertBefore(draggingItem, afterElement);
+        }
+    });
+    
+    // Get the element after the dragged item based on cursor position
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.todo-item:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+    
+    // Add a new todo item when the "Add" button is clicked
+    addButton.addEventListener('click', () => {
+        todoList.appendChild(createTodoItem());
+        checkIfEmpty(); // Recheck and disable buttons if necessary
+    });
+    
+    // Remove selected items when the "Remove" button is clicked
+    removeButton.addEventListener('click', () => {
+        const selectedItems = todoList.querySelectorAll('.select-task:checked');
+        
+        // Remove the selected items
+        selectedItems.forEach(item => {
+            todoList.removeChild(item.closest('.todo-item'));
+        });
+    
+        // Reset the "Select All" button to "Select All" if no items are checked
+        const checkboxes = todoList.querySelectorAll('.select-task');
+        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        if (!anyChecked) {
+            selectAllButton.textContent = "Select All"; // Reset the button text to "Select All"
+        }
+    
+        removeButton.textContent = "Deleted";
+        setTimeout(() => {
+            removeButton.textContent = "Delete";
+        }, 1000);
+    
+        checkIfEmpty(); // Recheck and disable buttons if necessary
+    });
+    
+    
+    // Toggle select all checkboxes when the "Select All" button is clicked
+    selectAllButton.addEventListener('click', () => {
+        const allChecked = selectAllButton.textContent === "Deselect";
+        const checkboxes = todoList.querySelectorAll('.select-task');
+    
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked;
+        });
+    
+        selectAllButton.textContent = allChecked ? "Select All" : "Deselect";
+    });
+    
+    // Save the todo list and set reminders when the "Save" button is clicked
+    saveButton.addEventListener('click', () => {
+        saveButton.textContent = "Saved";
+        setTimeout(() => {
+            saveButton.textContent = "Save List";
+        }, 1000);
+    
+        const items = [...todoList.querySelectorAll('.todo-item')].map(item => {
+            return {
+                element: item,
+                title: item.querySelector('input[type="text"]').value,
+                time: item.querySelector('input[type="time"]').value
+            };
+        });
+    
+        items.forEach(item => {
+            const now = new Date();
+            const alertTime = new Date();
+            const [hours, minutes] = item.time.split(':');
+            alertTime.setHours(hours, minutes, 0, 0);
+    
+            const timeDifference = alertTime.getTime() - now.getTime();
+            if (timeDifference > 0) {
+                setTimeout(() => {
+                    alert(`Reminder: ${item.title} at ${item.time}`);
+                    item.element.classList.add('disabled');
+                    item.element.querySelector('.select-task').disabled = false;
+                }, timeDifference);
+            }
+        });
+    });
+    
+    // Run the check initially when the page loads to update button states
+    checkIfEmpty();
+    
+
+
 
     // Update the clock every second
     setInterval(() => {
