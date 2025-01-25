@@ -1,23 +1,45 @@
+:root {
+    --tcPadding: max(15vw);
+    --verticalGap: max(2.2vh);
+    --horizontalGap: max(0.8vw);
+}
+
 body {
     background-image: url("https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg");
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-.container1 {
+.mainInner {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 4vw;
+    width: 100%;
+    height: 100%;
+    /* background-color: blue; */
+    transform: translateY(3%);
+}
+
+.column1 {
+    /* background-color: green; */
+}
+
+.timeContainer1 {
+    display: flex;
+    padding-left: var(--tcPadding);
+    padding-right: var(--tcPadding);
     flex-direction: column;
     justify-content: center;
-    margin-top: 2%;
-    margin-left: 5%;
-    margin-right: calc(50% - 5vw);
     border-radius: 15px;
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
+    padding-bottom: 2vh;
 }
 
-.container2 {
+.timeContainer2 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,14 +48,14 @@ body {
 
 .timeDescriptionContainer {
     display: flex;
-    gap: 2vw;
+    gap: 1vw;
     justify-content: center;
     padding-bottom: 3%;    
     margin-left: 4%;
 }
 
 .timeNumber {
-    font-size: calc(1.7vw + 1.2vh);
+    font-size: calc(2vw + 1.5vh);
     font-family: "Inconsolata", monospace;
 }
 
@@ -55,10 +77,9 @@ body {
 .row2container {
     display: flex;
     justify-content: left;
-    gap: 1.3%;
-    margin-left: 5%;
+    gap: var(--horizontalGap);
     height: 28vh;
-    margin-top: 1.3%;
+    margin-top: var(--verticalGap);
 }
 
 .particleContainer {
@@ -67,18 +88,17 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-
     background-color: rgba(255, 255, 255, .7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
+    padding-left: calc(var(--tcPadding)/3);
+    padding-right: calc(var(--tcPadding)/3);
 }
 
 #particleTitleText {
     font-size: calc(1vw + 0.8vh);
     font-family: "IBM Plex Mono", serif;
     font-weight: 600;
-    margin-left: 8.7vw;
-    margin-right: 8.7vw;
     margin-top: 0;
 }
 
@@ -88,6 +108,7 @@ body {
     border-radius: 15px;
     font-size: calc(0.7vw + 0.7vh);
     padding: 0.8vw;
+    max-width: 10vw;
 }
 
 #particlesButtonRain:hover {
@@ -116,8 +137,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -131,22 +152,23 @@ body {
     width: 300%;
     max-height: 200%;
     pointer-events: none;
-    opacity: 0.8;
+    opacity: 0.5;
 }
 
 .particleButtonsContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2vw;
+    gap: 1vw;
 }
 
 .particlesDescriptionTitles {
     display: flex;
     justify-content: center;
-    margin-left: 5.3%;
-    gap: 3vw;
+    gap: 2vw;
     font-family: "Space Grotesk", sans-serif;
+    padding-left: 1vw;
+    font-size: calc(0.7vw + 0.55vh);
 }
 
 #snowGif {
@@ -154,7 +176,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 120vw;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -207,27 +229,26 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-
     background-color: rgba(255, 255, 255, .7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
+    padding-left: calc(var(--tcPadding)/2.8);
+    padding-right: calc(var(--tcPadding)/2.8);
 }
 
 #weatherTitleText {
     font-size: calc(1vw + 0.8vh);
     font-family: "IBM Plex Mono", serif;
     font-weight: 600;
-    margin-left: 8.7vw;
-    margin-right: 8.7vw;
     margin-top: 0;
 }
 
 .weatherDescriptionTitles {
     display: flex;
     justify-content: center;
-    margin-left: 6%;
     gap: 3vw;
     font-family: "Space Grotesk", sans-serif;
+    font-size: calc(0.7vw + 0.55vh);
 }
 
 .weatherButtonsContainer {
@@ -321,7 +342,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 120vw;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -340,19 +361,18 @@ body {
 }
 
 .wallpaperContainer {
-    margin-top: 1.3%;
+    margin-top: var(--verticalGap);
     display: flex;
-    margin-right: calc(50% - 5vw);
-    margin-left: 5%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
     padding-bottom: 0.7%;
-
     background-color: rgba(255, 255, 255, .7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 #bg1Preview {
@@ -384,7 +404,8 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 1.5vh;
-    gap: 0.6vw;
+    gap: 1.3vw;
+    padding-bottom: 1vh;
 }
 
 .wallpaperImagePreviews {
@@ -398,7 +419,7 @@ body {
     background-color: transparent;
     border-radius: 15px;
     font-size: calc(0.75vw + 0.75vh);
-    padding: 1vw;
+    padding: 0.7vw;
 }
 
 .wallpaperButton:hover {
@@ -428,6 +449,154 @@ body {
     font-weight: 600;
     padding-left: 15vw;
     padding-right: 15vw;
+}
+
+
+/* To Do List */
+
+.column2 {
+    display: flex;
+    justify-content: center;
+    /* background-color: red; */
+}
+
+.tdContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #888888;
+    width: 40vw;
+    height: 40vh;
+}
+
+.tdPanel {
+    border: 2px solid #e8eaf6;
+    border-radius: 15px;
+    background-color: #f7f9fc;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+}
+
+.tdHeader {
+    font-size: calc(1vw + 0.7vh);
+    font-family: "IBM Plex Mono", serif;
+    font-weight: 600;
+    text-align: center;
+    color: black;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    background-color: #e0f7fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: grab;
+}
+
+.todo-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.todo-item input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.todo-item input[type="time"] {
+    width: 7rem;
+}
+
+.todo-item.disabled {
+    background-color: #f0f0f0;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.todo-item.disabled .select-task {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.tdContainer button {
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 10px;
+    padding: 1vh 1.5vw;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.tdContainer button:focus {
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.btn-add {
+    background-color: #5dade2;
+    color: white;
+}
+
+.btn-add:hover {
+    background-color: #3498db;
+}
+
+.btn-remove {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-remove:hover {
+    background-color: #c0392b;
+}
+
+.btn-save {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #27ae60;
+}
+
+.btn-select-all {
+    background-color: #f1c40f;
+    color: white;
+}
+
+.btn-select-all:hover {
+    background-color: #f39c12;
+}
+
+/* Add custom scroll bar styling */
+.tdPanel::-webkit-scrollbar {
+    width: 10px;
+}
+
+.tdPanel::-webkit-scrollbar-thumb {
+    background-color: #b2bec3;
+    border-radius: 10px;
+}
+
+.tdPanel::-webkit-scrollbar-track {
+    background-color: #f7f9fc;
+    border-radius: 10px;
 }
 
 
