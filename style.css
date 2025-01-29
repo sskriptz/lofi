@@ -10,7 +10,7 @@ body {
     background-repeat: no-repeat;
 }
 
-.mainInner {
+.mainContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -804,6 +804,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     gap: 3vw;
 }
 
@@ -814,9 +815,10 @@ body {
 }
 
 
-.playlist-dropdown {
-    width: 100%;
-    background-color: #333333;
+.genre-dropdown {
+    width: 30%;
+    height: 5vh;
+    background-color: #a6a1a1;
     color: white;
     padding: 8px;
     border-radius: 6px;
@@ -825,7 +827,7 @@ body {
     transition: background 0.3s ease;
 }
 
-.playlist-dropdown:hover {
-    background: #404040;
+.genre-dropdown:hover {
+    background: #7a7373;
 }
 
