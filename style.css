@@ -8,6 +8,13 @@ body {
     background-image: url("https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg");
     background-size: cover;
     background-repeat: no-repeat;
+    background-size: 250% 130%;
+}
+
+@media (min-width: 700px) {
+    body {
+        background-size: 100% 130%;
+    }
 }
 
 .mainContainer {
@@ -862,9 +869,7 @@ body {
         margin-top: 40vh;
     }
 
-    body {
-        background-size: 600vw 230vh;
-    }
+    
 
     .tdButtons {
         gap: 5px;
@@ -872,7 +877,7 @@ body {
 
     .btn {
         width: 50px;
-        font-size: 11px !important;
+        font-size: 11px;
     }
 
     .row2container {
