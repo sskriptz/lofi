@@ -13,3 +13,4 @@ Future Plans:
  - Add a tasks panel to list things you want to get done (Along with an in-built timer that will pause the music once the timer goes off)
  - Add multiple website themes to select from
  - Somehow find a way to enable cookies to save user preferences
+ - Make the website responsive
