@@ -24,9 +24,9 @@ body {
     flex-wrap: wrap;
 }
 
-.column1 {
-    /* background-color: green; */
-}
+/* .column1 {
+    background-color: green;
+} */
 
 .timeContainer1 {
     display: flex;
@@ -726,7 +726,7 @@ body {
 }
 
 .volume-control input[type="range"] {
-    -webkit-appearance: none;
+    appearance: none;
     width: 7vw;
     height: 6px;
     background: #404040;
