@@ -604,6 +604,11 @@ body {
     border-radius: 10px;
 }
 
+.tdButtons {
+    display: flex; 
+    justify-content: center;
+    gap: 15px;
+}
 
 
 /* audio player */
@@ -843,6 +848,8 @@ body {
     background: #7a7373;
 }
 
+
+
 @media (max-width: 700px) {
 
     .gsContainer {
@@ -857,6 +864,15 @@ body {
 
     body {
         background-size: 600vw 230vh;
+    }
+
+    .tdButtons {
+        gap: 5px;
+    }
+
+    .btn {
+        width: 50px;
+        font-size: 11px !important;
     }
 
 }
