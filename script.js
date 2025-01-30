@@ -487,8 +487,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
         return todoItem;
     }
-    
-
 
 
 
@@ -627,6 +625,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // ------------- END OF TODOLIST JS ---------------
 
 
+
+    // ----------- START OF GENRE DROPDOWN JS ------------
+
+    const genres = [
+        { genre: "Rap" },
+        { genre: "Pop" },
+    ];
+    
+    const genreDropdown = document.getElementById("genre-dropdown");
+    
+    function populateGenreDropdown() {
+        genreDropdown.innerHTML = "";
+        genres.forEach((genre, index) => {  // Changed from `songs` to `genres` and simplified variable names
+            const option = document.createElement("option");  // Corrected the element name to "option"
+            option.value = index;
+            option.textContent = genre.genre;
+            genreDropdown.appendChild(option);
+        });
+    }
+    
+    populateGenreDropdown();
+    
 
 
 
