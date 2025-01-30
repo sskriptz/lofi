@@ -875,4 +875,14 @@ body {
         font-size: 11px !important;
     }
 
+    .row2container {
+        height: 15vh;
+        margin-top: 3vh;
+        gap: 2vw;
+    }
+
+    .wallpaperContainer {
+        margin-top: 3vh;
+    }
+
 }
