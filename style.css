@@ -10,7 +10,7 @@ body {
     background-repeat: no-repeat;
 }
 
-.mainInner {
+.mainContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,14 +18,13 @@ body {
     gap: 4vw;
     width: 100%;
     height: 100%;
-    /* background-color: blue; */
     transform: translateY(3%);
     scale: 0.93;
 }
 
-.column1 {
-    /* background-color: green; */
-}
+/* .column1 {
+    background-color: green;
+} */
 
 .timeContainer1 {
     display: flex;
@@ -458,6 +457,7 @@ body {
 .column2 {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     /* background-color: red; */
 }
 
@@ -601,6 +601,7 @@ body {
 }
 
 
+
 /* audio player */
 
 .audio-player {
@@ -716,7 +717,7 @@ body {
 }
 
 .volume-control input[type="range"] {
-    -webkit-appearance: none;
+    appearance: none;
     width: 7vw;
     height: 6px;
     background: #404040;
@@ -779,5 +780,68 @@ body {
     .audio-player {
         width: 90%;
         padding: 15px;
+    }
+}
+
+.gsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #888888;
+    width: var(--gsContainer);
+    height: 6vh;
+    margin-top: 3vh;
+}
+
+.gsItemsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3vw;
+}
+
+.gsTitle {
+    font-size: calc(1vw + 0.7vh);
+    font-family: "IBM Plex Mono", serif;
+    font-weight: 600;
+}
+
+
+.genre-dropdown {
+    width: 30%;
+    height: 5vh;
+    background-color: #a6a1a1;
+    color: white;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.genre-dropdown:hover {
+    background: #7a7373;
+}
+
+.tdButtons {
+    display: flex; 
+    justify-content: center;
+    gap: 15px;
+}
+
+@media (max-width: 650px) {
+    .tdButtons {
+        gap: 5px;
+    }
+    .btn {
+        width: 50px;
+        font-size: 11px !important;
     }
 }
