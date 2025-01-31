@@ -8,12 +8,32 @@ body {
     background-image: url("https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    background-size: 250% 130%;
+    background-size: 280% 125%;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 500px) {
     body {
-        background-size: 100% 130%;
+        background-size: 260% 130%;
+    }
+}
+@media (min-width: 870px) {
+    body {
+        background-size: 220% 135%;
+    }
+}
+@media (min-width: 955px) {
+    body {
+        background-size: 150% 140%;
+    }
+}
+@media (min-width: 1200px) {
+    body {
+        background-size: 100% 140%;
+    }
+}
+@media (min-width: 2000px) {
+    body {
+        background-size: 100% 100%;
     }
 }
 
@@ -792,7 +812,7 @@ body {
     background: #1DB954;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 955px) {
 
     .audio-player {
         flex-wrap: wrap;
@@ -805,8 +825,6 @@ body {
     }
 
 }
-
-
 
 .gsContainer {
     display: flex;
@@ -822,6 +840,7 @@ body {
     width: var(--gsContainer);
     height: 6vh;
     margin-top: 3vh;
+    margin-bottom: 10vh;
 }
 
 .gsItemsContainer {
@@ -857,7 +876,7 @@ body {
 
 
 
-@media (max-width: 700px) {
+@media (max-width: 955px) {
 
     .gsContainer {
         margin-bottom: 200px;
@@ -869,14 +888,12 @@ body {
         margin-top: 40vh;
     }
 
-    
-
     .tdButtons {
         gap: 5px;
     }
 
     .btn {
-        width: 50px;
+        width: 100px;
         font-size: 11px;
     }
 
