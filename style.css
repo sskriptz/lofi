@@ -8,6 +8,33 @@ body {
     background-image: url("https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg");
     background-size: cover;
     background-repeat: no-repeat;
+    background-size: 280% 125%;
+}
+
+@media (min-width: 500px) {
+    body {
+        background-size: 260% 130%;
+    }
+}
+@media (min-width: 870px) {
+    body {
+        background-size: 220% 135%;
+    }
+}
+@media (min-width: 955px) {
+    body {
+        background-size: 150% 140%;
+    }
+}
+@media (min-width: 1200px) {
+    body {
+        background-size: 100% 140%;
+    }
+}
+@media (min-width: 2000px) {
+    body {
+        background-size: 100% 100%;
+    }
 }
 
 .mainContainer {
@@ -18,8 +45,10 @@ body {
     gap: 4vw;
     width: 100%;
     height: 100%;
+    /* background-color: blue; */
     transform: translateY(3%);
     scale: 0.93;
+    flex-wrap: wrap;
 }
 
 /* .column1 {
@@ -540,8 +569,9 @@ body {
     border-radius: 10px;
     padding: 1vh 1.5vw;
     cursor: pointer;
-    font-size: 1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: calc(0.7vw + 0.7vh);
+    max-width: 10vw;
 }
 
 .tdContainer button:focus {
@@ -552,6 +582,7 @@ body {
 .btn-add {
     background-color: #5dade2;
     color: white;
+    
 }
 
 .btn-add:hover {
@@ -600,6 +631,11 @@ body {
     border-radius: 10px;
 }
 
+.tdButtons {
+    display: flex; 
+    justify-content: center;
+    gap: 15px;
+}
 
 
 /* audio player */
@@ -776,11 +812,18 @@ body {
     background: #1DB954;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 955px) {
+
     .audio-player {
-        width: 90%;
-        padding: 15px;
+        flex-wrap: wrap;
+        gap: 0;
     }
+
+    .controls {
+        margin-left: 12%;
+        margin-top: 1vh;
+    }
+
 }
 
 .gsContainer {
@@ -797,6 +840,7 @@ body {
     width: var(--gsContainer);
     height: 6vh;
     margin-top: 3vh;
+    margin-bottom: 10vh;
 }
 
 .gsItemsContainer {
@@ -830,18 +874,37 @@ body {
     background: #7a7373;
 }
 
-.tdButtons {
-    display: flex; 
-    justify-content: center;
-    gap: 15px;
-}
 
-@media (max-width: 650px) {
+
+@media (max-width: 955px) {
+
+    .gsContainer {
+        margin-bottom: 200px;
+
+    }
+
+    .mainContainer {
+        scale: 1.5;
+        margin-top: 40vh;
+    }
+
     .tdButtons {
         gap: 5px;
     }
+
     .btn {
-        width: 50px;
-        font-size: 11px !important;
+        width: 100px;
+        font-size: 11px;
     }
+
+    .row2container {
+        height: 15vh;
+        margin-top: 3vh;
+        gap: 2vw;
+    }
+
+    .wallpaperContainer {
+        margin-top: 3vh;
+    }
+
 }
