@@ -651,14 +651,14 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 50px;
+    gap: 2vw;
     z-index: 9;
 }
 
 .song-info {
     text-align: center;
     width: 100%;
-    margin-left: 4%;
+    margin-right: 14%;
 }
 
 .song-title {
@@ -681,8 +681,8 @@ body {
     justify-content: center;
     gap: 2vw;
     width: 80%;
-    margin-left: -40px;
-    margin-right: -10px;
+    margin-left: -21%;
+    /* margin-right: 7%; */
 }
 
 .controls button {
@@ -775,7 +775,7 @@ body {
 }
 
 .playlist-dropdown {
-    width: 100%;
+    width: 15vw;
     background-color: #333333;
     color: white;
     padding: 8px;
@@ -783,6 +783,7 @@ body {
     font-size: 14px;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-right: 2vw;
 }
 
 .playlist-dropdown:hover {
@@ -810,6 +811,11 @@ body {
 
 .playlist-controls button:hover {
     background: #1DB954;
+}
+
+#autoplay-button {
+    width: 8vw;
+    margin-right: 7vw;
 }
 
 @media (max-width: 955px) {
@@ -874,6 +880,13 @@ body {
     background: #7a7373;
 }
 
+.s {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
 
 
 @media (max-width: 800px) {
@@ -886,6 +899,8 @@ body {
     .mainContainer {
         scale: 1.5;
         margin-top: 40vh;
+        width :50%;
+        margin-left: 25%;
     }
 
     .tdButtons {
@@ -907,4 +922,28 @@ body {
         margin-top: 3vh;
     }
 
+    .audio-player {
+        /* display: none; */
+    }
+
+}
+
+@media (max-width: 1050px) {
+    #autoplay-button {
+        margin-right: 5vw;
+    }
+}
+
+@media (max-width: 955px) {
+    .audio-player {
+        width: 96%;
+    }
+
+    .playlist-dropdown {
+        width: 50%;
+    }
+
+    #autoplay-button {
+        width: 100%;
+    }
 }
