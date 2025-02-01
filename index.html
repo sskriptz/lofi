@@ -173,20 +173,22 @@
                 </div>
             </div>
     
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar">
-                    <div class="progress" id="progress"></div>
-                    <div class="progress-thumb" id="progress-thumb"></div>
+            <div class="pc-vc-container">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress" id="progress"></div>
+                        <div class="progress-thumb" id="progress-thumb"></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="current-time">0:00</span>
+                        <span id="total-duration">0:00</span>
+                    </div>
                 </div>
-                <div class="time-display">
-                    <span id="current-time">0:00</span>
-                    <span id="total-duration">0:00</span>
+        
+                <div class="volume-control">
+                    <label for="volume-slider">Volume</label>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
                 </div>
-            </div>
-    
-            <div class="volume-control">
-                <label for="volume-slider">Volume</label>
-                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
             </div>
     
             <div class="ap-dd-container">
