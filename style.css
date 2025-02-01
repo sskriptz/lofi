@@ -2,6 +2,7 @@
     --tcPadding: max(15vw);
     --verticalGap: max(2.2vh);
     --horizontalGap: max(0.8vw);
+    --r2c3Paddings: max(6.5vw);
 }
 
 body {
@@ -50,21 +51,16 @@ body {
     background: linear-gradient(90deg, #7341a9, #00ffa6);
     background-size: 200% 100%;
     animation: gradientAnimation 6s infinite ease-in-out;
-    transition: transform 0.5s ease-in-out, backdrop-filter 0.5s ease-in-out, box-shadow 0.5s ease-in-out, filter 0.5s ease-in-out;
+    transition: transform 0.8s ease-in-out, backdrop-filter 0.8s ease-in-out, box-shadow 0.8s ease-in-out, filter 0.8s ease-in-out;
 }
 
 /* Hover Effect */
 .timeContainer1:hover {
     transform: scale(1.01);
     backdrop-filter: blur(2px);
-    box-shadow: 8px 12px #434343;
-    opacity: 0.9;
+    /* box-shadow: 8px 12px #434343; */
     filter: hue-rotate(45deg); /* Smooth color shift */
 }
-
-
-
-
 
 .timeContainer2 {
     display: flex;
@@ -128,7 +124,7 @@ body {
 .particleContainer:hover {
     transform: scale(1.01);
     backdrop-filter: blur(6px);
-    box-shadow: 8px 12px #434343;
+    /* box-shadow: 8px 12px #434343; */
 }
 
 
@@ -279,7 +275,7 @@ body {
 .weatherContainer:hover {
     transform: scale(1.01);
     backdrop-filter: blur(6px);
-    box-shadow: 8px 12px #434343;
+    /* box-shadow: 8px 12px #434343; */
 }
 
 
@@ -428,7 +424,7 @@ body {
 .wallpaperContainer:hover {
     transform: scale(1.01);
     backdrop-filter: blur(6px);
-    box-shadow: 8px 12px #434343;
+    /* box-shadow: 8px 12px #434343; */
 }
 
 
@@ -538,7 +534,7 @@ body {
 .tdContainer:hover {
     transform: scale(1.01);
     backdrop-filter: blur(6px);
-    box-shadow: 8px 12px #434343;
+    /* box-shadow: 8px 12px #434343; */
 }
 
 
@@ -874,10 +870,8 @@ body {
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #000000;
-    width: var(--gsContainer);
     height: 6vh;
-    margin-top: 3vh;
-    margin-bottom: 10vh;
+    margin-top: var(--verticalGap);
 
     /* Smooth transition for both hover and unhover */
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -886,7 +880,7 @@ body {
 .gsContainer:hover {
     transform: scale(1.01);
     backdrop-filter: blur(6px);
-    box-shadow: 8px 12px #434343;
+    /* box-shadow: 8px 12px #434343; */
 }
 
 
@@ -935,6 +929,112 @@ body {
     margin-left: 6vw;
     width: 100%;
     gap: 2vw;
+}
+
+
+.c2-r3-container {
+    display: flex;
+    margin-top: var(--verticalGap);
+    gap: var(--horizontalGap);
+    width: 100%;
+    height: 15vh;
+  }
+  
+
+
+.more-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #000000;
+    padding-left: calc(var(--tcPadding)/3);
+    padding-right: calc(var(--tcPadding)/3);
+    width: auto;
+    flex-grow: 1;
+    padding: 0;
+}
+
+.more-icon {
+    max-width: 25px;
+    max-height: 25px;
+}
+
+.more-btn {
+    border: none;
+    background-color: transparent;
+    border-radius: 15px;
+    font-size: calc(0.9vw + 0.9vh);
+    padding: 7px;
+    margin-right: 0.3vw;
+}
+
+.more-btn:hover {
+    animation-name: more-btn-hover;
+    animation-fill-mode: forwards;
+    cursor: pointer;
+}
+
+@keyframes more-btn-hover {
+    from {
+        background-color: transparent;
+    }
+
+    to {
+        background-color: rgba(255, 255, 255, .15);
+        backdrop-filter: blur(3px);
+    }
+}
+
+
+.settings-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #000000;
+    padding-left: calc(var(--tcPadding)/3);
+    padding-right: calc(var(--tcPadding)/3);
+    width: auto;
+    flex-grow: 1;
+    padding: 0;
+}
+
+.settings-icon {
+    max-width: 25px;
+    max-height: 25px;
+}
+
+.settings-btn {
+    border: none;
+    background-color: transparent;
+    border-radius: 15px;
+    font-size: calc(0.9vw + 0.9vh);
+    padding: 7px;
+    margin-right: 0.3vw;
+}
+
+.settings-btn:hover {
+    animation-name: settings-btn-hover;
+    animation-fill-mode: forwards;
+    cursor: pointer;
+}
+
+@keyframes settings-btn-hover {
+    from {
+        background-color: transparent;
+    }
+
+    to {
+        background-color: rgba(255, 255, 255, .15);
+        backdrop-filter: blur(3px);
+    }
 }
 
 
