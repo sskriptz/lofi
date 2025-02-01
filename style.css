@@ -41,7 +41,17 @@ body {
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
     padding-bottom: 2vh;
+    
+    /* Apply transition here so it works for both hover and unhover smoothly */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.timeContainer1:hover {
+    transform: scale(1.02);
+    backdrop-filter: blur(6px);
+    box-shadow: 8px 12px #666666;
+}
+
 
 .timeContainer2 {
     display: flex;
@@ -92,12 +102,22 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
     padding-left: calc(var(--tcPadding)/3);
     padding-right: calc(var(--tcPadding)/3);
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.particleContainer:hover {
+    transform: scale(1.02);
+    backdrop-filter: blur(6px);
+    box-shadow: 8px 12px #666666;
+}
+
 
 #particleTitleText {
     font-size: calc(1vw + 0.8vh);
@@ -233,12 +253,22 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
     padding-left: calc(var(--tcPadding)/2.8);
     padding-right: calc(var(--tcPadding)/2.8);
+
+    /* Smooth transition applied for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.weatherContainer:hover {
+    transform: scale(1.02);
+    backdrop-filter: blur(6px);
+    box-shadow: 8px 12px #666666;
+}
+
 
 #weatherTitleText {
     font-size: calc(1vw + 0.8vh);
@@ -372,12 +402,22 @@ body {
     align-items: center;
     border-radius: 15px;
     padding-bottom: 0.7%;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #888888;
     padding-bottom: 10px;
     margin-bottom: 10px;
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.wallpaperContainer:hover {
+    transform: scale(1.02);
+    backdrop-filter: blur(6px);
+    box-shadow: 8px 12px #666666;
+}
+
 
 #bg1Preview {
     height: calc(3vw + 3vh);
@@ -477,7 +517,18 @@ body {
     box-shadow: 5px 10px #888888;
     width: 40vw;
     height: 40vh;
+
+    /* Smooth transition for hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.tdContainer:hover {
+    transform: scale(1.02);
+    backdrop-filter: blur(6px);
+    box-shadow: 8px 12px #666666;
+}
+
+
 
 .tdPanel {
     border: 2px solid #e8eaf6;
@@ -814,7 +865,17 @@ body {
     height: 6vh;
     margin-top: 3vh;
     margin-bottom: 10vh;
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.gsContainer:hover {
+    transform: scale(1.02);
+    backdrop-filter: blur(6px);
+    box-shadow: 8px 12px #666666;
+}
+
 
 .gsItemsContainer {
     display: flex;
