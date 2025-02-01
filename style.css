@@ -640,7 +640,7 @@ body {
 .song-info {
     text-align: center;
     width: 20vw;
-    margin-right: -2vw;
+    margin-right: -1vw;
 }
 
 .song-title {
@@ -706,8 +706,8 @@ body {
 .progress-thumb {
     position: absolute;
     top: -3px;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     background: white;
     border-radius: 50%;
     cursor: pointer;
@@ -855,6 +855,13 @@ body {
     flex-basis: 100%;
 }
 
+.pc-vc-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 6vw;
+    width: 100%;
+    gap: 2vw;
+}
 
 
 /* --------START OF MEDIA QUERIES-------------- */
@@ -894,11 +901,6 @@ body {
         margin-top: 3vh;
     }
 
-    .si-c-container {
-        margin: 0 auto;
-        transform: translateX(-10%) !important;
-      }
-
 }
 
 @media (max-width: 1050px) {
@@ -909,7 +911,7 @@ body {
 
 @media (max-width: 955px) {
     .audio-player {
-        justify-content: flex-start;
+        justify-content: center;
     }
 
     .playlist-dropdown {
@@ -918,11 +920,6 @@ body {
 
     #autoplay-button {
         width: 100%;
-    }
-
-    .si-c-container {
-        margin: 0 auto;
-        transform: translateX(-20%);
     }
 
     .song-info {
@@ -934,10 +931,34 @@ body {
         gap: 0;
     }
 
-    .controls {
-        margin-left: 12%;
-        margin-top: 1vh;
+    .pc-vc-container {
+        margin-right: 20%;
+        gap: 10vw;
     }
+
+    .progress-container {
+        margin-right: -20vw;
+        margin-left: -5%;
+    }
+
+    .volume-control {
+        margin-left: 15vw;
+        margin-right: -13vw;
+    }
+
+    #volume-slider {
+        width: 24vw;
+    }
+
+    .controls button {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+    }
+
+    .si-c-container {
+        margin-right: 20vw;
+      }
 }
 
 /* Wallpaper media queries */
