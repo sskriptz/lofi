@@ -956,6 +956,14 @@ body {
     width: auto;
     flex-grow: 1;
     padding: 0;
+
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.more-container:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
 }
 
 .more-icon {
@@ -1004,6 +1012,14 @@ body {
     width: auto;
     flex-grow: 1;
     padding: 0;
+
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.settings-container:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
 }
 
 .settings-icon {
