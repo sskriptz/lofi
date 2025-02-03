@@ -733,76 +733,91 @@ document.addEventListener("DOMContentLoaded", () => {
     const settingsBtn = document.getElementById("settings-btn");
 
     settingsBtn.addEventListener('click', () => {
-
         const settingsPanelOverlay = document.createElement('div');
         settingsPanelOverlay.style.position = "fixed";
         settingsPanelOverlay.style.top = "0";
         settingsPanelOverlay.style.left = "0";
         settingsPanelOverlay.style.width = "100vw";
         settingsPanelOverlay.style.height = "100vh";
-        settingsPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Dark semi-transparent
-        settingsPanelOverlay.style.zIndex = "400"; // Ensure it's behind the panel
+        settingsPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        settingsPanelOverlay.style.zIndex = "400"; 
+        settingsPanelOverlay.style.opacity = "0"; // Start hidden
         settingsPanelOverlay.style.transition = "opacity 0.3s ease-in-out";
-
 
         const settingsPanel = document.createElement('div');
         settingsPanel.style.height = "75vh";
         settingsPanel.style.width = "70vw";
         settingsPanel.style.zIndex = "500";
-        settingsPanel.style.backgroundImage = "url('https://i.postimg.cc/hvwphNzQ/ezgif-com-resize.gif')";
-        settingsPanel.style.backgroundSize = "cover";
-        settingsPanel.style.backgroundPosition = "center";
-        settingsPanel.style.backgroundRepeat = "no-repeat";
         settingsPanel.style.position = "absolute";
         settingsPanel.style.top = "50%";
         settingsPanel.style.left = "50%";
         settingsPanel.style.display = "flex";
         settingsPanel.style.justifyContent = "center";
         settingsPanel.style.alignItems = "center";
-        settingsPanel.style.transform = "translate(-50%, -50%)";
+        settingsPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
         settingsPanel.style.borderRadius = "15px";
-        settingsPanel.style.transition = "transform 0.3s ease-in-out";
+        settingsPanel.style.overflow = "hidden";
         settingsPanel.style.border = "8px solid black";
+        settingsPanel.style.opacity = "0"; // Start hidden
+        settingsPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
 
-
-        settingsPanel.addEventListener("mouseover", () => {
-            settingsPanel.style.transform = "translate(-50%, -50%) scale(1.02)";
-        });
-
-        settingsPanel.addEventListener("mouseout", () => {
-            settingsPanel.style.transform = "translate(-50%, -50%) scale(1)";
-        });
-
-
+        const settingsPanelBg = document.createElement('div');
+        settingsPanelBg.style.position = "absolute";
+        settingsPanelBg.style.top = "0";
+        settingsPanelBg.style.left = "0";
+        settingsPanelBg.style.width = "100%";
+        settingsPanelBg.style.height = "100%";
+        settingsPanelBg.style.backgroundImage = "url('https://i.postimg.cc/hvwphNzQ/ezgif-com-resize.gif')";
+        settingsPanelBg.style.backgroundSize = "cover";
+        settingsPanelBg.style.backgroundPosition = "center";
+        settingsPanelBg.style.backgroundRepeat = "no-repeat";
+        settingsPanelBg.style.filter = "blur(5px)"; 
+        settingsPanelBg.style.zIndex = "-1"; 
 
         const settingsPanelClose = document.createElement('button');
         settingsPanelClose.style.height = "30px";
         settingsPanelClose.style.width = "50px";
-        settingsPanelClose.innerHTML = "&times";
+        settingsPanelClose.innerHTML = "&times;";
         settingsPanelClose.style.fontSize = "20px";
         settingsPanelClose.style.border = "none";
-        settingsPanelClose.style.transition = "transform 0.3s ease-in-out";
         settingsPanelClose.style.cursor = "pointer";
         settingsPanelClose.style.borderRadius = "10px";
-        
-        settingsPanelClose.addEventListener("mouseover", () => {
+        settingsPanelClose.style.zIndex = "1";
+        settingsPanelClose.style.transition = "transform 0.2s ease-in-out";
+
+        settingsPanelClose.addEventListener("mouseenter", () => {
             settingsPanelClose.style.transform = "scale(1.15)";
         });
 
-        settingsPanelClose.addEventListener("mouseout", () => {
+        settingsPanelClose.addEventListener("mouseleave", () => {
             settingsPanelClose.style.transform = "scale(1)";
         });
 
         settingsPanelClose.addEventListener('click', () => {
-            settingsPanel.remove();
-            settingsPanelOverlay.remove();
+            settingsPanel.style.opacity = "0";
+            settingsPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
+            settingsPanelOverlay.style.opacity = "0";
+            
+            // Remove elements after fade-out
+            setTimeout(() => {
+                settingsPanel.remove();
+                settingsPanelOverlay.remove();
+            }, 300);
         });
 
-
-        document.body.appendChild(settingsPanel);
         document.body.appendChild(settingsPanelOverlay);
+        document.body.appendChild(settingsPanel);
+        settingsPanel.appendChild(settingsPanelBg);
         settingsPanel.appendChild(settingsPanelClose);
+
+        // Use a slight delay to allow the transition to take effect
+        setTimeout(() => {
+            settingsPanel.style.opacity = "1";
+            settingsPanel.style.transform = "translate(-50%, -50%) scale(1)";
+            settingsPanelOverlay.style.opacity = "1";
+        }, 10);
     });
+
 
 
     // ----------------- END OF SETTINGS BUTTON JS -----------------
