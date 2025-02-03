@@ -746,10 +746,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         const settingsPanel = document.createElement('div');
-        settingsPanel.style.height = "70vh";
+        settingsPanel.style.height = "75vh";
         settingsPanel.style.width = "70vw";
         settingsPanel.style.zIndex = "500";
-        settingsPanel.style.backgroundColor = "gray";
+        settingsPanel.style.backgroundImage = "url('https://i.postimg.cc/hvwphNzQ/ezgif-com-resize.gif')";
+        settingsPanel.style.backgroundSize = "cover";
+        settingsPanel.style.backgroundPosition = "center";
+        settingsPanel.style.backgroundRepeat = "no-repeat";
         settingsPanel.style.position = "absolute";
         settingsPanel.style.top = "50%";
         settingsPanel.style.left = "50%";
@@ -759,6 +762,7 @@ document.addEventListener("DOMContentLoaded", () => {
         settingsPanel.style.transform = "translate(-50%, -50%)";
         settingsPanel.style.borderRadius = "15px";
         settingsPanel.style.transition = "transform 0.3s ease-in-out";
+        settingsPanel.style.border = "8px solid black";
 
 
         settingsPanel.addEventListener("mouseover", () => {
@@ -782,7 +786,7 @@ document.addEventListener("DOMContentLoaded", () => {
         settingsPanelClose.style.borderRadius = "10px";
         
         settingsPanelClose.addEventListener("mouseover", () => {
-            morePanesettingsPanelCloselClose.style.transform = "scale(1.15)";
+            settingsPanelClose.style.transform = "scale(1.15)";
         });
 
         settingsPanelClose.addEventListener("mouseout", () => {
