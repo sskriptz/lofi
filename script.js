@@ -647,8 +647,161 @@ document.addEventListener("DOMContentLoaded", () => {
     
     populateGenreDropdown();
     
+    // ------------ END OF GENRE DROPDOWN JS ---------------
 
 
+
+    // ---------------- START OF MORE BUTTON JS ---------------
+
+    const moreBtn = document.getElementById("more-btn");
+
+    moreBtn.addEventListener('click', () => {
+
+        const morePanelOverlay = document.createElement('div');
+        morePanelOverlay.style.position = "fixed";
+        morePanelOverlay.style.top = "0";
+        morePanelOverlay.style.left = "0";
+        morePanelOverlay.style.width = "100vw";
+        morePanelOverlay.style.height = "100vh";
+        morePanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Dark semi-transparent
+        morePanelOverlay.style.zIndex = "400"; // Ensure it's behind the panel
+        morePanelOverlay.style.transition = "opacity 0.3s ease-in-out";
+
+
+        const morePanel = document.createElement('div');
+        morePanel.style.height = "70vh";
+        morePanel.style.width = "70vw";
+        morePanel.style.zIndex = "500";
+        morePanel.style.backgroundColor = "black";
+        morePanel.style.position = "absolute";
+        morePanel.style.top = "50%";
+        morePanel.style.left = "50%";
+        morePanel.style.display = "flex";
+        morePanel.style.justifyContent = "center";
+        morePanel.style.alignItems = "center";
+        morePanel.style.transform = "translate(-50%, -50%)";
+        morePanel.style.borderRadius = "15px";
+        morePanel.style.transition = "transform 0.3s ease-in-out";
+
+
+        morePanel.addEventListener("mouseover", () => {
+            morePanel.style.transform = "translate(-50%, -50%) scale(1.02)";
+        });
+
+        morePanel.addEventListener("mouseout", () => {
+            morePanel.style.transform = "translate(-50%, -50%) scale(1)";
+        });
+
+
+
+        const morePanelClose = document.createElement('button');
+        morePanelClose.style.height = "30px";
+        morePanelClose.style.width = "50px";
+        morePanelClose.innerHTML = "&times";
+        morePanelClose.style.fontSize = "20px";
+        morePanelClose.style.border = "none";
+        morePanelClose.style.transition = "transform 0.3s ease-in-out";
+        morePanelClose.style.cursor = "pointer";
+        morePanelClose.style.borderRadius = "10px";
+        
+        morePanelClose.addEventListener("mouseover", () => {
+            morePanelClose.style.transform = "scale(1.15)";
+        });
+
+        morePanelClose.addEventListener("mouseout", () => {
+            morePanelClose.style.transform = "scale(1)";
+        });
+
+        morePanelClose.addEventListener('click', () => {
+            morePanel.remove();
+            morePanelOverlay.remove();
+        });
+
+
+        document.body.appendChild(morePanel);
+        document.body.appendChild(morePanelOverlay);
+        morePanel.appendChild(morePanelClose);
+    });
+
+
+
+    // ------------------ END OF MORE BUTTON JS-------------------
+
+
+    // ------------------ START OF SETTINGS BUTTON JS -----------------
+
+    const settingsBtn = document.getElementById("settings-btn");
+
+    settingsBtn.addEventListener('click', () => {
+
+        const settingsPanelOverlay = document.createElement('div');
+        settingsPanelOverlay.style.position = "fixed";
+        settingsPanelOverlay.style.top = "0";
+        settingsPanelOverlay.style.left = "0";
+        settingsPanelOverlay.style.width = "100vw";
+        settingsPanelOverlay.style.height = "100vh";
+        settingsPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Dark semi-transparent
+        settingsPanelOverlay.style.zIndex = "400"; // Ensure it's behind the panel
+        settingsPanelOverlay.style.transition = "opacity 0.3s ease-in-out";
+
+
+        const settingsPanel = document.createElement('div');
+        settingsPanel.style.height = "70vh";
+        settingsPanel.style.width = "70vw";
+        settingsPanel.style.zIndex = "500";
+        settingsPanel.style.backgroundColor = "gray";
+        settingsPanel.style.position = "absolute";
+        settingsPanel.style.top = "50%";
+        settingsPanel.style.left = "50%";
+        settingsPanel.style.display = "flex";
+        settingsPanel.style.justifyContent = "center";
+        settingsPanel.style.alignItems = "center";
+        settingsPanel.style.transform = "translate(-50%, -50%)";
+        settingsPanel.style.borderRadius = "15px";
+        settingsPanel.style.transition = "transform 0.3s ease-in-out";
+
+
+        settingsPanel.addEventListener("mouseover", () => {
+            settingsPanel.style.transform = "translate(-50%, -50%) scale(1.02)";
+        });
+
+        settingsPanel.addEventListener("mouseout", () => {
+            settingsPanel.style.transform = "translate(-50%, -50%) scale(1)";
+        });
+
+
+
+        const settingsPanelClose = document.createElement('button');
+        settingsPanelClose.style.height = "30px";
+        settingsPanelClose.style.width = "50px";
+        settingsPanelClose.innerHTML = "&times";
+        settingsPanelClose.style.fontSize = "20px";
+        settingsPanelClose.style.border = "none";
+        settingsPanelClose.style.transition = "transform 0.3s ease-in-out";
+        settingsPanelClose.style.cursor = "pointer";
+        settingsPanelClose.style.borderRadius = "10px";
+        
+        settingsPanelClose.addEventListener("mouseover", () => {
+            morePanesettingsPanelCloselClose.style.transform = "scale(1.15)";
+        });
+
+        settingsPanelClose.addEventListener("mouseout", () => {
+            settingsPanelClose.style.transform = "scale(1)";
+        });
+
+        settingsPanelClose.addEventListener('click', () => {
+            settingsPanel.remove();
+            settingsPanelOverlay.remove();
+        });
+
+
+        document.body.appendChild(settingsPanel);
+        document.body.appendChild(settingsPanelOverlay);
+        settingsPanel.appendChild(settingsPanelClose);
+    });
+
+
+    // ----------------- END OF SETTINGS BUTTON JS -----------------
 
 
     // --------------- START OF CLOCK JS ---------------------
