@@ -870,7 +870,7 @@ body {
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #000000;
-    height: 6vh;
+    height: 5vh;
     margin-top: var(--verticalGap);
 
     /* Smooth transition for both hover and unhover */
@@ -937,7 +937,7 @@ body {
     margin-top: var(--verticalGap);
     gap: var(--horizontalGap);
     width: 100%;
-    height: 15vh;
+    height: 8vh;
   }
   
 
