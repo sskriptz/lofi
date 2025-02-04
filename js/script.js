@@ -85,9 +85,14 @@ document.addEventListener("DOMContentLoaded", () => {
         closeButton.onclick = function () {
             document.body.removeChild(greetingDiv);
         };
-    
+
         greetingDiv.appendChild(closeButton);
         document.body.appendChild(greetingDiv);
+
+        let profileNameElement = document.getElementById("username");
+        if (profileNameElement) {
+            profileNameElement.textContent = `${username}`;
+        }
     }
     
     function checkUsername() {
@@ -933,6 +938,119 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ----------------- END OF SETTINGS BUTTON JS -----------------
+
+
+    // ------------------- START OF PROFILE ICON JS -----------------
+
+    const profileIconBtn = document.getElementById("profileIcon");
+
+    profileIconBtn.addEventListener('click', () => {
+        const pfpPanelOverlay = document.createElement('div');
+        pfpPanelOverlay.style.position = "fixed";
+        pfpPanelOverlay.style.top = "0";
+        pfpPanelOverlay.style.left = "0";
+        pfpPanelOverlay.style.width = "100vw";
+        pfpPanelOverlay.style.height = "100vh";
+        pfpPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        pfpPanelOverlay.style.zIndex = "400"; 
+        pfpPanelOverlay.style.opacity = "0"; // Start hidden
+        pfpPanelOverlay.style.transition = "opacity 0.3s ease-in-out";
+
+        const pfpPanel = document.createElement('div');
+        pfpPanel.style.height = "47vh";
+        pfpPanel.style.width = "40vw";
+        pfpPanel.style.zIndex = "500";
+        pfpPanel.style.position = "absolute";
+        pfpPanel.style.top = "50%";
+        pfpPanel.style.left = "50%";
+        pfpPanel.style.display = "flex";
+        pfpPanel.style.flexDirection = "column";
+        pfpPanel.style.alignItems = "center";
+        pfpPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
+        pfpPanel.style.borderRadius = "15px";
+        pfpPanel.style.overflow = "hidden";
+        pfpPanel.style.border = "8px solid black";
+        pfpPanel.style.opacity = "0"; // Start hidden
+        pfpPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+
+        const pfpPanelBg = document.createElement('div');
+        pfpPanelBg.style.position = "absolute";
+        pfpPanelBg.style.top = "0";
+        pfpPanelBg.style.left = "0";
+        pfpPanelBg.style.width = "100%";
+        pfpPanelBg.style.height = "100%";
+        pfpPanelBg.style.backgroundImage = "url('https://img.freepik.com/free-vector/gradient-black-background-with-wavy-lines_23-2149146012.jpg?semt=ais_hybrid')";
+        pfpPanelBg.style.backgroundSize = "cover";
+        pfpPanelBg.style.backgroundPosition = "center";
+        pfpPanelBg.style.backgroundRepeat = "no-repeat";
+        pfpPanelBg.style.zIndex = "-1"; 
+
+        const pfpPanelHeader = document.createElement('div');
+        pfpPanelHeader.style.display = "flex";
+        pfpPanelHeader.style.justifyContent = "right";
+        pfpPanelHeader.style.alignItems = "center";
+        // pfpPanelHeader.style.backgroundColor = "red";
+        pfpPanelHeader.style.width = "100%";
+        pfpPanelHeader.style.marginTop = "0";
+
+        const pfpPanelTitle = document.createElement('h2');
+        pfpPanelTitle.style.fontSize = "25px";
+        pfpPanelTitle.style.color = "white";
+        // pfpPanelTitle.style.backgroundColor = "green";
+        pfpPanelTitle.textContent = "Change Profile Icon";
+        pfpPanelTitle.style.marginRight = "17%";
+        pfpPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
+        pfpPanelTitle.style.marginTop = "2.5vh";
+
+
+        const pfpPanelClose = document.createElement('button');
+        pfpPanelClose.style.height = "30px";
+        pfpPanelClose.style.width = "30px";
+        pfpPanelClose.innerHTML = "&times;";
+        pfpPanelClose.style.fontSize = "20px";
+        pfpPanelClose.style.border = "none";
+        pfpPanelClose.style.cursor = "pointer";
+        pfpPanelClose.style.borderRadius = "10px";
+        pfpPanelClose.style.zIndex = "1";
+        pfpPanelClose.style.transition = "transform 0.2s ease-in-out";
+        pfpPanelClose.style.marginRight = "1vw";
+
+        pfpPanelClose.addEventListener("mouseenter", () => {
+            pfpPanelClose.style.transform = "scale(1.15)";
+        });
+
+        pfpPanelClose.addEventListener("mouseleave", () => {
+            pfpPanelClose.style.transform = "scale(1)";
+        });
+
+        pfpPanelClose.addEventListener('click', () => {
+            pfpPanel.style.opacity = "0";
+            pfpPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
+            pfpPanelOverlay.style.opacity = "0";
+            
+            // Remove elements after fade-out
+            setTimeout(() => {
+                pfpPanel.remove();
+                pfpPanelOverlay.remove();
+            }, 300);
+        });
+
+        document.body.appendChild(pfpPanelOverlay);
+        document.body.appendChild(pfpPanel);
+        pfpPanel.appendChild(pfpPanelBg);
+        pfpPanel.appendChild(pfpPanelHeader);
+        pfpPanelHeader.appendChild(pfpPanelTitle);
+        pfpPanelHeader.appendChild(pfpPanelClose);
+
+        // Use a slight delay to allow the transition to take effect
+        setTimeout(() => {
+            pfpPanel.style.opacity = "1";
+            pfpPanel.style.transform = "translate(-50%, -50%) scale(1)";
+            pfpPanelOverlay.style.opacity = "1";
+        }, 10);
+    });
+
+    // -------------------- END OF PROFILE ICON JS -------------------
 
 
     // --------------- START OF CLOCK JS ---------------------
