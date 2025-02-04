@@ -1,5 +1,116 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+
+    function createPopup() {
+        const popup = document.createElement('div');
+        popup.style.position = 'fixed';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        popup.style.padding = '20px';
+        popup.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        popup.style.color = 'white';
+        popup.style.borderRadius = '10px';
+        popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+        popup.style.textAlign = 'center';
+        popup.style.zIndex = '1000';
+    
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'Enter your username';
+        input.style.padding = '5px';
+        input.style.marginTop = '10px';
+        input.style.borderRadius = '5px';
+        input.style.border = 'none';
+    
+        const button = document.createElement('button');
+        button.textContent = 'Submit';
+        button.style.marginTop = '10px';
+        button.style.padding = '10px';
+        button.style.border = 'none';
+        button.style.backgroundColor = '#4CAF50';
+        button.style.color = 'white';
+        button.style.borderRadius = '5px';
+        button.style.cursor = 'pointer';
+    
+        button.onclick = function () {
+            const username = input.value.trim();
+            if (username) {
+                try {
+                    localStorage.setItem('username', username);
+                    console.log("Username saved:", username);
+                    document.body.removeChild(popup);
+                    showGreeting(username);
+                } catch (error) {
+                    console.error("Error accessing localStorage:", error);
+                    alert("Local storage is not accessible. Try a different browser or disable incognito mode.");
+                }
+            } else {
+                alert('Please enter a valid username.');
+            }
+        };
+    
+        popup.appendChild(input);
+        popup.appendChild(button);
+        document.body.appendChild(popup);
+    }
+    
+    function showGreeting(username) {
+        const greetingDiv = document.createElement('div');
+        greetingDiv.style.position = 'fixed';
+        greetingDiv.style.top = '50%';
+        greetingDiv.style.left = '50%';
+        greetingDiv.style.transform = 'translate(-50%, -50%)';
+        greetingDiv.style.padding = '20px';
+        greetingDiv.style.backgroundColor = 'rgba(0, 128, 0, 0.8)';
+        greetingDiv.style.color = 'white';
+        greetingDiv.style.borderRadius = '10px';
+        greetingDiv.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+        greetingDiv.style.textAlign = 'center';
+        greetingDiv.style.zIndex = '1000';
+        greetingDiv.style.fontSize = '20px';
+    
+        greetingDiv.textContent = `Welcome, ${username}!`;
+    
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.style.marginTop = '10px';
+        closeButton.style.padding = '10px';
+        closeButton.style.border = 'none';
+        closeButton.style.backgroundColor = '#FF6347';
+        closeButton.style.color = 'white';
+        closeButton.style.borderRadius = '5px';
+        closeButton.style.cursor = 'pointer';
+    
+        closeButton.onclick = function () {
+            document.body.removeChild(greetingDiv);
+        };
+    
+        greetingDiv.appendChild(closeButton);
+        document.body.appendChild(greetingDiv);
+    }
+    
+    function checkUsername() {
+        try {
+            const storedUsername = localStorage.getItem('username');
+            console.log("Checking stored username:", storedUsername);
+    
+            if (storedUsername) {
+                showGreeting(storedUsername);
+            } else {
+                createPopup();
+            }
+        } catch (error) {
+            console.error("LocalStorage is blocked:", error);
+            alert("Local storage is not accessible. Please check your browser settings.");
+            createPopup();
+        }
+    }
+    
+    checkUsername();
+    
+    
+
     var rainParticlesCheck = document.getElementById("particlesButtonRain");
     var snowParticlesCheck = document.getElementById("particlesButtonSnow");
     var stormWeatherCheck = document.getElementById("weatherButtonsStorm");
@@ -427,6 +538,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadSong(0); // Load the first song
 
         songTitle.textContent = "Nothing is playing";
+        
     };
 
 
@@ -853,7 +965,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ------------------ END OF CLOCK JS -----------------------
 
-
+    window.addEventListener("load", () => {
+        document.body.style.opacity = "1"; // Trigger fade-in
+    });
 
 
 });
