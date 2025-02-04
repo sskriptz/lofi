@@ -22,13 +22,52 @@ body {
     width: 100%;
     height: 100%;
     /* background-color: blue; */
-    transform: translateY(3%);
-    scale: 0.93;
+    transform: translateY(1vh);
+    scale: 0.9;
     flex-wrap: wrap;
 }
 
 .column1 {
     /* background-color: green; */
+}
+
+.c1-r1-container {
+    display: flex;
+    gap: var(--horizontalGap);
+}
+
+.set-more-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1vh;
+    height: 100%;
+}
+
+.more-container {
+    margin-top: 1vh;
+}
+
+.more-icon, .settings-icon {
+    width: 2vw;
+    background-color: red;
+    border-radius: 10px;
+    padding: 3.515vh 0.517vw 3.515vh 0.517vw;
+    box-shadow: 3.333px 6.666px #000000;
+    cursor: pointer;
+
+    background: linear-gradient(90deg, #7341a9, #00ffa6);
+    background-size: 200% 100%;
+    animation: gradientAnimation 6s infinite ease-in-out;
+    transition: transform 0.8s ease-in-out, backdrop-filter 0.8s ease-in-out, box-shadow 0.8s ease-in-out, filter 0.8s ease-in-out;
+}
+
+.more-icon:hover, .settings-icon:hover {
+    transform: scale(1.04);
+    backdrop-filter: blur(2px);
+    /* box-shadow: 8px 12px #434343; */
+    filter: hue-rotate(45deg); /* Smooth color shift */
 }
 
 @keyframes gradientAnimation {
@@ -107,6 +146,10 @@ body {
 
 .particleContainer {
     display: flex;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    flex-grow: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -114,8 +157,6 @@ body {
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #000000;
-    padding-left: calc(var(--tcPadding)/3);
-    padding-right: calc(var(--tcPadding)/3);
 
     /* Smooth transition for both hover and unhover */
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -258,6 +299,10 @@ body {
 
 .weatherContainer {
     display: flex;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    flex-grow: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -265,8 +310,6 @@ body {
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #000000;
-    padding-left: calc(var(--tcPadding)/2.8);
-    padding-right: calc(var(--tcPadding)/2.8);
 
     /* Smooth transition applied for both hover and unhover */
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -930,129 +973,6 @@ body {
     width: 100%;
     gap: 2vw;
 }
-
-
-.c2-r3-container {
-    display: flex;
-    margin-top: var(--verticalGap);
-    gap: var(--horizontalGap);
-    width: 100%;
-    height: 8vh;
-  }
-  
-
-
-.more-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #000000;
-    padding-left: calc(var(--tcPadding)/3);
-    padding-right: calc(var(--tcPadding)/3);
-    width: auto;
-    flex-grow: 1;
-    padding: 0;
-
-    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.more-container:hover {
-    transform: scale(1.01);
-    backdrop-filter: blur(6px);
-    /* box-shadow: 8px 12px #434343; */
-}
-
-.more-icon {
-    max-width: 25px;
-    max-height: 25px;
-}
-
-.more-btn {
-    border: none;
-    background-color: transparent;
-    border-radius: 15px;
-    font-size: calc(0.9vw + 0.9vh);
-    padding: 7px;
-    margin-right: 0.3vw;
-}
-
-.more-btn:hover {
-    animation-name: more-btn-hover;
-    animation-fill-mode: forwards;
-    cursor: pointer;
-}
-
-@keyframes more-btn-hover {
-    from {
-        background-color: transparent;
-    }
-
-    to {
-        background-color: rgba(255, 255, 255, .15);
-        backdrop-filter: blur(3px);
-    }
-}
-
-
-.settings-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #000000;
-    padding-left: calc(var(--tcPadding)/3);
-    padding-right: calc(var(--tcPadding)/3);
-    width: auto;
-    flex-grow: 1;
-    padding: 0;
-
-    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.settings-container:hover {
-    transform: scale(1.01);
-    backdrop-filter: blur(6px);
-    /* box-shadow: 8px 12px #434343; */
-}
-
-.settings-icon {
-    max-width: 25px;
-    max-height: 25px;
-}
-
-.settings-btn {
-    border: none;
-    background-color: transparent;
-    border-radius: 15px;
-    font-size: calc(0.9vw + 0.9vh);
-    padding: 7px;
-    margin-right: 0.3vw;
-}
-
-.settings-btn:hover {
-    animation-name: settings-btn-hover;
-    animation-fill-mode: forwards;
-    cursor: pointer;
-}
-
-@keyframes settings-btn-hover {
-    from {
-        background-color: transparent;
-    }
-
-    to {
-        background-color: rgba(255, 255, 255, .15);
-        backdrop-filter: blur(3px);
-    }
-}
-
 
 /* --------START OF MEDIA QUERIES-------------- */
 
