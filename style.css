@@ -24,10 +24,9 @@ main {
     align-items: center;
     gap: 4vw;
     width: 100%;
-    height: 100%;
     /* background-color: blue; */
-    transform: translateY(-15vh);
-    scale: 0.95;
+    transform: translateY(-20vh);
+    scale: 0.9;
     flex-wrap: wrap;
 }
 
@@ -990,7 +989,7 @@ main {
     box-shadow: 5px 10px #000000;
     margin-top: 2.5vh;
     width: 20vw;
-    height: 14vh;
+    height: 17vh;
     /* Smooth transition for both hover and unhover */
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
@@ -1002,8 +1001,8 @@ main {
 }
 
 #profileIcon {
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
     margin-top: 3vh;
     cursor: pointer;
     border-radius: 10px;
