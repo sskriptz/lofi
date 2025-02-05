@@ -1,5 +1,260 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+
+    // ------------------ START OF INITIALIZATION CODE FOR NEWCOMERS --------------------
+
+    // Injecting keyframes into the document
+    function injectKeyframes() {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+
+            @keyframes fadeInPopup {
+                from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    injectKeyframes();
+
+    function createBackdrop() {
+        const backdrop = document.createElement("div");
+        backdrop.id = "backdrop";
+        backdrop.style = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 1); /* Fully Pitch Black */
+            z-index: 998;
+            display: block;
+            opacity: 0;
+            animation: fadeIn 0s forwards;
+        `;
+        document.body.appendChild(backdrop);
+    }
+
+    function removeBackdrop() {
+        const backdrop = document.getElementById("backdrop");
+        if (backdrop) {
+            backdrop.style.animation = "fadeOut 0.5s forwards";
+            setTimeout(() => {
+                document.body.removeChild(backdrop);
+            }, 500);
+        }
+    }
+
+    function createUsernamePopup() {
+        createBackdrop(); 
+
+        const popup = document.createElement('div');
+        popup.style = popupContainerStyle();
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'Enter your username';
+        input.style = inputFieldStyle();
+
+        const button = document.createElement('button');
+        button.textContent = 'Submit';
+        button.style = submitButtonStyle('#4CAF50');
+
+        button.onclick = function () {
+            const username = input.value.trim();
+            if (username) {
+                localStorage.setItem('username', username);
+                document.body.removeChild(popup);
+                removeBackdrop(); 
+                showProfileSelection();
+            } else {
+                alert('Please enter a valid username.');
+            }
+        };
+
+        popup.appendChild(input);
+        popup.appendChild(button);
+        document.body.appendChild(popup);
+        popup.style.animation = "fadeInPopup 0.5s forwards";
+    }
+
+    function showProfileSelection() {
+        createBackdrop(); 
+
+        const profilePopup = document.createElement('div');
+        profilePopup.style = profileSelectionPopupStyle();
+
+        const title = document.createElement('h3');
+        title.textContent = 'Select Your Profile Picture';
+        title.style = `color: #333; margin-bottom: 20px;`;
+
+        const imgContainer = document.createElement('div');
+        imgContainer.style = `display: flex; justify-content: center; gap: 15px;`;
+
+        const img1 = createProfileImage("https://static-00.iconduck.com/assets.00/profile-circle-icon-256x256-cm91gqm2.png");
+        const img2 = createProfileImage("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b8d517e6-2c88-453b-8d3a-3f79ff39b7c0/dgmmn3s-46371f14-ee56-425a-9cfc-a2d565bf192f.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2I4ZDUxN2U2LTJjODgtNDUzYi04ZDNhLTNmNzlmZjM5YjdjMFwvZGdtbW4zcy00NjM3MWYxNC1lZTU2LTQyNWEtOWNmYy1hMmQ1NjViZjE5MmYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BI_m7F3HyOW5hmcwfrEFDj63TlBcx5sDXlUgCO6K3YQ");
+        const img3 = createProfileImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfYJBRF3wwyf2PDriXg1j7FqXLEX2MWmOzgQ&s");
+        const img4 = createProfileImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDqGvrz8GusNuKYmFFR6YjHsmkwJiI_AHR3w&s");
+
+        imgContainer.appendChild(img1);
+        imgContainer.appendChild(img2);
+        imgContainer.appendChild(img3);
+        imgContainer.appendChild(img4);
+
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.style = submitButtonStyle('#007bff');
+
+        let selectedImage = null;
+
+        function createProfileImage(src) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.style = profileImageStyle();
+
+            img.onclick = function () {
+                selectedImage = src;
+                img1.style.border = '2px solid transparent';
+                img2.style.border = '2px solid transparent';
+                img3.style.border = '2px solid transparent';
+                img4.style.border = '2px solid transparent';
+                img.style.border = '2px solid blue';
+            };
+
+            return img;
+        }
+
+        saveButton.onclick = function () {
+            if (selectedImage) {
+                localStorage.setItem('profilePicture', selectedImage);
+                document.body.removeChild(profilePopup);
+                removeBackdrop();
+                updateProfileUI();
+            } else {
+                alert('Please select a profile picture.');
+            }
+        };
+
+        profilePopup.appendChild(title);
+        profilePopup.appendChild(imgContainer);
+        profilePopup.appendChild(saveButton);
+        document.body.appendChild(profilePopup);
+        profilePopup.style.animation = "fadeInPopup 0.5s forwards";
+    }
+
+    function updateProfileUI() {
+        const username = localStorage.getItem('username');
+        const profilePicture = localStorage.getItem('profilePicture');
+
+        let usernameElement = document.getElementById("username");
+        let profileImage = document.getElementById("profileIcon");
+
+        if (usernameElement) usernameElement.textContent = `${username}`;
+        if (profileImage && profilePicture) profileImage.src = profilePicture;
+    }
+
+    function checkUserProfile() {
+        const storedUsername = localStorage.getItem('username');
+        const storedProfilePicture = localStorage.getItem('profilePicture');
+
+        if (storedUsername && storedProfilePicture) {
+            updateProfileUI();
+        } else if (storedUsername) {
+            showProfileSelection();
+        } else {
+            createUsernamePopup();
+        }
+    }
+
+    // Styles
+    function popupContainerStyle() {
+        return `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 1);
+            color: black;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeInPopup 0.5s forwards;
+        `;
+    }
+
+    function profileSelectionPopupStyle() {
+        return `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeInPopup 0.5s forwards;
+        `;
+    }
+
+    function submitButtonStyle(color) {
+        return `
+            margin-top: 20px;
+            padding: 15px 25px;
+            background-color: ${color};
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        `;
+    }
+
+    function inputFieldStyle() {
+        return `
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            outline: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease-in-out;
+        `;
+    }
+
+    function profileImageStyle() {
+        return `
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        `;
+    }
+
+    checkUserProfile();
+
+    
+    // ------------------ END OF INITIALIZATION CODE FOR NEWCOMERS -------------------------
+    
+
     var rainParticlesCheck = document.getElementById("particlesButtonRain");
     var snowParticlesCheck = document.getElementById("particlesButtonSnow");
     var stormWeatherCheck = document.getElementById("weatherButtonsStorm");
@@ -427,6 +682,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadSong(0); // Load the first song
 
         songTitle.textContent = "Nothing is playing";
+        
     };
 
 
@@ -647,8 +903,523 @@ document.addEventListener("DOMContentLoaded", () => {
     
     populateGenreDropdown();
     
+    // ------------ END OF GENRE DROPDOWN JS ---------------
 
 
+
+    // ---------------- START OF MORE BUTTON JS ---------------
+
+    const moreBtn = document.getElementById("more-btn");
+
+    moreBtn.addEventListener('click', () => {
+
+        const morePanelOverlay = document.createElement('div');
+        morePanelOverlay.style.position = "fixed";
+        morePanelOverlay.style.top = "0";
+        morePanelOverlay.style.left = "0";
+        morePanelOverlay.style.width = "100vw";
+        morePanelOverlay.style.height = "100vh";
+        morePanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Dark semi-transparent
+        morePanelOverlay.style.zIndex = "400"; // Ensure it's behind the panel
+        morePanelOverlay.style.transition = "opacity 0.3s ease-in-out";
+
+
+        const morePanel = document.createElement('div');
+        morePanel.style.height = "70vh";
+        morePanel.style.width = "70vw";
+        morePanel.style.zIndex = "500";
+        morePanel.style.backgroundColor = "black";
+        morePanel.style.position = "absolute";
+        morePanel.style.top = "50%";
+        morePanel.style.left = "50%";
+        morePanel.style.display = "flex";
+        morePanel.style.justifyContent = "center";
+        morePanel.style.alignItems = "center";
+        morePanel.style.transform = "translate(-50%, -50%)";
+        morePanel.style.borderRadius = "15px";
+        morePanel.style.transition = "transform 0.3s ease-in-out";
+
+
+        morePanel.addEventListener("mouseover", () => {
+            morePanel.style.transform = "translate(-50%, -50%) scale(1.02)";
+        });
+
+        morePanel.addEventListener("mouseout", () => {
+            morePanel.style.transform = "translate(-50%, -50%) scale(1)";
+        });
+
+
+
+        const morePanelClose = document.createElement('button');
+        morePanelClose.style.height = "30px";
+        morePanelClose.style.width = "50px";
+        morePanelClose.innerHTML = "&times";
+        morePanelClose.style.fontSize = "20px";
+        morePanelClose.style.border = "none";
+        morePanelClose.style.transition = "transform 0.3s ease-in-out";
+        morePanelClose.style.cursor = "pointer";
+        morePanelClose.style.borderRadius = "10px";
+        
+        morePanelClose.addEventListener("mouseover", () => {
+            morePanelClose.style.transform = "scale(1.15)";
+        });
+
+        morePanelClose.addEventListener("mouseout", () => {
+            morePanelClose.style.transform = "scale(1)";
+        });
+
+        morePanelClose.addEventListener('click', () => {
+            morePanel.remove();
+            morePanelOverlay.remove();
+        });
+
+
+        document.body.appendChild(morePanel);
+        document.body.appendChild(morePanelOverlay);
+        morePanel.appendChild(morePanelClose);
+    });
+
+
+
+    // ------------------ END OF MORE BUTTON JS-------------------
+
+
+    // ------------------ START OF SETTINGS BUTTON JS -----------------
+
+    const settingsBtn = document.getElementById("settings-btn");
+
+    settingsBtn.addEventListener('click', () => {
+        const settingsPanelOverlay = document.createElement('div');
+        settingsPanelOverlay.style.position = "fixed";
+        settingsPanelOverlay.style.top = "0";
+        settingsPanelOverlay.style.left = "0";
+        settingsPanelOverlay.style.width = "100vw";
+        settingsPanelOverlay.style.height = "100vh";
+        settingsPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        settingsPanelOverlay.style.zIndex = "400"; 
+        settingsPanelOverlay.style.opacity = "0"; // Start hidden
+        settingsPanelOverlay.style.transition = "opacity 0.3s ease-in-out";
+
+        const settingsPanel = document.createElement('div');
+        settingsPanel.style.height = "75vh";
+        settingsPanel.style.width = "70vw";
+        settingsPanel.style.zIndex = "500";
+        settingsPanel.style.position = "absolute";
+        settingsPanel.style.top = "50%";
+        settingsPanel.style.left = "50%";
+        settingsPanel.style.display = "flex";
+        settingsPanel.style.justifyContent = "center";
+        settingsPanel.style.alignItems = "center";
+        settingsPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
+        settingsPanel.style.borderRadius = "15px";
+        settingsPanel.style.overflow = "hidden";
+        settingsPanel.style.border = "8px solid black";
+        settingsPanel.style.opacity = "0"; // Start hidden
+        settingsPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+
+        const settingsPanelBg = document.createElement('div');
+        settingsPanelBg.style.position = "absolute";
+        settingsPanelBg.style.top = "0";
+        settingsPanelBg.style.left = "0";
+        settingsPanelBg.style.width = "100%";
+        settingsPanelBg.style.height = "100%";
+        settingsPanelBg.style.backgroundImage = "url('https://i.postimg.cc/hvwphNzQ/ezgif-com-resize.gif')";
+        settingsPanelBg.style.backgroundSize = "cover";
+        settingsPanelBg.style.backgroundPosition = "center";
+        settingsPanelBg.style.backgroundRepeat = "no-repeat";
+        settingsPanelBg.style.filter = "blur(5px)"; 
+        settingsPanelBg.style.zIndex = "-1"; 
+
+        const settingsPanelClose = document.createElement('button');
+        settingsPanelClose.style.height = "30px";
+        settingsPanelClose.style.width = "50px";
+        settingsPanelClose.innerHTML = "&times;";
+        settingsPanelClose.style.fontSize = "20px";
+        settingsPanelClose.style.border = "none";
+        settingsPanelClose.style.cursor = "pointer";
+        settingsPanelClose.style.borderRadius = "10px";
+        settingsPanelClose.style.zIndex = "1";
+        settingsPanelClose.style.transition = "transform 0.2s ease-in-out";
+
+        settingsPanelClose.addEventListener("mouseenter", () => {
+            settingsPanelClose.style.transform = "scale(1.15)";
+        });
+
+        settingsPanelClose.addEventListener("mouseleave", () => {
+            settingsPanelClose.style.transform = "scale(1)";
+        });
+
+        settingsPanelClose.addEventListener('click', () => {
+            settingsPanel.style.opacity = "0";
+            settingsPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
+            settingsPanelOverlay.style.opacity = "0";
+            
+            // Remove elements after fade-out
+            setTimeout(() => {
+                settingsPanel.remove();
+                settingsPanelOverlay.remove();
+            }, 300);
+        });
+
+        document.body.appendChild(settingsPanelOverlay);
+        document.body.appendChild(settingsPanel);
+        settingsPanel.appendChild(settingsPanelBg);
+        settingsPanel.appendChild(settingsPanelClose);
+
+        // Use a slight delay to allow the transition to take effect
+        setTimeout(() => {
+            settingsPanel.style.opacity = "1";
+            settingsPanel.style.transform = "translate(-50%, -50%) scale(1)";
+            settingsPanelOverlay.style.opacity = "1";
+        }, 10);
+    });
+
+
+
+    // ----------------- END OF SETTINGS BUTTON JS -----------------
+
+
+    // ------------------- START OF PROFILE ICON JS -----------------
+
+    // Load the profile picture from localStorage when the page loads
+window.addEventListener('load', () => {
+    const profileIcon = document.getElementById("profileIcon");
+    const storedProfilePic = localStorage.getItem("profilePic");
+
+    if (storedProfilePic) {
+        profileIcon.src = storedProfilePic;
+    }
+});
+
+const profileIconBtn = document.getElementById("profileIcon");
+
+profileIconBtn.addEventListener('click', () => {
+    const pfpPanelOverlay = document.createElement('div');
+    pfpPanelOverlay.style.position = "fixed";
+    pfpPanelOverlay.style.top = "0";
+    pfpPanelOverlay.style.left = "0";
+    pfpPanelOverlay.style.width = "100vw";
+    pfpPanelOverlay.style.height = "100vh";
+    pfpPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    pfpPanelOverlay.style.zIndex = "400";
+    pfpPanelOverlay.style.opacity = "0";
+    pfpPanelOverlay.style.transition = "opacity 0.3s ease-in-out";
+
+    const pfpPanel = document.createElement('div');
+    pfpPanel.style.height = "47vh";
+    pfpPanel.style.width = "40vw";
+    pfpPanel.style.zIndex = "500";
+    pfpPanel.style.position = "absolute";
+    pfpPanel.style.top = "50%";
+    pfpPanel.style.left = "50%";
+    pfpPanel.style.display = "flex";
+    pfpPanel.style.flexDirection = "column";
+    pfpPanel.style.alignItems = "center";
+    pfpPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
+    pfpPanel.style.borderRadius = "15px";
+    pfpPanel.style.overflow = "hidden";
+    pfpPanel.style.border = "8px solid black";
+    pfpPanel.style.opacity = "0";
+    pfpPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+
+    const pfpPanelBg = document.createElement('div');
+    pfpPanelBg.style.position = "absolute";
+    pfpPanelBg.style.top = "0";
+    pfpPanelBg.style.left = "0";
+    pfpPanelBg.style.width = "100%";
+    pfpPanelBg.style.height = "100%";
+    pfpPanelBg.style.backgroundImage = "url('https://img.freepik.com/free-vector/gradient-black-background-with-wavy-lines_23-2149146012.jpg?semt=ais_hybrid')";
+    pfpPanelBg.style.backgroundSize = "cover";
+    pfpPanelBg.style.backgroundPosition = "center";
+    pfpPanelBg.style.backgroundRepeat = "no-repeat";
+    pfpPanelBg.style.zIndex = "-1";
+
+    const pfpPanelHeader = document.createElement('div');
+    pfpPanelHeader.style.display = "flex";
+    pfpPanelHeader.style.justifyContent = "right";
+    pfpPanelHeader.style.alignItems = "center";
+    pfpPanelHeader.style.width = "100%";
+    pfpPanelHeader.style.padding = "0 15px";
+    pfpPanelHeader.style.marginRight = "2vw";
+
+    const pfpPanelTitle = document.createElement('h2');
+    pfpPanelTitle.style.fontSize = "25px";
+    pfpPanelTitle.style.color = "white";
+    pfpPanelTitle.style.textAlign = "center";
+    pfpPanelTitle.textContent = "Change Profile Picture";
+    pfpPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
+    pfpPanelTitle.style.textAlign = "center";
+    pfpPanelTitle.style.marginRight = "6vw";
+
+    // Close button
+    const closeButton = document.createElement("button");
+    closeButton.textContent = "X";
+    closeButton.style.background = "white";
+    closeButton.style.color = "black";
+    closeButton.style.border = "none";
+    closeButton.style.fontSize = "18px";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.padding = "5px 10px";
+    closeButton.style.borderRadius = "5px";
+
+    closeButton.addEventListener("click", () => {
+        // Apply fade-out effect by changing the opacity first
+        pfpPanel.style.opacity = "0";
+        pfpPanelOverlay.style.opacity = "0";
+    
+        // Wait for the fade-out transition to complete before removing the elements
+        setTimeout(() => {
+            pfpPanelOverlay.remove();
+            pfpPanel.remove();
+        }, 300); // Match the duration of the opacity transition (0.3s)
+    });
+
+    const pfpPanelItemContainer = document.createElement('div');
+    pfpPanelItemContainer.style.display = "flex";
+    pfpPanelItemContainer.style.flexDirection = "column";
+    pfpPanelItemContainer.style.justifyContent = "center";
+    pfpPanelItemContainer.style.alignItems = "center";
+    pfpPanelItemContainer.style.width = "70%";
+    pfpPanelItemContainer.style.height = "27vh";
+    pfpPanelItemContainer.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+    pfpPanelItemContainer.style.border = "5px solid white";
+    pfpPanelItemContainer.style.borderRadius = "10px";
+
+    const pfpPanelRow1Container = document.createElement('div');
+    pfpPanelRow1Container.style.display = "flex";
+    pfpPanelRow1Container.style.justifyContent = "center";
+    pfpPanelRow1Container.style.alignItems = "center";
+    pfpPanelRow1Container.style.width = "90%";
+    pfpPanelRow1Container.style.height = "10vh";
+    // pfpPanelRow1Container.style.backgroundColor = "blue";
+
+    const pfpPanelIcon1 = document.createElement('img');
+    pfpPanelIcon1.style.width = "70px";
+    pfpPanelIcon1.style.height = "70px";
+    pfpPanelIcon1.style.borderRadius = "10px";
+    pfpPanelIcon1.style.padding = "10px";
+    // pfpPanelIcon1.style.border = "5px solid black";
+    pfpPanelIcon1.src = localStorage.getItem("profilePic");
+    pfpPanelIcon1.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+
+    pfpPanelIcon1.addEventListener('mouseenter', () => {
+        pfpPanelIcon1.style.transform = "scale(1.05)"; // Increase scale on hover
+    });
+
+    pfpPanelIcon1.addEventListener('mouseleave', () => {
+        pfpPanelIcon1.style.transform = "scale(1)"; // Reset scale when hover is removed
+    });
+
+    const pfpPanelBtnContainer = document.createElement('div');
+    pfpPanelBtnContainer.style.display = "flex";
+    pfpPanelBtnContainer.style.justifyContent = "center";
+    pfpPanelBtnContainer.style.alignItems = "center";
+    pfpPanelBtnContainer.style.width = "80%";
+    pfpPanelBtnContainer.style.height = "5vh";
+    pfpPanelBtnContainer.style.marginTop = "20px";
+    pfpPanelBtnContainer.style.gap = "1vw";
+    pfpPanelBtnContainer.style.marginBottom = "2.5vh";
+
+    const pfpPanelSelectBtn = document.createElement('button');
+    pfpPanelSelectBtn.style.height = "100%";
+    pfpPanelSelectBtn.style.width = "7vw";
+    pfpPanelSelectBtn.textContent = "Select";
+    pfpPanelSelectBtn.style.backgroundColor = "transparent";
+    pfpPanelSelectBtn.style.borderRadius = "10px";
+    pfpPanelSelectBtn.style.border = "3px solid white";
+    pfpPanelSelectBtn.style.fontSize = "15px";
+    pfpPanelSelectBtn.style.color = "white";
+    pfpPanelSelectBtn.style.cursor = "pointer";
+    pfpPanelSelectBtn.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+
+    pfpPanelSelectBtn.addEventListener('mouseenter', () => {
+        pfpPanelSelectBtn.style.transform = "scale(1.05)"; // Increase scale on hover
+    });
+
+    pfpPanelSelectBtn.addEventListener('mouseleave', () => {
+        pfpPanelSelectBtn.style.transform = "scale(1)"; // Reset scale when hover is removed
+    });
+
+    const pfpPanelUploadBtn = document.createElement('button');
+    pfpPanelUploadBtn.style.height = "100%";
+    pfpPanelUploadBtn.style.width = "8vw";
+    pfpPanelUploadBtn.textContent = "Upload Image";
+    pfpPanelUploadBtn.style.backgroundColor = "transparent";
+    pfpPanelUploadBtn.style.borderRadius = "10px";
+    pfpPanelUploadBtn.style.border = "3px solid white";
+    pfpPanelUploadBtn.style.fontSize = "15px";
+    pfpPanelUploadBtn.style.color = "white";
+    pfpPanelUploadBtn.style.cursor = "pointer";
+    pfpPanelUploadBtn.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+
+    pfpPanelUploadBtn.addEventListener('mouseenter', () => {
+        pfpPanelUploadBtn.style.transform = "scale(1.05)"; // Increase scale on hover
+    });
+
+    pfpPanelUploadBtn.addEventListener('mouseleave', () => {
+        pfpPanelUploadBtn.style.transform = "scale(1)"; // Reset scale when hover is removed
+    });
+
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.style.display = "none";
+
+    pfpPanelUploadBtn.addEventListener("click", () => {
+        pfpPanel.remove();
+
+        const uploadImgPanel = document.createElement('div');
+        uploadImgPanel.style.height = "47vh";
+        uploadImgPanel.style.width = "30vw";
+        uploadImgPanel.style.zIndex = "500";
+        uploadImgPanel.style.position = "absolute";
+        uploadImgPanel.style.top = "50%";
+        uploadImgPanel.style.left = "50%";
+        uploadImgPanel.style.display = "flex";
+        uploadImgPanel.style.flexDirection = "column";
+        uploadImgPanel.style.alignItems = "center";
+        uploadImgPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
+        uploadImgPanel.style.borderRadius = "15px";
+        uploadImgPanel.style.overflow = "hidden";
+        uploadImgPanel.style.border = "8px solid black";
+        uploadImgPanel.style.opacity = "1";
+        uploadImgPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+
+        const uploadPanelBg = document.createElement('div');
+        uploadPanelBg.style.position = "absolute";
+        uploadPanelBg.style.top = "0";
+        uploadPanelBg.style.left = "0";
+        uploadPanelBg.style.width = "100%";
+        uploadPanelBg.style.height = "100%";
+        uploadPanelBg.style.backgroundImage = "url('https://img.freepik.com/free-vector/gradient-black-background-with-wavy-lines_23-2149146012.jpg?semt=ais_hybrid')";
+        uploadPanelBg.style.backgroundSize = "cover";
+        uploadPanelBg.style.backgroundPosition = "center";
+        uploadPanelBg.style.backgroundRepeat = "no-repeat";
+        uploadPanelBg.style.zIndex = "-1";
+
+
+        const uploadImgHeader = document.createElement('div');
+        uploadImgHeader.style.display = "flex";
+        uploadImgHeader.style.justifyContent = "right";
+        uploadImgHeader.style.alignItems = "center";
+        uploadImgHeader.style.width = "100%";
+        uploadImgHeader.style.height = "10vh";
+        // uploadImgHeader.style.backgroundColor = "green";
+        uploadImgHeader.style.padding = "0 15px";
+        uploadImgHeader.style.marginRight = "2vw";
+
+        const uploadPanelTitle = document.createElement('h2');
+        uploadPanelTitle.style.fontSize = "25px";
+        uploadPanelTitle.style.color = "white";
+        uploadPanelTitle.style.textAlign = "center";
+        uploadPanelTitle.textContent = "Upload Picture";
+        uploadPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
+        uploadPanelTitle.style.textAlign = "center";
+        uploadPanelTitle.style.marginRight = "5vw";
+
+        const upCloseBtn = document.createElement("button");
+        upCloseBtn.textContent = "X";
+        upCloseBtn.style.background = "white";
+        upCloseBtn.style.color = "black";
+        upCloseBtn.style.border = "none";
+        upCloseBtn.style.fontSize = "18px";
+        upCloseBtn.style.cursor = "pointer";
+        upCloseBtn.style.padding = "5px 10px";
+        upCloseBtn.style.borderRadius = "5px";
+
+        upCloseBtn.addEventListener("click", () => {
+        // Apply fade-out effect by changing the opacity first
+            uploadImgPanel.style.opacity = "0";
+            pfpPanelOverlay.style.opacity = "0";
+        
+            // Wait for the fade-out transition to complete before removing the elements
+            setTimeout(() => {
+                pfpPanelOverlay.remove();
+                uploadImgPanel.remove();
+            }, 300); // Match the duration of the opacity transition (0.3s)
+        });
+
+
+
+        const uploadImgPlaceholder = document.createElement('img');
+        uploadImgPlaceholder.id = "uploadImgPlaceholder";
+        uploadImgPlaceholder.style.width = "60px";
+        uploadImgPlaceholder.style.height = "60px";
+        uploadImgPlaceholder.style.padding = "10px";
+        uploadImgPlaceholder.style.backgroundColor = "white";
+        uploadImgPlaceholder.src = "https://static-00.iconduck.com/assets.00/upload-icon-2048x2048-eu9n5hco.png";
+        uploadImgPlaceholder.style.border = "5px solid white";
+        uploadImgPlaceholder.style.borderRadius = "10px";
+        // uploadImgPlaceholder.style.marginTop = "27%";
+        uploadImgPlaceholder.style.cursor = "pointer";
+        uploadImgPlaceholder.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+
+        uploadImgPlaceholder.addEventListener('mouseenter', () => {
+            uploadImgPlaceholder.style.transform = "scale(1.05)"; // Increase scale on hover
+        });
+
+        uploadImgPlaceholder.addEventListener('mouseleave', () => {
+            uploadImgPlaceholder.style.transform = "scale(1)"; // Reset scale when hover is removed
+        });
+
+
+        document.body.appendChild(uploadImgPanel);
+        uploadImgPanel.appendChild(uploadImgHeader);
+        uploadImgHeader.appendChild(uploadPanelTitle);
+        uploadImgHeader.appendChild(upCloseBtn);
+        uploadImgPanel.appendChild(uploadPanelBg);
+        uploadImgPanel.appendChild(uploadImgPlaceholder);
+
+
+        uploadImgPlaceholder.addEventListener("click", () => {
+            fileInput.click();
+        });
+    });
+
+    fileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imageUrl = e.target.result;
+                localStorage.setItem("profilePic", imageUrl);
+                document.getElementById("profileIcon").src = imageUrl;
+
+                const uploadImgPlaceholder = document.getElementById("uploadImgPlaceholder");
+                uploadImgPlaceholder.src = imageUrl;
+                uploadImgPlaceholder.border = "none";
+                uploadImgPlaceholder.style.width = "80px";
+                uploadImgPlaceholder.style.height = "80px";
+
+                pfpPanelIcon1.src = imageUrl;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.body.appendChild(pfpPanelOverlay);
+    document.body.appendChild(pfpPanel);
+    pfpPanel.appendChild(pfpPanelBg);
+    pfpPanel.appendChild(pfpPanelHeader);
+    pfpPanelHeader.appendChild(pfpPanelTitle);
+    pfpPanelHeader.appendChild(closeButton);
+    pfpPanel.appendChild(pfpPanelItemContainer);
+    pfpPanelItemContainer.appendChild(pfpPanelRow1Container);
+    pfpPanelRow1Container.appendChild(pfpPanelIcon1);
+    pfpPanel.appendChild(pfpPanelBtnContainer);
+    pfpPanelBtnContainer.appendChild(pfpPanelUploadBtn);
+    pfpPanelBtnContainer.appendChild(pfpPanelSelectBtn);
+    document.body.appendChild(fileInput);
+
+    setTimeout(() => {
+        pfpPanel.style.opacity = "1";
+        pfpPanel.style.transform = "translate(-50%, -50%) scale(1)";
+        pfpPanelOverlay.style.opacity = "1";
+    }, 10);
+});
+
+
+    // -------------------- END OF PROFILE ICON JS -------------------
 
 
     // --------------- START OF CLOCK JS ---------------------
@@ -681,7 +1452,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ------------------ END OF CLOCK JS -----------------------
 
-
+    window.addEventListener("load", () => {
+        document.body.style.opacity = "1"; // Trigger fade-in
+    });
 
 
 });
