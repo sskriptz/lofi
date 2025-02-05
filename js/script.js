@@ -1,119 +1,252 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 
-    function createPopup() {
+    // ------------------ START OF INITIALIZATION CODE FOR NEWCOMERS --------------------
+
+    // Injecting keyframes into the document
+    function injectKeyframes() {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+
+            @keyframes fadeInPopup {
+                from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    injectKeyframes();
+
+    function createBackdrop() {
+        const backdrop = document.createElement("div");
+        backdrop.id = "backdrop";
+        backdrop.style = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 1); /* Fully Pitch Black */
+            z-index: 998;
+            display: block;
+            opacity: 0;
+            animation: fadeIn 0s forwards;
+        `;
+        document.body.appendChild(backdrop);
+    }
+
+    function removeBackdrop() {
+        const backdrop = document.getElementById("backdrop");
+        if (backdrop) {
+            backdrop.style.animation = "fadeOut 0.5s forwards";
+            setTimeout(() => {
+                document.body.removeChild(backdrop);
+            }, 500);
+        }
+    }
+
+    function createUsernamePopup() {
+        createBackdrop(); 
+
         const popup = document.createElement('div');
-        popup.style.position = 'fixed';
-        popup.style.top = '50%';
-        popup.style.left = '50%';
-        popup.style.transform = 'translate(-50%, -50%)';
-        popup.style.padding = '20px';
-        popup.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        popup.style.color = 'white';
-        popup.style.borderRadius = '10px';
-        popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-        popup.style.textAlign = 'center';
-        popup.style.zIndex = '1000';
-    
+        popup.style = popupContainerStyle();
+
         const input = document.createElement('input');
         input.type = 'text';
         input.placeholder = 'Enter your username';
-        input.style.padding = '5px';
-        input.style.marginTop = '10px';
-        input.style.borderRadius = '5px';
-        input.style.border = 'none';
-    
+        input.style = inputFieldStyle();
+
         const button = document.createElement('button');
         button.textContent = 'Submit';
-        button.style.marginTop = '10px';
-        button.style.padding = '10px';
-        button.style.border = 'none';
-        button.style.backgroundColor = '#4CAF50';
-        button.style.color = 'white';
-        button.style.borderRadius = '5px';
-        button.style.cursor = 'pointer';
-    
+        button.style = submitButtonStyle('#4CAF50');
+
         button.onclick = function () {
             const username = input.value.trim();
             if (username) {
-                try {
-                    localStorage.setItem('username', username);
-                    console.log("Username saved:", username);
-                    document.body.removeChild(popup);
-                    showGreeting(username);
-                } catch (error) {
-                    console.error("Error accessing localStorage:", error);
-                    alert("Local storage is not accessible. Try a different browser or disable incognito mode.");
-                }
+                localStorage.setItem('username', username);
+                document.body.removeChild(popup);
+                removeBackdrop(); 
+                showProfileSelection();
             } else {
                 alert('Please enter a valid username.');
             }
         };
-    
+
         popup.appendChild(input);
         popup.appendChild(button);
         document.body.appendChild(popup);
+        popup.style.animation = "fadeInPopup 0.5s forwards";
     }
-    
-    function showGreeting(username) {
-        const greetingDiv = document.createElement('div');
-        greetingDiv.style.position = 'fixed';
-        greetingDiv.style.top = '50%';
-        greetingDiv.style.left = '50%';
-        greetingDiv.style.transform = 'translate(-50%, -50%)';
-        greetingDiv.style.padding = '20px';
-        greetingDiv.style.backgroundColor = 'rgba(0, 128, 0, 0.8)';
-        greetingDiv.style.color = 'white';
-        greetingDiv.style.borderRadius = '10px';
-        greetingDiv.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-        greetingDiv.style.textAlign = 'center';
-        greetingDiv.style.zIndex = '1000';
-        greetingDiv.style.fontSize = '20px';
-    
-        greetingDiv.textContent = `Welcome, ${username}!`;
-    
-        const closeButton = document.createElement('button');
-        closeButton.textContent = 'Close';
-        closeButton.style.marginTop = '10px';
-        closeButton.style.padding = '10px';
-        closeButton.style.border = 'none';
-        closeButton.style.backgroundColor = '#FF6347';
-        closeButton.style.color = 'white';
-        closeButton.style.borderRadius = '5px';
-        closeButton.style.cursor = 'pointer';
-    
-        closeButton.onclick = function () {
-            document.body.removeChild(greetingDiv);
+
+    function showProfileSelection() {
+        createBackdrop(); 
+
+        const profilePopup = document.createElement('div');
+        profilePopup.style = profileSelectionPopupStyle();
+
+        const title = document.createElement('h3');
+        title.textContent = 'Select Your Profile Picture';
+        title.style = `color: #333; margin-bottom: 20px;`;
+
+        const imgContainer = document.createElement('div');
+        imgContainer.style = `display: flex; justify-content: center; gap: 15px;`;
+
+        const img1 = createProfileImage("https://static-00.iconduck.com/assets.00/profile-circle-icon-256x256-cm91gqm2.png");
+        const img2 = createProfileImage("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b8d517e6-2c88-453b-8d3a-3f79ff39b7c0/dgmmn3s-46371f14-ee56-425a-9cfc-a2d565bf192f.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2I4ZDUxN2U2LTJjODgtNDUzYi04ZDNhLTNmNzlmZjM5YjdjMFwvZGdtbW4zcy00NjM3MWYxNC1lZTU2LTQyNWEtOWNmYy1hMmQ1NjViZjE5MmYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BI_m7F3HyOW5hmcwfrEFDj63TlBcx5sDXlUgCO6K3YQ");
+
+        imgContainer.appendChild(img1);
+        imgContainer.appendChild(img2);
+
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.style = submitButtonStyle('#007bff');
+
+        let selectedImage = null;
+
+        function createProfileImage(src) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.style = profileImageStyle();
+
+            img.onclick = function () {
+                selectedImage = src;
+                img1.style.border = '2px solid transparent';
+                img2.style.border = '2px solid transparent';
+                img.style.border = '2px solid blue';
+            };
+
+            return img;
+        }
+
+        saveButton.onclick = function () {
+            if (selectedImage) {
+                localStorage.setItem('profilePicture', selectedImage);
+                document.body.removeChild(profilePopup);
+                removeBackdrop();
+                updateProfileUI();
+            } else {
+                alert('Please select a profile picture.');
+            }
         };
 
-        greetingDiv.appendChild(closeButton);
-        document.body.appendChild(greetingDiv);
+        profilePopup.appendChild(title);
+        profilePopup.appendChild(imgContainer);
+        profilePopup.appendChild(saveButton);
+        document.body.appendChild(profilePopup);
+        profilePopup.style.animation = "fadeInPopup 0.5s forwards";
+    }
 
-        let profileNameElement = document.getElementById("username");
-        if (profileNameElement) {
-            profileNameElement.textContent = `${username}`;
+    function updateProfileUI() {
+        const username = localStorage.getItem('username');
+        const profilePicture = localStorage.getItem('profilePicture');
+
+        let usernameElement = document.getElementById("username");
+        let profileImage = document.getElementById("profileIcon");
+
+        if (usernameElement) usernameElement.textContent = `${username}`;
+        if (profileImage && profilePicture) profileImage.src = profilePicture;
+    }
+
+    function checkUserProfile() {
+        const storedUsername = localStorage.getItem('username');
+        const storedProfilePicture = localStorage.getItem('profilePicture');
+
+        if (storedUsername && storedProfilePicture) {
+            updateProfileUI();
+        } else if (storedUsername) {
+            showProfileSelection();
+        } else {
+            createUsernamePopup();
         }
     }
-    
-    function checkUsername() {
-        try {
-            const storedUsername = localStorage.getItem('username');
-            console.log("Checking stored username:", storedUsername);
-    
-            if (storedUsername) {
-                showGreeting(storedUsername);
-            } else {
-                createPopup();
-            }
-        } catch (error) {
-            console.error("LocalStorage is blocked:", error);
-            alert("Local storage is not accessible. Please check your browser settings.");
-            createPopup();
-        }
+
+    // Styles
+    function popupContainerStyle() {
+        return `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 1);
+            color: black;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeInPopup 0.5s forwards;
+        `;
     }
+
+    function profileSelectionPopupStyle() {
+        return `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeInPopup 0.5s forwards;
+        `;
+    }
+
+    function submitButtonStyle(color) {
+        return `
+            margin-top: 20px;
+            padding: 15px 25px;
+            background-color: ${color};
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        `;
+    }
+
+    function inputFieldStyle() {
+        return `
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            outline: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease-in-out;
+        `;
+    }
+
+    function profileImageStyle() {
+        return `
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        `;
+    }
+
+    checkUserProfile();
+
     
-    checkUsername();
-    
+    // ------------------ END OF INITIALIZATION CODE FOR NEWCOMERS -------------------------
     
 
     var rainParticlesCheck = document.getElementById("particlesButtonRain");
@@ -987,20 +1120,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const pfpPanelHeader = document.createElement('div');
         pfpPanelHeader.style.display = "flex";
-        pfpPanelHeader.style.justifyContent = "right";
+        pfpPanelHeader.style.justifyContent = "space-between";
         pfpPanelHeader.style.alignItems = "center";
         // pfpPanelHeader.style.backgroundColor = "red";
         pfpPanelHeader.style.width = "100%";
-        pfpPanelHeader.style.marginTop = "0";
+        pfpPanelHeader.style.marginTop = "15px";
 
         const pfpPanelTitle = document.createElement('h2');
         pfpPanelTitle.style.fontSize = "25px";
         pfpPanelTitle.style.color = "white";
+        pfpPanelTitle.style.textAlign = "center";
         // pfpPanelTitle.style.backgroundColor = "green";
         pfpPanelTitle.textContent = "Change Profile Icon";
-        pfpPanelTitle.style.marginRight = "17%";
+        pfpPanelTitle.style.margin = "0";
         pfpPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
-        pfpPanelTitle.style.marginTop = "2.5vh";
+        // pfpPanelTitle.style.marginTop = "2.5vh";
+        pfpPanelTitle.style.width = "100%";
+        pfpPanelTitle.style.marginLeft = "48px";
+
+
+        const pfpPanelItemContainer = document.createElement('div');
+        pfpPanelItemContainer.style.display = "flex";
+        pfpPanelItemContainer.style.flexDirection = "column";
+        pfpPanelItemContainer.style.justifyContent = "center";
+        pfpPanelItemContainer.style.alignItems = "center";
+        pfpPanelItemContainer.style.width = "80%";
+        pfpPanelItemContainer.style.height = "27vh";
+        pfpPanelItemContainer.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+        pfpPanelItemContainer.style.border = "5px solid white";
+        pfpPanelItemContainer.style.borderRadius = "10px";
+        pfpPanelItemContainer.style.marginTop = "2.5vh";
+
+
+        const pfpPanelBtnContainer = document.createElement('div');
+        pfpPanelBtnContainer.style.display = "flex";
+        pfpPanelBtnContainer.style.justifyContent = "center";
+        pfpPanelBtnContainer.style.alignItems = "center";
+        pfpPanelBtnContainer.style.width = "80%";
+        pfpPanelBtnContainer.style.height = "5vh";
+        // pfpPanelBtnContainer.style.backgroundColor = "red";
+        pfpPanelBtnContainer.style.marginTop = "20px";
+
+
+        const pfpPanelRow1Container = document.createElement('div');
+        pfpPanelRow1Container.style.display = "flex";
+        pfpPanelRow1Container.style.justifyContent = "center";
+        pfpPanelRow1Container.style.alignItems = "center";
+        pfpPanelRow1Container.style.width = "90%";
+        pfpPanelRow1Container.style.height = "10vh";
+        pfpPanelRow1Container.style.backgroundColor = "blue";
+
+
+        const pfpPanelIcon1 = document.createElement('img');
+        pfpPanelIcon1.style.width = "50px";
+        pfpPanelIcon1.style.height = "50px";
+        pfpPanelIcon1.src = "https://static-00.iconduck.com/assets.00/profile-circle-icon-256x256-cm91gqm2.png";
+        pfpPanelIcon1.style.cursor = "pointer";
+
+        
+        const pfpPanelSelectBtn = document.createElement('button');
+        pfpPanelSelectBtn.style.height = "100%";
+        pfpPanelSelectBtn.style.width = "5vw";
+        pfpPanelSelectBtn.textContent = "Select";
+        pfpPanelSelectBtn.style.backgroundColor = "transparent";
+        pfpPanelSelectBtn.textAlign = "center";
+        pfpPanelSelectBtn.style.borderRadius = "10px";
+        pfpPanelSelectBtn.style.border = "3px solid white";
+        pfpPanelSelectBtn.style.fontSize = "15px";
+        pfpPanelSelectBtn.style.color = "white";
+        pfpPanelSelectBtn.style.fontFamily = "'Inconsolata', monospace;";
+        pfpPanelSelectBtn.style.cursor = "pointer";
 
 
         const pfpPanelClose = document.createElement('button');
@@ -1037,8 +1226,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.body.appendChild(pfpPanelOverlay);
         document.body.appendChild(pfpPanel);
+
         pfpPanel.appendChild(pfpPanelBg);
         pfpPanel.appendChild(pfpPanelHeader);
+        pfpPanel.appendChild(pfpPanelItemContainer);
+        pfpPanel.appendChild(pfpPanelBtnContainer);
+
+        pfpPanelItemContainer.appendChild(pfpPanelRow1Container);
+
+        pfpPanelRow1Container.appendChild(pfpPanelIcon1);
+
+        pfpPanelBtnContainer.appendChild(pfpPanelSelectBtn);
+
         pfpPanelHeader.appendChild(pfpPanelTitle);
         pfpPanelHeader.appendChild(pfpPanelClose);
 
