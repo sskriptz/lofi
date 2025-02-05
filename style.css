@@ -2,39 +2,17 @@
     --tcPadding: max(15vw);
     --verticalGap: max(2.2vh);
     --horizontalGap: max(0.8vw);
+    --r2c3Paddings: max(6.5vw);
 }
 
 body {
     background-image: url("https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    background-size: 280% 125%;
-}
-
-@media (min-width: 500px) {
-    body {
-        background-size: 260% 130%;
-    }
-}
-@media (min-width: 870px) {
-    body {
-        background-size: 220% 135%;
-    }
-}
-@media (min-width: 955px) {
-    body {
-        background-size: 150% 140%;
-    }
-}
-@media (min-width: 1200px) {
-    body {
-        background-size: 100% 140%;
-    }
-}
-@media (min-width: 2000px) {
-    body {
-        background-size: 100% 100%;
-    }
+    background-position: center;
+    cursor: url('https://i.ibb.co/60tk0khC/image-removebg-preview-1-1-optimized.png'), auto;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
 .mainContainer {
@@ -45,16 +23,62 @@ body {
     gap: 4vw;
     width: 100%;
     height: 100%;
-    background-color: blue;
-    transform: translateY(3%);
-    scale: 0.93;
+    /* background-color: blue; */
+    transform: translateY(1vh);
+    scale: 0.9;
     flex-wrap: wrap;
 }
 
 .column1 {
-    background-color: green;
+    /* background-color: green; */
 }
 
+.c1-r1-container {
+    display: flex;
+    gap: var(--horizontalGap);
+}
+
+.set-more-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1vh;
+    height: 100%;
+}
+
+.more-container {
+    margin-top: 1vh;
+}
+
+.more-icon, .settings-icon {
+    width: 2vw;
+    background-color: red;
+    border-radius: 10px;
+    padding: 3.515vh 0.517vw 3.515vh 0.517vw;
+    box-shadow: 3.333px 6.666px #000000;
+    cursor: pointer;
+
+    background: linear-gradient(90deg, #7341a9, #00ffa6);
+    background-size: 200% 100%;
+    animation: gradientAnimation 6s infinite ease-in-out;
+    transition: transform 0.8s ease-in-out, backdrop-filter 0.8s ease-in-out, box-shadow 0.8s ease-in-out, filter 0.8s ease-in-out;
+}
+
+.more-icon:hover, .settings-icon:hover {
+    transform: scale(1.04);
+    backdrop-filter: blur(2px);
+    /* box-shadow: 8px 12px #434343; */
+    filter: hue-rotate(45deg); /* Smooth color shift */
+}
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Base Styles */
 .timeContainer1 {
     display: flex;
     padding-left: var(--tcPadding);
@@ -62,10 +86,21 @@ body {
     flex-direction: column;
     justify-content: center;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #888888;
     padding-bottom: 2vh;
+    box-shadow: 5px 10px #000000;
+
+    background: linear-gradient(90deg, #7341a9, #00ffa6);
+    background-size: 200% 100%;
+    animation: gradientAnimation 6s infinite ease-in-out;
+    transition: transform 0.8s ease-in-out, backdrop-filter 0.8s ease-in-out, box-shadow 0.8s ease-in-out, filter 0.8s ease-in-out;
+}
+
+/* Hover Effect */
+.timeContainer1:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(2px);
+    /* box-shadow: 8px 12px #434343; */
+    filter: hue-rotate(45deg); /* Smooth color shift */
 }
 
 .timeContainer2 {
@@ -113,16 +148,28 @@ body {
 
 .particleContainer {
     display: flex;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    flex-grow: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #888888;
-    padding-left: calc(var(--tcPadding)/3);
-    padding-right: calc(var(--tcPadding)/3);
+    box-shadow: 5px 10px #000000;
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.particleContainer:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
+}
+
 
 #particleTitleText {
     font-size: calc(1vw + 0.8vh);
@@ -254,16 +301,28 @@ body {
 
 .weatherContainer {
     display: flex;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+    flex-grow: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #888888;
-    padding-left: calc(var(--tcPadding)/2.8);
-    padding-right: calc(var(--tcPadding)/2.8);
+    box-shadow: 5px 10px #000000;
+
+    /* Smooth transition applied for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.weatherContainer:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
+}
+
 
 #weatherTitleText {
     font-size: calc(1vw + 0.8vh);
@@ -397,12 +456,22 @@ body {
     align-items: center;
     border-radius: 15px;
     padding-bottom: 0.7%;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #888888;
+    box-shadow: 5px 10px #000000;
     padding-bottom: 10px;
     margin-bottom: 10px;
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.wallpaperContainer:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
+}
+
 
 #bg1Preview {
     height: calc(3vw + 3vh);
@@ -499,10 +568,21 @@ body {
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #888888;
+    box-shadow: 5px 10px #000000;
     width: 40vw;
-    height: 40vh;
+    height: 38vh;
+
+    /* Smooth transition for hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.tdContainer:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
+}
+
+
 
 .tdPanel {
     border: 2px solid #e8eaf6;
@@ -651,14 +731,21 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 50px;
+    gap: 2vw;
     z-index: 9;
+}
+
+.si-c-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .song-info {
     text-align: center;
-    width: 100%;
-    margin-left: 4%;
+    width: 20vw;
+    margin-right: -1vw;
 }
 
 .song-title {
@@ -680,9 +767,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 2vw;
-    width: 80%;
-    margin-left: -40px;
-    margin-right: -10px;
+    margin-right: -8vw;
 }
 
 .controls button {
@@ -702,7 +787,8 @@ body {
 }
 
 .progress-container {
-    width: 100%;
+    width: 80%;
+    margin-left: 10%;
 }
 
 .progress-bar {
@@ -725,8 +811,8 @@ body {
 .progress-thumb {
     position: absolute;
     top: -3px;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     background: white;
     border-radius: 50%;
     cursor: pointer;
@@ -775,7 +861,7 @@ body {
 }
 
 .playlist-dropdown {
-    width: 100%;
+    width: 15vw;
     background-color: #333333;
     color: white;
     padding: 8px;
@@ -783,6 +869,7 @@ body {
     font-size: 14px;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-right: 2vw;
 }
 
 .playlist-dropdown:hover {
@@ -812,18 +899,9 @@ body {
     background: #1DB954;
 }
 
-@media (max-width: 955px) {
-
-    .audio-player {
-        flex-wrap: wrap;
-        gap: 0;
-    }
-
-    .controls {
-        margin-left: 12%;
-        margin-top: 1vh;
-    }
-
+#autoplay-button {
+    width: 9vw;
+    margin-right: 7vw;
 }
 
 .gsContainer {
@@ -836,12 +914,20 @@ body {
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #888888;
-    width: var(--gsContainer);
-    height: 6vh;
-    margin-top: 3vh;
-    margin-bottom: 10vh;
+    box-shadow: 5px 10px #000000;
+    height: 5vh;
+    margin-top: var(--verticalGap);
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.gsContainer:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
+}
+
 
 .gsItemsContainer {
     display: flex;
@@ -874,6 +960,93 @@ body {
     background: #7a7373;
 }
 
+.ap-dd-container {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-basis: 100%;
+}
+
+.pc-vc-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 6vw;
+    width: 100%;
+    gap: 2vw;
+}
+
+.c2-r3-container {
+    display: flex;
+    justify-content: left;
+    gap: var(--horizontalGap);
+    height: 31.3vh;
+    margin-top: 2.4vh;
+    margin-bottom: 1.5vh;
+}
+
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #000000;
+    margin-top: 2.5vh;
+    width: 20vw;
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.profileContainer:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
+}
+
+#profileIcon {
+    width: 90px;
+    height: 90px;
+    margin-top: 3vh;
+    cursor: pointer;
+    border-radius: 10px;
+    /* border: 5px solid black; */
+    transition: transform 0.3s ease-in-out;
+}
+
+#profileIcon:hover {
+    transform: scale(1.05);
+}
+
+#username {
+    font-size: 30px;
+    font-family: "Inconsolata", monospace;
+    margin-top: 1vh;
+    cursor: pointer;
+}
+
+.c2r3-square-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #000000;
+    margin-top: 2.5vh;
+}
+
+/* --------START OF MEDIA QUERIES-------------- */
+
 
 
 @media (max-width: 800px) {
@@ -886,6 +1059,8 @@ body {
     .mainContainer {
         scale: 1.5;
         margin-top: 40vh;
+        width :50%;
+        margin-left: 25%;
     }
 
     .tdButtons {
@@ -908,3 +1083,63 @@ body {
     }
 
 }
+
+@media (max-width: 1050px) {
+    #autoplay-button {
+        margin-right: 5vw;
+    }
+}
+
+@media (max-width: 955px) {
+    .audio-player {
+        justify-content: center;
+    }
+
+    .playlist-dropdown {
+        width: 100%;
+    }
+
+    #autoplay-button {
+        width: 100%;
+    }
+
+    .song-info {
+        width: 230px;
+    }
+
+    .audio-player {
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    .pc-vc-container {
+        margin-right: 20%;
+        gap: 10vw;
+    }
+
+    .progress-container {
+        margin-right: -20vw;
+        margin-left: -5%;
+    }
+
+    .volume-control {
+        margin-left: 15vw;
+        margin-right: -13vw;
+    }
+
+    #volume-slider {
+        width: 24vw;
+    }
+
+    .controls button {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+    }
+
+    .si-c-container {
+        margin-right: 20vw;
+      }
+}
+
+/* ------------------END OF MEDIA QUERIES------------------ */
