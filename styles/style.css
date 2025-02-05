@@ -9,7 +9,7 @@ body {
     background-image: url("https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    background-size: 280% 125%;
+    background-position: center;
     cursor: url('https://i.ibb.co/60tk0khC/image-removebg-preview-1-1-optimized.png'), auto;
     opacity: 0;
     transition: opacity 1s ease-in-out;
@@ -976,8 +976,55 @@ body {
     gap: 2vw;
 }
 
+.c2-r3-container {
+    display: flex;
+    justify-content: left;
+    gap: var(--horizontalGap);
+    height: 30.4vh;
+    margin-top: 2.4vh;
+    margin-bottom: 1.5vh;
+}
 
-.gameContainer {
+
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #000000;
+    margin-top: 2.5vh;
+    width: 20vw;
+
+    /* Smooth transition for both hover and unhover */
+    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.profileContainer:hover {
+    transform: scale(1.01);
+    backdrop-filter: blur(6px);
+    /* box-shadow: 8px 12px #434343; */
+}
+
+#profileIcon {
+    width: 60px;
+    height: 60px;
+    margin-top: 3vh;
+    cursor: pointer;
+}
+
+#username {
+    font-size: 30px;
+    font-family: "Inconsolata", monospace;
+    margin-top: 1vh;
+    cursor: pointer;
+}
+
+.c2r3-square-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -985,19 +1032,10 @@ body {
     background: white;
     padding: 1rem;
     border-radius: 20px;
-    border: 5px solid white;
-    background-image: url('https://www.shutterstock.com/shutterstock/videos/6522356/thumb/1.jpg');
-    height: 25vh;
-    margin-top: var(--verticalGap);
-
-    /* Smooth transition for both hover and unhover */
-    transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.gameContainer:hover {
-    transform: scale(1.01);
-    backdrop-filter: blur(6px);
-    /* box-shadow: 8px 12px #434343; */
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(3px);
+    box-shadow: 5px 10px #000000;
+    margin-top: 2.5vh;
 }
 
 /* --------START OF MEDIA QUERIES-------------- */
@@ -1095,34 +1133,6 @@ body {
     .si-c-container {
         margin-right: 20vw;
       }
-}
-
-/* Wallpaper media queries */
-
-@media (min-width: 500px) {
-    body {
-        background-size: 260% 130%;
-    }
-}
-@media (min-width: 870px) {
-    body {
-        background-size: 220% 135%;
-    }
-}
-@media (min-width: 955px) {
-    body {
-        background-size: 150% 140%;
-    }
-}
-@media (min-width: 1200px) {
-    body {
-        background-size: 100% 140%;
-    }
-}
-@media (min-width: 2000px) {
-    body {
-        background-size: 100% 100%;
-    }
 }
 
 /* ------------------END OF MEDIA QUERIES------------------ */
