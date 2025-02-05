@@ -10,32 +10,37 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
     cursor: url('https://i.ibb.co/60tk0khC/image-removebg-preview-1-1-optimized.png'), auto;
     opacity: 0;
     transition: opacity 1s ease-in-out;
+    font-family: "Inconsolata", monospace;
 }
 
-.mainContainer {
+main {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
     gap: 4vw;
     width: 100%;
     height: 100%;
     /* background-color: blue; */
-    transform: translateY(1vh);
-    scale: 0.9;
+    transform: translateY(-15vh);
+    scale: 0.95;
     flex-wrap: wrap;
 }
 
-.column1 {
-    /* background-color: green; */
+.column1, .column2 {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
-.c1-r1-container {
+.c1-r1-container, .row2container {
     display: flex;
     gap: var(--horizontalGap);
+    margin-top: 0;
 }
 
 .set-more-container {
@@ -68,7 +73,7 @@ body {
 .more-icon:hover, .settings-icon:hover {
     transform: scale(1.04);
     backdrop-filter: blur(2px);
-    /* box-shadow: 8px 12px #434343; */
+    box-shadow: 8px 12px #434343;
     filter: hue-rotate(45deg); /* Smooth color shift */
 }
 
@@ -88,7 +93,6 @@ body {
     border-radius: 15px;
     padding-bottom: 2vh;
     box-shadow: 5px 10px #000000;
-
     background: linear-gradient(90deg, #7341a9, #00ffa6);
     background-size: 200% 100%;
     animation: gradientAnimation 6s infinite ease-in-out;
@@ -120,13 +124,11 @@ body {
 
 .timeNumber {
     font-size: calc(2vw + 1.5vh);
-    font-family: "Inconsolata", monospace;
 }
 
 #timeDescriptionText {
     display: flex;
     font-size: calc(0.75vw + 0.5vh);
-    font-family: "Inconsolata", monospace;
 }
 
 .colon {
@@ -139,10 +141,6 @@ body {
 }
 
 .row2container {
-    display: flex;
-    justify-content: left;
-    gap: var(--horizontalGap);
-    height: 28vh;
     margin-top: var(--verticalGap);
 }
 
@@ -151,6 +149,8 @@ body {
     width: auto;
     padding-left: 0;
     padding-right: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
     flex-grow: 1;
     flex-direction: column;
     justify-content: center;
@@ -553,10 +553,7 @@ body {
 /* To Do List */
 
 .column2 {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    /* background-color: red; */
+    margin-top: 23vh;
 }
 
 .tdContainer {
@@ -571,7 +568,6 @@ body {
     box-shadow: 5px 10px #000000;
     width: 40vw;
     height: 38vh;
-
     /* Smooth transition for hover and unhover */
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
@@ -753,13 +749,11 @@ body {
     font-weight: bold;
     margin-bottom: 5px;
     color: white;
-    font-family: "Inconsolata", monospace;
 }
 
 .song-artist {
     font-size: 14px;
     color: #b3b3b3;
-    font-family: "Inconsolata", monospace;
 }
 
 .controls {
@@ -824,7 +818,6 @@ body {
     display: flex;
     justify-content: space-between;
     font-size: 12px;
-    font-family: "Inconsolata", monospace;
     color: #b3b3b3;
     margin-top: 5px;
 }
@@ -835,7 +828,6 @@ body {
     gap: 10px;
     font-size: 12px;
     color: #b3b3b3;
-    font-family: "Inconsolata", monospace;
 }
 
 .volume-control input[type="range"] {
@@ -888,7 +880,6 @@ body {
     border: none;
     color: white;
     font-size: 14px;
-    font-family: "Inconsolata", monospace;
     padding: 8px 15px;
     border-radius: 6px;
     cursor: pointer;
@@ -978,11 +969,9 @@ body {
 
 .c2-r3-container {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     gap: var(--horizontalGap);
-    height: 31.3vh;
-    margin-top: 2.4vh;
-    margin-bottom: 1.5vh;
+    margin-bottom: 200px;
 }
 
 
@@ -999,7 +988,7 @@ body {
     box-shadow: 5px 10px #000000;
     margin-top: 2.5vh;
     width: 20vw;
-
+    height: 14vh;
     /* Smooth transition for both hover and unhover */
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
@@ -1019,7 +1008,6 @@ body {
 
 #username {
     font-size: 30px;
-    font-family: "Inconsolata", monospace;
     margin-top: 1vh;
     cursor: pointer;
 }
@@ -1042,18 +1030,13 @@ body {
 
 
 
-@media (max-width: 800px) {
-
-    .gsContainer {
-        margin-bottom: 200px;
-
-    }
-
-    .mainContainer {
+@media (max-width: 1025px) {
+    main {
         scale: 1.5;
         margin-top: 40vh;
-        width :50%;
+        width: 50%;
         margin-left: 25%;
+        transform: translateY(-5vh);
     }
 
     .tdButtons {
@@ -1075,15 +1058,8 @@ body {
         margin-top: 3vh;
     }
 
-}
+    
 
-@media (max-width: 1050px) {
-    #autoplay-button {
-        margin-right: 5vw;
-    }
-}
-
-@media (max-width: 955px) {
     .audio-player {
         justify-content: center;
     }
@@ -1132,7 +1108,18 @@ body {
 
     .si-c-container {
         margin-right: 20vw;
-      }
+    }
+}
+
+@media (max-width: 1050px) {
+    #autoplay-button {
+        margin-right: 5vw;
+    }
+}
+@media (max-width: 1025px) {
+    .column2 {
+        margin-top: auto;
+    }
 }
 
 /* ------------------END OF MEDIA QUERIES------------------ */
