@@ -276,9 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function enableRainParticles() {
 
-        // Check the current visibility of the rainGifImage element
         if (rainGifImage.style.visibility === "visible") {
-            // Hide the rain GIFs and change button text to "Enable"
             rainGifImage.style.visibility = "hidden";
             rainGif.style.visibility = "hidden";
             particlesButtonRain.textContent = "Enable";
@@ -287,7 +285,6 @@ document.addEventListener("DOMContentLoaded", () => {
             stormWeatherCheck.disabled = false;
             blizzardWeatherCheck.disabled = false;
         } else {
-            // Show the rain GIFs and change button text to "Disable"
             rainGifImage.style.visibility = "visible";
             rainGif.style.visibility = "visible";
             particlesButtonRain.textContent = "Disable";
@@ -298,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Set up the event listener on the particles button
+
     if (particlesButtonRain) {
         particlesButtonRain.addEventListener("click", enableRainParticles);
     }
@@ -614,12 +611,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (audio.paused) {
             audio.play();
             playButton.textContent = "❚❚";
-            // Change document title to song title when playing
             const song = songs[currentSongIndex];
         } else {
             audio.pause();
             playButton.textContent = "▶";
-            // Change document title to "Spotify Clone" when paused
         }
     }
 
@@ -640,7 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     audio.addEventListener("ended", () => {
         if (isAutoplayEnabled) {
-            nextSong(); // Go to next song when current ends
+            nextSong();
         }
     });
 
@@ -706,13 +701,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (todoItems.length === 0) {
             removeButton.disabled = true;
             selectAllButton.disabled = true;
-            removeButton.classList.add('disabled');  // Add a class for styling
-            selectAllButton.classList.add('disabled');  // Add a class for styling
+            removeButton.classList.add('disabled');
+            selectAllButton.classList.add('disabled');
         } else {
             removeButton.disabled = false;
             selectAllButton.disabled = false;
-            removeButton.classList.remove('disabled');  // Remove the class
-            selectAllButton.classList.remove('disabled');  // Remove the class
+            removeButton.classList.remove('disabled');
+            selectAllButton.classList.remove('disabled');
         }
     }
     
@@ -893,8 +888,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     function populateGenreDropdown() {
         genreDropdown.innerHTML = "";
-        genres.forEach((genre, index) => {  // Changed from `songs` to `genres` and simplified variable names
-            const option = document.createElement("option");  // Corrected the element name to "option"
+        genres.forEach((genre, index) => { 
+            const option = document.createElement("option");
             option.value = index;
             option.textContent = genre.genre;
             genreDropdown.appendChild(option);
@@ -919,8 +914,8 @@ document.addEventListener("DOMContentLoaded", () => {
         morePanelOverlay.style.left = "0";
         morePanelOverlay.style.width = "100vw";
         morePanelOverlay.style.height = "100vh";
-        morePanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Dark semi-transparent
-        morePanelOverlay.style.zIndex = "400"; // Ensure it's behind the panel
+        morePanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // dark semi-transparent eh
+        morePanelOverlay.style.zIndex = "400"; // making sure it is behind the panel
         morePanelOverlay.style.transition = "opacity 0.3s ease-in-out";
 
 
@@ -1095,6 +1090,7 @@ const profileIconBtn = document.getElementById("profileIcon");
 
 profileIconBtn.addEventListener('click', () => {
     const pfpPanelOverlay = document.createElement('div');
+    pfpPanelOverlay.id = "pfpPanelOverlay";
     pfpPanelOverlay.style.position = "fixed";
     pfpPanelOverlay.style.top = "0";
     pfpPanelOverlay.style.left = "0";
@@ -1161,17 +1157,24 @@ profileIconBtn.addEventListener('click', () => {
     closeButton.style.cursor = "pointer";
     closeButton.style.padding = "5px 10px";
     closeButton.style.borderRadius = "5px";
+    closeButton.style.transition = "transform 0.3s ease-in-out";
+
+    closeButton.addEventListener('mouseenter', () => {
+        closeButton.style.transform = "scale(1.1)";
+    });
+
+    closeButton.addEventListener('mouseleave', () => {
+        closeButton.style.transform = "scale(1)";
+    });
 
     closeButton.addEventListener("click", () => {
-        // Apply fade-out effect by changing the opacity first
         pfpPanel.style.opacity = "0";
         pfpPanelOverlay.style.opacity = "0";
     
-        // Wait for the fade-out transition to complete before removing the elements
         setTimeout(() => {
             pfpPanelOverlay.remove();
             pfpPanel.remove();
-        }, 300); // Match the duration of the opacity transition (0.3s)
+        }, 300);
     });
 
     const pfpPanelItemContainer = document.createElement('div');
@@ -1194,20 +1197,21 @@ profileIconBtn.addEventListener('click', () => {
     // pfpPanelRow1Container.style.backgroundColor = "blue";
 
     const pfpPanelIcon1 = document.createElement('img');
+    pfpPanelIcon1.id = "currentPfp";
     pfpPanelIcon1.style.width = "70px";
     pfpPanelIcon1.style.height = "70px";
-    pfpPanelIcon1.style.borderRadius = "10px";
+    pfpPanelIcon1.style.borderRadius = "50%";
     pfpPanelIcon1.style.padding = "10px";
     // pfpPanelIcon1.style.border = "5px solid black";
-    pfpPanelIcon1.src = localStorage.getItem("profilePic");
-    pfpPanelIcon1.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+    pfpPanelIcon1.src = localStorage.getItem("profilePicture");
+    pfpPanelIcon1.style.transition = "transform 0.3s ease-in-out";
 
     pfpPanelIcon1.addEventListener('mouseenter', () => {
-        pfpPanelIcon1.style.transform = "scale(1.05)"; // Increase scale on hover
+        pfpPanelIcon1.style.transform = "scale(1.05)";
     });
 
     pfpPanelIcon1.addEventListener('mouseleave', () => {
-        pfpPanelIcon1.style.transform = "scale(1)"; // Reset scale when hover is removed
+        pfpPanelIcon1.style.transform = "scale(1)";
     });
 
     const pfpPanelBtnContainer = document.createElement('div');
@@ -1230,14 +1234,14 @@ profileIconBtn.addEventListener('click', () => {
     pfpPanelSelectBtn.style.fontSize = "15px";
     pfpPanelSelectBtn.style.color = "white";
     pfpPanelSelectBtn.style.cursor = "pointer";
-    pfpPanelSelectBtn.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+    pfpPanelSelectBtn.style.transition = "transform 0.3s ease-in-out";
 
     pfpPanelSelectBtn.addEventListener('mouseenter', () => {
-        pfpPanelSelectBtn.style.transform = "scale(1.05)"; // Increase scale on hover
+        pfpPanelSelectBtn.style.transform = "scale(1.05)";
     });
 
     pfpPanelSelectBtn.addEventListener('mouseleave', () => {
-        pfpPanelSelectBtn.style.transform = "scale(1)"; // Reset scale when hover is removed
+        pfpPanelSelectBtn.style.transform = "scale(1)";
     });
 
     const pfpPanelUploadBtn = document.createElement('button');
@@ -1250,14 +1254,14 @@ profileIconBtn.addEventListener('click', () => {
     pfpPanelUploadBtn.style.fontSize = "15px";
     pfpPanelUploadBtn.style.color = "white";
     pfpPanelUploadBtn.style.cursor = "pointer";
-    pfpPanelUploadBtn.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+    pfpPanelUploadBtn.style.transition = "transform 0.3s ease-in-out";
 
     pfpPanelUploadBtn.addEventListener('mouseenter', () => {
-        pfpPanelUploadBtn.style.transform = "scale(1.05)"; // Increase scale on hover
+        pfpPanelUploadBtn.style.transform = "scale(1.05)";
     });
 
     pfpPanelUploadBtn.addEventListener('mouseleave', () => {
-        pfpPanelUploadBtn.style.transform = "scale(1)"; // Reset scale when hover is removed
+        pfpPanelUploadBtn.style.transform = "scale(1)";
     });
 
     const fileInput = document.createElement("input");
@@ -1269,6 +1273,7 @@ profileIconBtn.addEventListener('click', () => {
         pfpPanel.remove();
 
         const uploadImgPanel = document.createElement('div');
+        uploadImgPanel.id = "uploadImgPanel";
         uploadImgPanel.style.height = "47vh";
         uploadImgPanel.style.width = "30vw";
         uploadImgPanel.style.zIndex = "500";
@@ -1326,17 +1331,24 @@ profileIconBtn.addEventListener('click', () => {
         upCloseBtn.style.cursor = "pointer";
         upCloseBtn.style.padding = "5px 10px";
         upCloseBtn.style.borderRadius = "5px";
+        upCloseBtn.style.transition = 'transform 0.3s ease-in-out';
+
+        upCloseBtn.addEventListener('mouseenter', () => {
+            upCloseBtn.style.transform = "scale(1.1)";
+        });
+    
+        upCloseBtn.addEventListener('mouseleave', () => {
+            upCloseBtn.style.transform = "scale(1)";
+        });
 
         upCloseBtn.addEventListener("click", () => {
-        // Apply fade-out effect by changing the opacity first
             uploadImgPanel.style.opacity = "0";
             pfpPanelOverlay.style.opacity = "0";
         
-            // Wait for the fade-out transition to complete before removing the elements
             setTimeout(() => {
                 pfpPanelOverlay.remove();
                 uploadImgPanel.remove();
-            }, 300); // Match the duration of the opacity transition (0.3s)
+            }, 300);
         });
 
 
@@ -1350,16 +1362,16 @@ profileIconBtn.addEventListener('click', () => {
         uploadImgPlaceholder.src = "https://static-00.iconduck.com/assets.00/upload-icon-2048x2048-eu9n5hco.png";
         uploadImgPlaceholder.style.border = "5px solid white";
         uploadImgPlaceholder.style.borderRadius = "10px";
-        // uploadImgPlaceholder.style.marginTop = "27%";
+        uploadImgPlaceholder.style.marginTop = "14%";
         uploadImgPlaceholder.style.cursor = "pointer";
-        uploadImgPlaceholder.style.transition = "transform 0.3s ease-in-out"; // Smooth transition for the scale effect
+        uploadImgPlaceholder.style.transition = "transform 0.3s ease-in-out";
 
         uploadImgPlaceholder.addEventListener('mouseenter', () => {
-            uploadImgPlaceholder.style.transform = "scale(1.05)"; // Increase scale on hover
+            uploadImgPlaceholder.style.transform = "scale(1.05)";
         });
 
         uploadImgPlaceholder.addEventListener('mouseleave', () => {
-            uploadImgPlaceholder.style.transform = "scale(1)"; // Reset scale when hover is removed
+            uploadImgPlaceholder.style.transform = "scale(1)";
         });
 
 
@@ -1382,20 +1394,117 @@ profileIconBtn.addEventListener('click', () => {
             const reader = new FileReader();
             reader.onload = function (e) {
                 const imageUrl = e.target.result;
-                localStorage.setItem("profilePic", imageUrl);
-                document.getElementById("profileIcon").src = imageUrl;
-
-                const uploadImgPlaceholder = document.getElementById("uploadImgPlaceholder");
-                uploadImgPlaceholder.src = imageUrl;
-                uploadImgPlaceholder.border = "none";
-                uploadImgPlaceholder.style.width = "80px";
-                uploadImgPlaceholder.style.height = "80px";
-
-                pfpPanelIcon1.src = imageUrl;
+    
+                // Create an image element to load the selected file
+                const img = new Image();
+                img.src = imageUrl;
+    
+                img.onload = function () {
+                    // Create a canvas to resize the image
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+    
+                    // Set the canvas size to 90px by 90px
+                    canvas.width = 90;
+                    canvas.height = 90;
+    
+                    // Draw the image on the canvas with the new dimensions
+                    ctx.drawImage(img, 0, 0, 90, 90);
+    
+                    // Get the resized image data URL
+                    const resizedImageUrl = canvas.toDataURL();
+    
+                    // Save the resized image URL to localStorage
+                    localStorage.setItem("profilePicture", resizedImageUrl);
+    
+                    // Update the profileIcon and currentPfp with the new image URL
+                    document.getElementById("profileIcon").src = resizedImageUrl;
+    
+                    // Update the uploadImgPlaceholder with the new image
+                    const uploadImgPanel = document.getElementById("uploadImgPanel");
+                    uploadImgPanel.style.display = "none";
+    
+                    const successPanelImg = document.createElement('div');
+                    successPanelImg.id = "uploadImgPanel";
+                    successPanelImg.style.height = "47vh";
+                    successPanelImg.style.width = "30vw";
+                    successPanelImg.style.zIndex = "500";
+                    successPanelImg.style.position = "absolute";
+                    successPanelImg.style.top = "50%";
+                    successPanelImg.style.left = "50%";
+                    successPanelImg.style.display = "flex";
+                    successPanelImg.style.flexDirection = "column";
+                    successPanelImg.style.alignItems = "center";
+                    successPanelImg.style.justifyContent = "center";
+                    successPanelImg.style.transform = "translate(-50%, -50%) scale(0.95)";
+                    successPanelImg.style.borderRadius = "15px";
+                    successPanelImg.style.overflow = "hidden";
+                    successPanelImg.style.border = "8px solid black";
+                    successPanelImg.style.opacity = "1";
+                    successPanelImg.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+    
+                    const successPanelImgBg = document.createElement('div');
+                    successPanelImgBg.style.position = "absolute";
+                    successPanelImgBg.style.top = "0";
+                    successPanelImgBg.style.left = "0";
+                    successPanelImgBg.style.width = "100%";
+                    successPanelImgBg.style.height = "100%";
+                    successPanelImgBg.style.backgroundImage = "url('https://img.freepik.com/free-vector/gradient-black-background-with-wavy-lines_23-2149146012.jpg?semt=ais_hybrid')";
+                    successPanelImgBg.style.backgroundSize = "cover";
+                    successPanelImgBg.style.backgroundPosition = "center";
+                    successPanelImgBg.style.backgroundRepeat = "no-repeat";
+                    successPanelImgBg.style.zIndex = "-1";
+    
+                    const successPanelImgMsg = document.createElement('h2');
+                    successPanelImgMsg.style.fontSize = "22px";
+                    successPanelImgMsg.style.color = "white";
+                    successPanelImgMsg.style.textAlign = "center";
+                    successPanelImgMsg.textContent = "Image changed successfully!";
+                    successPanelImgMsg.style.fontFamily = "'IBM Plex Mono', serif";
+                    successPanelImgMsg.style.textAlign = "center";
+    
+                    const successPanelImgCloseBtn = document.createElement('button');
+                    successPanelImgCloseBtn.style.height = "10%";
+                    successPanelImgCloseBtn.style.width = "30%";
+                    successPanelImgCloseBtn.textContent = "Close";
+                    successPanelImgCloseBtn.style.backgroundColor = "transparent";
+                    successPanelImgCloseBtn.style.borderRadius = "10px";
+                    successPanelImgCloseBtn.style.border = "3px solid white";
+                    successPanelImgCloseBtn.style.fontSize = "15px";
+                    successPanelImgCloseBtn.style.color = "white";
+                    successPanelImgCloseBtn.style.cursor = "pointer";
+                    successPanelImgCloseBtn.style.transition = "transform 0.3s ease-in-out";
+    
+                    successPanelImgCloseBtn.addEventListener('mouseenter', () => {
+                        successPanelImgCloseBtn.style.transform = "scale(1.05)";
+                    });
+    
+                    successPanelImgCloseBtn.addEventListener('mouseleave', () => {
+                        successPanelImgCloseBtn.style.transform = "scale(1)";
+                    });
+    
+                    successPanelImgCloseBtn.addEventListener("click", () => {
+                        successPanelImg.style.opacity = "0";
+    
+                        setTimeout(() => {
+                            successPanelImg.remove();
+                            uploadImgPanel.remove();
+                            const pfpPanelOverlay = document.getElementById("pfpPanelOverlay");
+                            pfpPanelOverlay.remove();
+                        }, 300);
+                    });
+    
+                    document.body.appendChild(successPanelImg);
+                    successPanelImg.appendChild(successPanelImgBg);
+                    successPanelImg.appendChild(successPanelImgMsg);
+                    successPanelImg.appendChild(successPanelImgCloseBtn);
+                };
             };
             reader.readAsDataURL(file);
         }
     });
+    
+    
 
     document.body.appendChild(pfpPanelOverlay);
     document.body.appendChild(pfpPanel);
