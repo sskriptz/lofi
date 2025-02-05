@@ -980,7 +980,7 @@ body {
     display: flex;
     justify-content: left;
     gap: var(--horizontalGap);
-    height: 30.4vh;
+    height: 31.3vh;
     margin-top: 2.4vh;
     margin-bottom: 1.5vh;
 }
