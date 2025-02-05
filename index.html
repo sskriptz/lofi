@@ -40,44 +40,56 @@
 
         <div class="mainContainer">
             <div class="column1">
-                <div class="timeContainer1">
-                    <div class="timeContainer2">
-                        <div class="hrs_container">
-                            <h1 class="timeNumber" id="hrs">00</h1>
+                <div class="c1-r1-container">
+                    <div class="timeContainer1">
+                        <div class="timeContainer2">
+                            <div class="hrs_container">
+                                <h1 class="timeNumber" id="hrs">00</h1>
+                            </div>
+                            
+                            <div class="colon">:</div>
+
+                            <div class="min_container">
+                                <h1 class="timeNumber" id="min">00</h1>
+                            </div>
+
+                            <div class="colon">:</div>
+
+                            <div class="sec_container">
+                                <h1 class="timeNumber" id="sec">00</h1>
+                            </div>
+
+                            <div class="ampm_container">
+                                <h1 class="timeNumber" id="ampm">00</h1>
+                            </div>
                         </div>
-                        
-                        <div class="colon">:</div>
 
-                        <div class="min_container">
-                            <h1 class="timeNumber" id="min">00</h1>
-                        </div>
+                        <div class="timeDescriptionContainer">
+                            <div class="hoursDescContainer">
+                                <h1 id="timeDescriptionText">HOURS</h1>
+                            </div>
 
-                        <div class="colon">:</div>
+                            <div class="minutesDescContainer">
+                                <h1 id="timeDescriptionText">MINUTES</h1>
+                            </div>
 
-                        <div class="sec_container">
-                            <h1 class="timeNumber" id="sec">00</h1>
-                        </div>
+                            <div class="secondsDescContainer">
+                                <h1 id="timeDescriptionText">SECONDS</h1>
+                            </div>
 
-                        <div class="ampm_container">
-                            <h1 class="timeNumber" id="ampm">00</h1>
+                            <div class="ampmDescContainer">
+                                <h1 id="timeDescriptionText">AM/PM</h1>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="timeDescriptionContainer">
-                        <div class="hoursDescContainer">
-                            <h1 id="timeDescriptionText">HOURS</h1>
+                    <div class="set-more-container">
+                        <div class="more-container">
+                            <img src="https://i.ibb.co/by4MXq2/application-1.png" alt="More Icon" class="more-icon" id="more-btn">
                         </div>
-
-                        <div class="minutesDescContainer">
-                            <h1 id="timeDescriptionText">MINUTES</h1>
-                        </div>
-
-                        <div class="secondsDescContainer">
-                            <h1 id="timeDescriptionText">SECONDS</h1>
-                        </div>
-
-                        <div class="ampmDescContainer">
-                            <h1 id="timeDescriptionText">AM/PM</h1>
+                    
+                        <div class="settings-container">
+                            <img src="https://i.ibb.co/rKgcRxKm/setting-1.png" alt="Settings Icon" class="settings-icon" id="settings-btn">
                         </div>
                     </div>
                 </div>
@@ -154,46 +166,65 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="c2-r3-container">
+                    <div class="profileContainer">
+                        <img src="" alt="profile-icon" id="profileIcon">
+                        <h1 id="username"></h1>
+                    </div>
+                    <div class="c2r3-square-container">
+                        <div class=""></div>
+                        <div class=""></div>
+                        <div class=""></div>
+                        <div class=""></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        
         <div class="audio-player">
-            <div class="song-info">
-                <div class="song-title" id="song-title">Song 1</div>
-                <div class="song-artist" id="song-artist">Artist 1</div>
-            </div>
-    
-            <div class="controls">
-                <button id="prev-button">|&#9664;</button>
-                <button id="play-button">&#9654;</button>
-                <button id="next-button">&#9654;|</button>
-            </div>
-    
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar">
-                    <div class="progress" id="progress"></div>
-                    <div class="progress-thumb" id="progress-thumb"></div>
+
+            <div class="si-c-container">
+                <div class="song-info">
+                    <div class="song-title" id="song-title">Song 1</div>
+                    <div class="song-artist" id="song-artist">Artist 1</div>
                 </div>
-                <div class="time-display">
-                    <span id="current-time">0:00</span>
-                    <span id="total-duration">0:00</span>
+        
+                <div class="controls">
+                    <button id="prev-button">|&#9664;</button>
+                    <button id="play-button">&#9654;</button>
+                    <button id="next-button">&#9654;|</button>
                 </div>
             </div>
     
-            <div class="volume-control">
-                <label for="volume-slider">Volume</label>
-                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+            <div class="pc-vc-container">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress" id="progress"></div>
+                        <div class="progress-thumb" id="progress-thumb"></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="current-time">0:00</span>
+                        <span id="total-duration">0:00</span>
+                    </div>
+                </div>
+        
+                <div class="volume-control">
+                    <label for="volume-slider">Volume</label>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+                </div>
             </div>
     
-            <div class="playlist-controls">
-                <select id="playlist-dropdown" class="playlist-dropdown">
-                    <!-- Playlist options will be added dynamically -->
-                </select>
-            </div>
-    
-            <div class="playlist-controls">
-                <button id="autoplay-button">Autoplay: On</button>
+            <div class="ap-dd-container">
+                <div class="playlist-controls">
+                    <select id="playlist-dropdown" class="playlist-dropdown">
+                        <!-- Playlist options will be added dynamically -->
+                    </select>
+                </div>
+        
+                <div class="playlist-controls">
+                    <button id="autoplay-button">Autoplay: On</button>
+                </div>
             </div>
         </div>
     
