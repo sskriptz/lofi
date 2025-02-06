@@ -1132,11 +1132,10 @@ profileIconBtn.addEventListener('click', () => {
 
     const pfpPanelHeader = document.createElement('div');
     pfpPanelHeader.style.display = "flex";
-    pfpPanelHeader.style.justifyContent = "right";
+    pfpPanelHeader.style.justifyContent = "center";
     pfpPanelHeader.style.alignItems = "center";
     pfpPanelHeader.style.width = "100%";
     pfpPanelHeader.style.padding = "0 15px";
-    pfpPanelHeader.style.marginRight = "2vw";
 
     const pfpPanelTitle = document.createElement('h2');
     pfpPanelTitle.style.fontSize = "25px";
@@ -1145,18 +1144,18 @@ profileIconBtn.addEventListener('click', () => {
     pfpPanelTitle.textContent = "Change Profile Picture";
     pfpPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
     pfpPanelTitle.style.textAlign = "center";
-    pfpPanelTitle.style.marginRight = "6vw";
 
     // Close button
     const closeButton = document.createElement("button");
-    closeButton.textContent = "X";
-    closeButton.style.background = "white";
-    closeButton.style.color = "black";
-    closeButton.style.border = "none";
-    closeButton.style.fontSize = "18px";
+    closeButton.style.height = "100%";
+    closeButton.style.width = "7vw";
+    closeButton.textContent = "Cancel";
+    closeButton.style.backgroundColor = "transparent";
+    closeButton.style.borderRadius = "10px";
+    closeButton.style.border = "3px solid white";
+    closeButton.style.fontSize = "15px";
+    closeButton.style.color = "white";
     closeButton.style.cursor = "pointer";
-    closeButton.style.padding = "5px 10px";
-    closeButton.style.borderRadius = "5px";
     closeButton.style.transition = "transform 0.3s ease-in-out";
 
     closeButton.addEventListener('mouseenter', () => {
@@ -1177,6 +1176,15 @@ profileIconBtn.addEventListener('click', () => {
         }, 300);
     });
 
+    const pfpPanelContainers = document.createElement('div');
+    pfpPanelContainers.style.width = "85%";
+    pfpPanelContainers.style.height = "27vh";
+    pfpPanelContainers.style.display = "flex";
+    pfpPanelContainers.style.justifyContent = "center";
+    pfpPanelContainers.style.alignItems = "center";
+    pfpPanelContainers.style.gap = "2%";
+    // pfpPanelContainers.style.backgroundColor = "red";
+
     const pfpPanelItemContainer = document.createElement('div');
     pfpPanelItemContainer.style.display = "flex";
     pfpPanelItemContainer.style.flexDirection = "column";
@@ -1187,6 +1195,17 @@ profileIconBtn.addEventListener('click', () => {
     pfpPanelItemContainer.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
     pfpPanelItemContainer.style.border = "5px solid white";
     pfpPanelItemContainer.style.borderRadius = "10px";
+
+    const pfpPanelCurrentPfpContainer = document.createElement('div');
+    pfpPanelCurrentPfpContainer.style.display = "flex";
+    pfpPanelCurrentPfpContainer.style.flexDirection = "column";
+    pfpPanelCurrentPfpContainer.style.justifyContent = "center";
+    pfpPanelCurrentPfpContainer.style.alignItems = "center";
+    pfpPanelCurrentPfpContainer.style.width = "30%";
+    pfpPanelCurrentPfpContainer.style.height = "27vh";
+    pfpPanelCurrentPfpContainer.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+    pfpPanelCurrentPfpContainer.style.border = "5px solid white";
+    pfpPanelCurrentPfpContainer.style.borderRadius = "10px";
 
     const pfpPanelRow1Container = document.createElement('div');
     pfpPanelRow1Container.style.display = "flex";
@@ -1225,15 +1244,16 @@ profileIconBtn.addEventListener('click', () => {
     pfpPanelBtnContainer.style.marginBottom = "2.5vh";
 
     const pfpPanelSelectBtn = document.createElement('button');
+    pfpPanelSelectBtn.disabled = true;
     pfpPanelSelectBtn.style.height = "100%";
     pfpPanelSelectBtn.style.width = "7vw";
     pfpPanelSelectBtn.textContent = "Select";
-    pfpPanelSelectBtn.style.backgroundColor = "transparent";
+    pfpPanelSelectBtn.style.backgroundColor = "#ccc";
     pfpPanelSelectBtn.style.borderRadius = "10px";
     pfpPanelSelectBtn.style.border = "3px solid white";
     pfpPanelSelectBtn.style.fontSize = "15px";
     pfpPanelSelectBtn.style.color = "white";
-    pfpPanelSelectBtn.style.cursor = "pointer";
+    pfpPanelSelectBtn.style.cursor = "not-allowed";
     pfpPanelSelectBtn.style.transition = "transform 0.3s ease-in-out";
 
     pfpPanelSelectBtn.addEventListener('mouseenter', () => {
@@ -1274,7 +1294,7 @@ profileIconBtn.addEventListener('click', () => {
 
         const uploadImgPanel = document.createElement('div');
         uploadImgPanel.id = "uploadImgPanel";
-        uploadImgPanel.style.height = "47vh";
+        uploadImgPanel.style.height = "37vh";
         uploadImgPanel.style.width = "30vw";
         uploadImgPanel.style.zIndex = "500";
         uploadImgPanel.style.position = "absolute";
@@ -1305,13 +1325,12 @@ profileIconBtn.addEventListener('click', () => {
 
         const uploadImgHeader = document.createElement('div');
         uploadImgHeader.style.display = "flex";
-        uploadImgHeader.style.justifyContent = "right";
+        uploadImgHeader.style.justifyContent = "center";
         uploadImgHeader.style.alignItems = "center";
         uploadImgHeader.style.width = "100%";
         uploadImgHeader.style.height = "10vh";
         // uploadImgHeader.style.backgroundColor = "green";
         uploadImgHeader.style.padding = "0 15px";
-        uploadImgHeader.style.marginRight = "2vw";
 
         const uploadPanelTitle = document.createElement('h2');
         uploadPanelTitle.style.fontSize = "25px";
@@ -1320,18 +1339,53 @@ profileIconBtn.addEventListener('click', () => {
         uploadPanelTitle.textContent = "Upload Picture";
         uploadPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
         uploadPanelTitle.style.textAlign = "center";
-        uploadPanelTitle.style.marginRight = "5vw";
 
-        const upCloseBtn = document.createElement("button");
-        upCloseBtn.textContent = "X";
-        upCloseBtn.style.background = "white";
-        upCloseBtn.style.color = "black";
-        upCloseBtn.style.border = "none";
-        upCloseBtn.style.fontSize = "18px";
+
+        const uploadImgPlaceholder = document.createElement('img');
+        uploadImgPlaceholder.id = "uploadImgPlaceholder";
+        uploadImgPlaceholder.style.width = "60px";
+        uploadImgPlaceholder.style.height = "60px";
+        uploadImgPlaceholder.style.padding = "10px";
+        uploadImgPlaceholder.style.backgroundColor = "white";
+        uploadImgPlaceholder.src = "https://static-00.iconduck.com/assets.00/upload-icon-2048x2048-eu9n5hco.png";
+        uploadImgPlaceholder.style.border = "5px solid white";
+        uploadImgPlaceholder.style.borderRadius = "10px";
+        uploadImgPlaceholder.style.marginTop = "2%";
+        uploadImgPlaceholder.style.cursor = "pointer";
+        uploadImgPlaceholder.style.transition = "transform 0.3s ease-in-out";
+
+        uploadImgPlaceholder.addEventListener('mouseenter', () => {
+            uploadImgPlaceholder.style.transform = "scale(1.05)";
+        });
+
+        uploadImgPlaceholder.addEventListener('mouseleave', () => {
+            uploadImgPlaceholder.style.transform = "scale(1)";
+        });
+
+
+
+        const uploadImgBtnContainer = document.createElement('div');
+        uploadImgBtnContainer.style.display = "flex";
+        uploadImgBtnContainer.style.justifyContent = "center";
+        uploadImgBtnContainer.style.alignItems = "center";
+        uploadImgBtnContainer.style.width = "80%";
+        uploadImgBtnContainer.style.height = "5vh";
+        uploadImgBtnContainer.style.marginTop = "7%";
+        uploadImgBtnContainer.style.gap = "1vw";
+        uploadImgBtnContainer.style.marginBottom = "2.5vh";
+
+
+        const upCloseBtn = document.createElement('button');
+        upCloseBtn.style.height = "100%";
+        upCloseBtn.style.width = "7vw";
+        upCloseBtn.textContent = "Cancel";
+        upCloseBtn.style.borderRadius = "10px";
+        upCloseBtn.style.border = "3px solid white";
+        upCloseBtn.style.backgroundColor = "transparent";
+        upCloseBtn.style.fontSize = "15px";
+        upCloseBtn.style.color = "white";
         upCloseBtn.style.cursor = "pointer";
-        upCloseBtn.style.padding = "5px 10px";
-        upCloseBtn.style.borderRadius = "5px";
-        upCloseBtn.style.transition = 'transform 0.3s ease-in-out';
+        upCloseBtn.style.transition = "transform 0.3s ease-in-out";
 
         upCloseBtn.addEventListener('mouseenter', () => {
             upCloseBtn.style.transform = "scale(1.1)";
@@ -1352,35 +1406,13 @@ profileIconBtn.addEventListener('click', () => {
         });
 
 
-
-        const uploadImgPlaceholder = document.createElement('img');
-        uploadImgPlaceholder.id = "uploadImgPlaceholder";
-        uploadImgPlaceholder.style.width = "60px";
-        uploadImgPlaceholder.style.height = "60px";
-        uploadImgPlaceholder.style.padding = "10px";
-        uploadImgPlaceholder.style.backgroundColor = "white";
-        uploadImgPlaceholder.src = "https://static-00.iconduck.com/assets.00/upload-icon-2048x2048-eu9n5hco.png";
-        uploadImgPlaceholder.style.border = "5px solid white";
-        uploadImgPlaceholder.style.borderRadius = "10px";
-        uploadImgPlaceholder.style.marginTop = "14%";
-        uploadImgPlaceholder.style.cursor = "pointer";
-        uploadImgPlaceholder.style.transition = "transform 0.3s ease-in-out";
-
-        uploadImgPlaceholder.addEventListener('mouseenter', () => {
-            uploadImgPlaceholder.style.transform = "scale(1.05)";
-        });
-
-        uploadImgPlaceholder.addEventListener('mouseleave', () => {
-            uploadImgPlaceholder.style.transform = "scale(1)";
-        });
-
-
         document.body.appendChild(uploadImgPanel);
         uploadImgPanel.appendChild(uploadImgHeader);
         uploadImgHeader.appendChild(uploadPanelTitle);
-        uploadImgHeader.appendChild(upCloseBtn);
         uploadImgPanel.appendChild(uploadPanelBg);
         uploadImgPanel.appendChild(uploadImgPlaceholder);
+        uploadImgPanel.appendChild(uploadImgBtnContainer);
+        uploadImgBtnContainer.appendChild(upCloseBtn);
 
 
         uploadImgPlaceholder.addEventListener("click", () => {
@@ -1426,7 +1458,7 @@ profileIconBtn.addEventListener('click', () => {
     
                     const successPanelImg = document.createElement('div');
                     successPanelImg.id = "uploadImgPanel";
-                    successPanelImg.style.height = "47vh";
+                    successPanelImg.style.height = "25vh";
                     successPanelImg.style.width = "30vw";
                     successPanelImg.style.zIndex = "500";
                     successPanelImg.style.position = "absolute";
@@ -1464,12 +1496,13 @@ profileIconBtn.addEventListener('click', () => {
                     successPanelImgMsg.style.textAlign = "center";
     
                     const successPanelImgCloseBtn = document.createElement('button');
-                    successPanelImgCloseBtn.style.height = "10%";
+                    successPanelImgCloseBtn.style.height = "20%";
                     successPanelImgCloseBtn.style.width = "30%";
                     successPanelImgCloseBtn.textContent = "Close";
                     successPanelImgCloseBtn.style.backgroundColor = "transparent";
                     successPanelImgCloseBtn.style.borderRadius = "10px";
                     successPanelImgCloseBtn.style.border = "3px solid white";
+                    successPanelImgCloseBtn.style.marginTop = "2%";
                     successPanelImgCloseBtn.style.fontSize = "15px";
                     successPanelImgCloseBtn.style.color = "white";
                     successPanelImgCloseBtn.style.cursor = "pointer";
@@ -1511,13 +1544,15 @@ profileIconBtn.addEventListener('click', () => {
     pfpPanel.appendChild(pfpPanelBg);
     pfpPanel.appendChild(pfpPanelHeader);
     pfpPanelHeader.appendChild(pfpPanelTitle);
-    pfpPanelHeader.appendChild(closeButton);
-    pfpPanel.appendChild(pfpPanelItemContainer);
+    pfpPanel.appendChild(pfpPanelContainers);
+    pfpPanelContainers.appendChild(pfpPanelItemContainer);
+    pfpPanelContainers.appendChild(pfpPanelCurrentPfpContainer);
     pfpPanelItemContainer.appendChild(pfpPanelRow1Container);
-    pfpPanelRow1Container.appendChild(pfpPanelIcon1);
+    pfpPanelCurrentPfpContainer.appendChild(pfpPanelIcon1);
     pfpPanel.appendChild(pfpPanelBtnContainer);
     pfpPanelBtnContainer.appendChild(pfpPanelUploadBtn);
     pfpPanelBtnContainer.appendChild(pfpPanelSelectBtn);
+    pfpPanelBtnContainer.appendChild(closeButton);
     document.body.appendChild(fileInput);
 
     setTimeout(() => {
