@@ -1,7 +1,7 @@
 # lofi [UNSTABLE]
 The Lofi Website is currently under development and the version published here is unstable. We will be pushing code onto a separate repository and upload it in here after every stable update moving forward. 
 
-The experimental repository is at: https://github.com/sskriptz/experiment-lofi - Experimental Lofi URL: https://sskriptz.github.io/experiment-lofi
+The experimental repository is at: https://github.com/sskriptz/lofi2 - Experimental Lofi URL: https://sskriptz.github.io/lofi2
 
 Calm relaxing place tab to chill in:
  - Has a live clock
