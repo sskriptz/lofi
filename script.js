@@ -1,275 +1,834 @@
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAwUAqTV07AahyfD55owmyAcxDG3TP_KnI",
+  authDomain: "lofi-168cb.firebaseapp.com",
+  projectId: "lofi-168cb",
+  storageBucket: "lofi-168cb.firebasestorage.app",
+  messagingSenderId: "331670095312",
+  appId: "1:331670095312:web:7538041673a10b1b4aa5d5"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let currentChatUser = null;
+let messageListener = null;
+
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Create the welcome panel element and style it dynamically (Frosted glass effect)
+    const welcomePanel = document.createElement("div");
+    welcomePanel.id = "welcome-panel";
+    welcomePanel.style.position = "absolute"; // Absolute positioning to position it relative to the page
+    welcomePanel.style.top = "-100px"; // Start off-screen
+    welcomePanel.style.background = "rgba(255, 255, 255, 0.8)"; // Reduced transparency for frosted glass effect
+    welcomePanel.style.borderRadius = "15px"; // Rounded corners
+    welcomePanel.style.border = "3px solid rgba(0, 0, 0, 0.7)"; // Increased thickness of black border
+    welcomePanel.style.padding = "20px";
+    welcomePanel.style.fontSize = "18px";
+    welcomePanel.style.textAlign = "center";
+    welcomePanel.style.width = "80%";
+    welcomePanel.style.maxWidth = "400px";
+    welcomePanel.style.zIndex = "9999"; // On top of everything else
+    welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Soft shadow for depth
+    welcomePanel.style.transition = "top 0.5s ease, opacity 0.3s ease, transform 0.3s ease"; // Smooth animation
+    welcomePanel.style.opacity = "0"; // Start as invisible
+    welcomePanel.style.fontFamily = "'Inconsolata', monospace"; // Inconsolata font
+    welcomePanel.style.backdropFilter = "blur(15px)"; // Frosted glass effect
+    document.body.appendChild(welcomePanel);
+    
+    // Create the welcome message paragraph (Text in white)
+    const welcomeMessage = document.createElement("p");
+    welcomeMessage.style.color = "black"; // Ensure the text is white
+    welcomePanel.appendChild(welcomeMessage);
+    
+    // Create the continue button for the panel
+    const closePanelBtn = document.createElement("button");
+    closePanelBtn.textContent = "Continue";
+    closePanelBtn.style.background = "#333333"; // Dark background for button
+    closePanelBtn.style.border = "2px solid transparent"; // Initially no border
+    closePanelBtn.style.color = "white";
+    closePanelBtn.style.fontSize = "20px";
+    closePanelBtn.style.marginTop = "20px";
+    closePanelBtn.style.cursor = "pointer";
+    closePanelBtn.style.padding = "12px 30px"; // More padding for a rectangular button
+    closePanelBtn.style.borderRadius = "8px"; // Curved edges
+    closePanelBtn.style.transition = "background-color 0.3s ease, border-color 0.3s ease";
+    closePanelBtn.style.fontWeight = "bold";
+    closePanelBtn.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+    welcomePanel.appendChild(closePanelBtn);
+    
+    // Hover effect for button: border and color change
+    closePanelBtn.onmouseover = () => {
+        closePanelBtn.style.borderColor = "#ffffff"; // Border shows up on hover
+        closePanelBtn.style.backgroundColor = "#555555"; // Darker background on hover
+    };
+    closePanelBtn.onmouseout = () => {
+        closePanelBtn.style.borderColor = "transparent"; // No border on mouse out
+        closePanelBtn.style.backgroundColor = "#333333"; // Original background
+    };
+    
+    // Hover effect for the panel itself: subtle brightness increase
+    welcomePanel.onmouseover = () => {
+        welcomePanel.style.transform = "translateX(-50%) scale(1.05)"; // Slight scale-up
+        welcomePanel.style.boxShadow = "0 15px 50px rgba(0, 0, 0, 0.4)"; // Increase shadow on hover
+    };
+    welcomePanel.onmouseout = () => {
+        welcomePanel.style.transform = "translateX(-50%) scale(1)"; // Return to normal scale
+        welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Return to original shadow
+    };
+    
+    // Add CSS for hover animation
+    const style = document.createElement('style');
+    style.innerHTML = 
+        `@keyframes hoverUpDown {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+            100% { transform: translateY(0); }
+        }`;
+    document.head.appendChild(style);
 
-    // ------------------ START OF INITIALIZATION CODE FOR NEWCOMERS --------------------
 
-    // Injecting keyframes into the document
-    function injectKeyframes() {
-        const style = document.createElement('style');
-        style.innerHTML = `
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-
-            @keyframes fadeInPopup {
-                from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-                to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    injectKeyframes();
-
-    function createBackdrop() {
-        const backdrop = document.createElement("div");
-        backdrop.id = "backdrop";
-        backdrop.style = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 1); /* Fully Pitch Black */
-            z-index: 998;
-            display: block;
-            opacity: 0;
-            animation: fadeIn 0s forwards;
-        `;
-        document.body.appendChild(backdrop);
-    }
-
-    function removeBackdrop() {
-        const backdrop = document.getElementById("backdrop");
-        if (backdrop) {
-            backdrop.style.animation = "fadeOut 0.5s forwards";
-            setTimeout(() => {
-                document.body.removeChild(backdrop);
-            }, 500);
-        }
-    }
-
-    function createUsernamePopup() {
-        createBackdrop(); 
-
-        const popup = document.createElement('div');
-        popup.style = popupContainerStyle();
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = 'Enter your username';
-        input.style = inputFieldStyle();
-
-        const button = document.createElement('button');
-        button.textContent = 'Submit';
-        button.style = submitButtonStyle('#4CAF50');
-
-        button.onclick = function () {
-            const username = input.value.trim();
-            if (username) {
-                localStorage.setItem('username', username);
-                document.body.removeChild(popup);
-                removeBackdrop(); 
-                showProfileSelection();
-            } else {
-                alert('Please enter a valid username.');
-            }
-        };
-
-        popup.appendChild(input);
-        popup.appendChild(button);
-        document.body.appendChild(popup);
-        popup.style.animation = "fadeInPopup 0.5s forwards";
-    }
-
-    function showProfileSelection() {
-        createBackdrop(); 
-
-        const profilePopup = document.createElement('div');
-        profilePopup.style = profileSelectionPopupStyle();
-
-        const title = document.createElement('h3');
-        title.textContent = 'Select Your Profile Picture';
-        title.style = `color: #333; margin-bottom: 20px;`;
-
-        const imgContainer = document.createElement('div');
-        imgContainer.style = `display: flex; justify-content: center; gap: 15px;`;
-
-        const img1 = createProfileImage("https://static-00.iconduck.com/assets.00/profile-circle-icon-256x256-cm91gqm2.png");
-        const img2 = createProfileImage("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b8d517e6-2c88-453b-8d3a-3f79ff39b7c0/dgmmn3s-46371f14-ee56-425a-9cfc-a2d565bf192f.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2I4ZDUxN2U2LTJjODgtNDUzYi04ZDNhLTNmNzlmZjM5YjdjMFwvZGdtbW4zcy00NjM3MWYxNC1lZTU2LTQyNWEtOWNmYy1hMmQ1NjViZjE5MmYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BI_m7F3HyOW5hmcwfrEFDj63TlBcx5sDXlUgCO6K3YQ");
-        const img3 = createProfileImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfYJBRF3wwyf2PDriXg1j7FqXLEX2MWmOzgQ&s");
-        const img4 = createProfileImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDqGvrz8GusNuKYmFFR6YjHsmkwJiI_AHR3w&s");
-
-        imgContainer.appendChild(img1);
-        imgContainer.appendChild(img2);
-        imgContainer.appendChild(img3);
-        imgContainer.appendChild(img4);
-
-        const saveButton = document.createElement('button');
-        saveButton.textContent = 'Save';
-        saveButton.style = submitButtonStyle('#007bff');
-
-        let selectedImage = null;
-
-        function createProfileImage(src) {
-            const img = document.createElement('img');
-            img.src = src;
-            img.style = profileImageStyle();
-
-            img.onclick = function () {
-                selectedImage = src;
-                img1.style.border = '2px solid transparent';
-                img2.style.border = '2px solid transparent';
-                img3.style.border = '2px solid transparent';
-                img4.style.border = '2px solid transparent';
-                img.style.border = '2px solid blue';
-            };
-
-            return img;
-        }
-
-        saveButton.onclick = function () {
-            if (selectedImage) {
-                localStorage.setItem('profilePicture', selectedImage);
-                document.body.removeChild(profilePopup);
-                removeBackdrop();
-                updateProfileUI();
-            } else {
-                alert('Please select a profile picture.');
-            }
-        };
-
-        profilePopup.appendChild(title);
-        profilePopup.appendChild(imgContainer);
-        profilePopup.appendChild(saveButton);
-        document.body.appendChild(profilePopup);
-        profilePopup.style.animation = "fadeInPopup 0.5s forwards";
-    }
-
-    function updateProfileUI() {
-        const username = localStorage.getItem('username');
-        const profilePicture = localStorage.getItem('profilePicture');
-
-        let usernameElement = document.getElementById("username");
-        let profileImage = document.getElementById("profileIcon");
-
-        if (usernameElement) usernameElement.textContent = `${username}`;
-        if (profileImage && profilePicture) profileImage.src = profilePicture;
-    }
-
-    function checkUserProfile() {
-        const storedUsername = localStorage.getItem('username');
-        const storedProfilePicture = localStorage.getItem('profilePicture');
-
-        if (storedUsername && storedProfilePicture) {
-            updateProfileUI();
-        } else if (storedUsername) {
-            showProfileSelection();
+    // Check if the user is new or returning
+    function checkIfNewUser(user) {
+        const creationTime = user.metadata.creationTime;
+        const lastSignInTime = user.metadata.lastSignInTime;
+    
+        if (creationTime === lastSignInTime) {
+            // New user
+            welcomeMessage.innerHTML = `Welcome, ${user.displayName}!`;
         } else {
-            createUsernamePopup();
+            // Returning user
+            welcomeMessage.innerHTML = `Welcome back, ${user.displayName}!`;
+        }
+    
+        // Delay the animation of the welcome panel
+        setTimeout(() => {
+            // Show the welcome panel with slide-down animation
+            welcomePanel.style.opacity = "1"; // Make the panel visible
+            welcomePanel.style.top = "20px"; // Slide the panel down smoothly
+            // Apply the hover animation
+            welcomePanel.style.animation = "hoverUpDown 3s infinite ease-in-out"; // Infinite up and down animation
+        }, 500); // Delay by 500ms
+    }
+
+
+    // Close the welcome panel
+    closePanelBtn.onclick = () => {
+        welcomePanel.style.top = "-100px"; // Hide the panel again
+        welcomePanel.style.opacity = "0"; // Make it invisible again
+    
+        // After the panel is completely out of view, set it to display none
+        setTimeout(() => {
+            welcomePanel.style.display = "none"; // Remove the panel from the view
+        }, 500); // Match the transition duration
+    };
+
+
+
+
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            checkIfNewUser(user);
+        } else {
+            // If user is not signed in, redirect to index page
+            window.location.href = "index.html";
+            return;
+        }
+
+        // Rest of your existing landing page auth code
+        document.getElementById('chatContainer').style.display = 'none';
+        currentChatUser = null;
+        if (messageListener) {
+            messageListener();
+            messageListener = null;
+        }
+
+        // ----------------- UPDATE USER INFO -----------------
+
+
+
+
+
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        
+        const profilePicElement = document.getElementById('userProfilePic');
+        if (user.photoURL) {
+            profilePicElement.src = user.photoURL;
+        } else {
+            profilePicElement.src = 'https://www.gravatar.com/avatar/?d=mp';
+        }
+
+
+
+
+
+        // Update user info display
+        const userInfo = document.getElementById('user-info');
+        userInfo.innerHTML = `
+            <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                 alt="Profile" 
+                 width="50" 
+                 style="border-radius: 50%">
+            <p>Hello, ${user.displayName}</p>
+        `;
+
+
+
+
+
+
+        const profileUserInfo = document.getElementById("pp-user-info");
+        profileUserInfo.innerHTML = `
+            <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                 alt="Profile" 
+                 width="50" 
+                 style="border-radius: 50%">
+            <p>${user.displayName}</p>
+        `;
+
+
+
+
+
+
+        const accCreationDateP = document.getElementById("acc-creation-date");
+
+        // Function to format the date
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString("en-US", {  
+                year: "numeric",  
+                month: "long",  
+                day: "numeric"  
+            });
+        }
+
+        if (user) {
+            const creationTimestamp = user.metadata.creationTime;
+            if (creationTimestamp) {
+                accCreationDateP.textContent = `Account Created On: ${formatDate(creationTimestamp)}`;
+            } else {
+                accCreationDateP.textContent = "Creation date not available.";
+            }
+        }
+
+
+
+
+
+
+        // -----------------------------------------------
+
+        if (!userDoc.exists) {
+            // Create new user document with Google display name
+            await db.collection('users').doc(user.uid).set({
+                email: user.email,
+                username: user.displayName,
+                friends: [],
+                friendRequests: [],
+                profilePicture: user.photoURL || null
+            });
+            document.getElementById('userUsername').textContent = user.displayName;
+        } else {
+            document.getElementById('userUsername').textContent = userDoc.data().username;
+        }
+
+        // Show main section
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('usernameSection').style.display = 'none';
+        document.getElementById('mainSection').style.display = 'block';
+        loadFriendRequests();
+        loadFriends();
+        setupSearchListener();
+
+
+
+        // Retrieve the "About Me" text when the user is signed in
+        if (user) {
+            // Fetch the user's "About Me" from Firestore
+            db.collection("users").doc(user.uid).get()
+            .then(doc => {
+                if (doc.exists) {
+                    // Display the saved "About Me" text if it exists
+                    aboutMeOfficialP.textContent = doc.data().aboutMe || "You haven't set an About Me yet.";
+                } else {
+                    aboutMeOfficialP.textContent = "You haven't set an About Me yet.";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching About Me:", error);
+            });
+        }
+
+
+        // Retrieve the "Socials" text when the user is signed in
+
+        if (user) {
+            db.collection("users").doc(user.uid).get()
+            .then(doc => {
+                if (doc.exists) {
+                    socialsOfficialP.innerHTML = (doc.data().socials || "You haven't set your Socials yet.").replace(/\n/g, "<br>");
+                } else {
+                    socialsOfficialP.innerHTML = "You haven't set your Socials yet.";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching Socials:", error);
+            });
+        }
+    });
+
+    // Get the input and save button elements for username change
+    const usernameInput = document.getElementById("username-input"); // The input field for the new username
+    const usernameSaveBtn = document.getElementById("username-save-btn"); // The save button
+    
+    // Function to handle username change
+    function changeUsername() {
+        const newUsername = usernameInput.value; // Get the value from the input field
+    
+        if (newUsername) {
+            const user = auth.currentUser;
+            user.updateProfile({
+                displayName: newUsername
+            }).then(() => {
+                alert("Username updated successfully!");
+                window.location.reload(true);
+                // Update UI to reflect new username
+                userInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>Hello, ${user.displayName}</p>`;
+                profilePanelUserInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>${user.displayName}</p>`;
+            }).catch(error => {
+                console.error("Error updating username:", error);
+            });
+        } else {
+            console.log("Username cannot be empty");
+        }
+    }
+    
+    // Add event listener for the save button to trigger the change
+    usernameSaveBtn.addEventListener("click", changeUsername); 
+
+
+    // Get elements for "About Me"
+    const aboutMeInput = document.getElementById("aboutme-input");
+    const aboutMeSaveBtn = document.getElementById("aboutme-save-btn");
+    const aboutMeOfficialP = document.getElementById("aboutme-official-p");
+
+
+    const maxLines = 5;  // Set the maximum number of lines allowed
+
+
+    aboutMeInput.addEventListener("input", () => {
+        const lines = aboutMeInput.value.split("\n"); // Split the value into lines by newline characters
+        
+        if (lines.length > maxLines) {
+            // If the number of lines exceeds maxLines, limit the textarea to maxLines
+            // We only keep the first `maxLines` lines and join them back into a string
+            aboutMeInput.value = lines.slice(0, maxLines).join("\n");
+        }
+    });
+
+
+    // Function to save the About Me content to Firestore
+    function saveAboutMe() {
+        const aboutMeText = aboutMeInput.value.trim(); // Get and trim the input text
+        const user = firebase.auth().currentUser; // Get the current user
+
+        if (user && aboutMeText) {
+            // Save the text to Firestore under the user's document
+            db.collection("users").doc(user.uid).set({
+                aboutMe: aboutMeText
+            }, { merge: true }) // Use merge to only update the aboutMe field without overwriting the entire document
+            .then(() => {
+                alert("About Me saved successfully!");
+                // Update the "About Me" text in the HTML immediately
+                aboutMeOfficialP.textContent = aboutMeText;
+                aboutMeInput.value = ''; // Clear the input field
+            })
+            .catch(error => {
+                console.error("Error saving About Me:", error);
+            });
+        } else {
+            console.log("About Me is empty or user not signed in");
         }
     }
 
-    // Styles
-    function popupContainerStyle() {
-        return `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 40px;
-            background-color: rgba(255, 255, 255, 1);
-            color: black;
-            border-radius: 12px;
-            text-align: center;
-            z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            animation: fadeInPopup 0.5s forwards;
-        `;
+    // Add event listener to the save button
+    aboutMeSaveBtn.addEventListener("click", saveAboutMe);
+
+
+
+    // Get elements for "Socials"
+    const socialsInput = document.getElementById("socials-input");
+    const socialsSaveBtn = document.getElementById("socials-save-btn");
+    const socialsOfficialP = document.getElementById("socials-official-p");
+
+    const maxSocialLines = 5; // Limit the number of lines for Socials
+
+    socialsInput.addEventListener("input", () => {
+        const lines = socialsInput.value.split("\n");
+
+        if (lines.length > maxSocialLines) {
+            socialsInput.value = lines.slice(0, maxSocialLines).join("\n");
+        }
+    });
+
+    // Function to save the Socials content to Firestore
+    function saveSocials() {
+        const socialsText = socialsInput.value.trim();
+        const user = firebase.auth().currentUser;
+
+        if (user && socialsText) {
+            db.collection("users").doc(user.uid).set({
+                socials: socialsText
+            }, { merge: true }) // Only update socials field without overwriting the whole document
+            .then(() => {
+                alert("Socials saved successfully!");
+                socialsOfficialP.innerHTML = socialsText.replace(/\n/g, "<br>"); // Preserve line breaks
+                socialsInput.value = ''; // Clear the input field
+            })
+            .catch(error => {
+                console.error("Error saving Socials:", error);
+            });
+        } else {
+            console.log("Socials is empty or user not signed in");
+        }
     }
 
-    function profileSelectionPopupStyle() {
-        return `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 40px;
-            background-color: white;
-            border-radius: 12px;
-            text-align: center;
-            z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            animation: fadeInPopup 0.5s forwards;
-        `;
+    // Add event listener to the save button
+    socialsSaveBtn.addEventListener("click", saveSocials);
+});
+
+
+// Authentication functions
+async function signUp() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    try {
+        await auth.createUserWithEmailAndPassword(email, password);
+    } catch (error) {
+        alert(error.message);
     }
+}
 
-    function submitButtonStyle(color) {
-        return `
-            margin-top: 20px;
-            padding: 15px 25px;
-            background-color: ${color};
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            border: none;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        `;
+async function signIn() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    try {
+        await auth.signInWithEmailAndPassword(email, password);
+    } catch (error) {
+        alert(error.message);
     }
+}
 
-    function inputFieldStyle() {
-        return `
-            padding: 12px 15px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 2px solid #ccc;
-            outline: none;
-            margin-bottom: 20px;
-            transition: all 0.3s ease-in-out;
-        `;
-    }
+function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+            if (!user.displayName) {
+                // If for some reason there's no display name, use email without the domain
+                const username = user.email.split('@')[0];
+                return db.collection('users').doc(user.uid).set({
+                    email: user.email,
+                    username: username,
+                    friends: [],
+                    friendRequests: [],
+                    profilePicture: user.photoURL || null
+                });
+            }
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+}
 
-    function profileImageStyle() {
-        return `
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            border-radius: 50%;
-        `;
-    }
-
-    checkUserProfile();
-
+function signOut() {
+    // Clear chat container and reset chat state
+    document.getElementById('chatContainer').style.display = 'none';
+    currentChatUser = null;
     
-    // ------------------ END OF INITIALIZATION CODE FOR NEWCOMERS -------------------------
+    // Remove message listener if it exists
+    if (messageListener) {
+        messageListener();  // If it's a function, you call it like this
+        messageListener = null;  // Reset listener
+    } else if (messageListener && typeof messageListener === 'function') {
+        firebase.database().ref('messages').off('child_added', messageListener); // Detach the Firebase listener
+    }
+
+    auth.setPersistence(firebase.auth.Auth.Persistence.NONE).then(() => {
+        auth.signOut().then(() => {
+            // After signing out, redirect to the index page
+            window.location.href = "index.html";  // Redirect to index.html after sign-out
+        }).catch(error => console.error("Sign-out error:", error));
+    }).catch(error => console.error("Error clearing persistence:", error));
+}
+
+
+function setupSearchListener() {
+    const searchInput = document.getElementById('searchInput');
+    let timeout = null;
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm.length > 2) {
+                searchUsers(searchTerm);
+            } else {
+                document.getElementById('searchResults').innerHTML = '';
+            }
+        }, 500);
+    });
+}
+
+async function searchUsers(searchTerm) {
+    const currentUser = auth.currentUser;
+    const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
+    const currentUserData = currentUserDoc.data();
+    const currentUserFriends = currentUserData.friends || [];
     
+    const usersRef = db.collection('users');
+    // Get all users and filter client-side for better partial matches
+    const snapshot = await usersRef.get();
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+
+    snapshot.forEach(doc => {
+        const userData = doc.data();
+        // Check if username contains search term (case insensitive)
+        if (
+            userData.username.toLowerCase().includes(searchTerm.toLowerCase()) && // Matches anywhere in username
+            doc.id !== currentUser.uid // Not the current user
+        ) {
+            const isAlreadyFriend = currentUserFriends.some(friend => friend.userId === doc.id);
+            const hasPendingRequest = currentUserData.friendRequests?.some(
+                request => request.userId === doc.id && request.status === 'pending'
+            );
+            
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+            userCard.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="${userData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                        alt="Profile" 
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <span>${userData.username}</span>
+                </div>
+                ${
+                    isAlreadyFriend ? '<button disabled>Already Friends</button>' : 
+                    hasPendingRequest ? '<button disabled>Request Pending</button>' :
+                    `<button onclick="sendFriendRequest('${doc.id}')">Send Friend Request</button>`
+                }
+            `;
+            searchResults.appendChild(userCard);
+        }
+    });
+}
+
+async function sendFriendRequest(targetUserId) {
+    const currentUser = auth.currentUser;
+    
+    // Additional safety check to prevent self-friend requests
+    if (targetUserId === currentUser.uid) {
+        alert('You cannot send a friend request to yourself!');
+        return;
+    }
+    
+    try {
+        const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
+        const currentUserData = currentUserDoc.data();
+        const targetUserDoc = await db.collection('users').doc(targetUserId).get();
+        const targetUserData = targetUserDoc.data();
+
+        // Check if already friends
+        const isAlreadyFriend = currentUserData.friends?.some(friend => friend.userId === targetUserId);
+        if (isAlreadyFriend) {
+            alert('You are already friends with this user!');
+            return;
+        }
+
+        // Check if friend request already sent
+        const requestAlreadySent = targetUserData.friendRequests?.some(
+            request => request.userId === currentUser.uid && request.status === 'pending'
+        );
+        if (requestAlreadySent) {
+            alert('Friend request already sent!');
+            return;
+        }
+
+        const targetUserRef = db.collection('users').doc(targetUserId);
+        await targetUserRef.update({
+            friendRequests: firebase.firestore.FieldValue.arrayUnion({
+                userId: currentUser.uid,
+                username: currentUserData.username,
+                status: 'pending'
+            })
+        });
+
+        document.getElementById('searchResults').innerHTML = '';
+        document.getElementById('searchInput').value = '';
+        alert('Friend request sent!');
+    } catch (error) {
+        alert('Error sending friend request: ' + error.message);
+    }
+}
+
+async function loadFriendRequests() {
+    const currentUser = auth.currentUser;
+    const userDoc = await db.collection('users').doc(currentUser.uid).get();
+    const userData = userDoc.data();
+    const notifications = document.getElementById('notifications');
+    notifications.innerHTML = '';
+
+    if (userData.friendRequests && userData.friendRequests.length > 0) {
+        for (const request of userData.friendRequests) {
+            if (request.status === 'pending') {
+                // Fetch requester's current data to get their up-to-date profile picture
+                const requesterDoc = await db.collection('users').doc(request.userId).get();
+                const requesterData = requesterDoc.data();
+                
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <img src="${requesterData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                            alt="Profile" 
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <p>Friend request from ${request.username}</p>
+                    </div>
+                    <div>
+                        <button onclick="acceptFriendRequest('${request.userId}')">Accept</button>
+                        <button onclick="rejectFriendRequest('${request.userId}')">Reject</button>
+                    </div>
+                `;
+                notifications.appendChild(notification);
+            }
+        }
+    }
+}
+
+async function acceptFriendRequest(requesterId) {
+    const currentUser = auth.currentUser;
+    const currentUserRef = db.collection('users').doc(currentUser.uid);
+    const requesterRef = db.collection('users').doc(requesterId);
+
+    try {
+        const currentUserDoc = await currentUserRef.get();
+        const requesterDoc = await requesterRef.get();
+        const currentUserData = currentUserDoc.data();
+        const requesterData = requesterDoc.data();
+
+        // Add to current user's friends list
+        await currentUserRef.update({
+            friends: firebase.firestore.FieldValue.arrayUnion({
+                userId: requesterId,
+                username: requesterData.username
+            }),
+            friendRequests: firebase.firestore.FieldValue.arrayRemove({
+                userId: requesterId,
+                username: requesterData.username,
+                status: 'pending'
+            })
+        });
+
+        // Add to requester's friends list
+        await requesterRef.update({
+            friends: firebase.firestore.FieldValue.arrayUnion({
+                userId: currentUser.uid,
+                username: currentUserData.username
+            })
+        });
+
+        loadFriendRequests();
+        loadFriends();
+    } catch (error) {
+        alert('Error accepting friend request: ' + error.message);
+    }
+}
+
+async function rejectFriendRequest(requesterId) {
+    const currentUser = auth.currentUser;
+    const currentUserRef = db.collection('users').doc(currentUser.uid);
+    const requesterRef = db.collection('users').doc(requesterId);
+
+    try {
+        const requesterDoc = await requesterRef.get();
+        await currentUserRef.update({
+            friendRequests: firebase.firestore.FieldValue.arrayRemove({
+                userId: requesterId,
+                username: requesterDoc.data().username,
+                status: 'pending'
+            })
+        });
+        loadFriendRequests();
+    } catch (error) {
+        alert('Error rejecting friend request: ' + error.message);
+    }
+}
+
+async function loadFriends() {
+    const currentUser = auth.currentUser;
+    const userDoc = await db.collection('users').doc(currentUser.uid).get();
+    const userData = userDoc.data();
+    const friendsList = document.getElementById('friendsList');
+    friendsList.innerHTML = '';
+
+    if (userData.friends && userData.friends.length > 0) {
+        for (const friend of userData.friends) {
+            // Fetch friend's current data to get their up-to-date profile picture
+            const friendDoc = await db.collection('users').doc(friend.userId).get();
+            const friendData = friendDoc.data();
+            
+            const friendItem = document.createElement('div');
+            friendItem.className = 'friend-item';
+            friendItem.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                        alt="Profile" 
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <span>${friend.username}</span>
+                </div>
+                <div>
+                    <button onclick="removeFriend('${friend.userId}')">Remove</button>
+                    <button onclick="openChat('${friend.userId}', '${friend.username}')">Chat</button>
+                </div>
+            `;
+            friendsList.appendChild(friendItem);
+        }
+    } else {
+        friendsList.innerHTML = '<p>No friends yet</p>';
+    }
+}
+
+async function removeFriend(friendId) {
+    const currentUser = auth.currentUser;
+    const currentUserRef = db.collection('users').doc(currentUser.uid);
+    const friendRef = db.collection('users').doc(friendId);
+
+    try {
+        const currentUserDoc = await currentUserRef.get();
+        const friendDoc = await friendRef.get();
+        const currentUserData = currentUserDoc.data();
+        const friendData = friendDoc.data();
+
+        // Remove from current user's friends list
+        await currentUserRef.update({
+            friends: firebase.firestore.FieldValue.arrayRemove({
+                userId: friendId,
+                username: friendData.username
+            })
+        });
+
+        // Remove from friend's friends list
+        await friendRef.update({
+            friends: firebase.firestore.FieldValue.arrayRemove({
+                userId: currentUser.uid,
+                username: currentUserData.username
+            })
+        });
+
+        loadFriends();
+        if (currentChatUser === friendId) {
+            document.getElementById('chatContainer').style.display = 'none';
+        }
+    } catch (error) {
+        alert('Error removing friend: ' + error.message);
+    }
+}
+
+function openChat(friendId, friendUsername) {
+    currentChatUser = friendId;
+    document.getElementById('chatContainer').style.display = 'block';
+    document.querySelector('#chatUsername span').textContent = friendUsername;
+    loadMessages(friendId);
+}
+
+async function loadMessages(friendId) {
+    const currentUser = auth.currentUser;
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.innerHTML = '';
+
+    // Clear previous listener
+    if (messageListener) {
+        messageListener();
+    }
+
+    // Create a chat ID that's consistent regardless of who started the chat
+    const chatId = [currentUser.uid, friendId].sort().join('_');
+
+    // Set up real-time listener for messages
+    messageListener = db.collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp')
+        .onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const message = change.doc.data();
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${message.senderId === currentUser.uid ? 'sent' : 'received'}`;
+                    messageDiv.textContent = message.text;
+                    chatMessages.appendChild(messageDiv);
+                }
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+}
+
+async function sendMessage(event) {
+    event.preventDefault();
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (!message || !currentChatUser) return;
+
+    const currentUser = auth.currentUser;
+    const chatId = [currentUser.uid, currentChatUser].sort().join('_');
+
+    try {
+        await db.collection('chats')
+            .doc(chatId)
+            .collection('messages')
+            .add({
+                text: message,
+                senderId: currentUser.uid,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        messageInput.value = '';
+    } catch (error) {
+        alert('Error sending message: ' + error.message);
+    }
+}
+
+function friendsPanelClose() {
+    document.getElementById("container").style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    window.addEventListener("load", () => {
+        document.body.style.opacity = "1";
+    });
+
 
     var rainParticlesCheck = document.getElementById("particlesButtonRain");
-    var snowParticlesCheck = document.getElementById("particlesButtonSnow");
-    var stormWeatherCheck = document.getElementById("weatherButtonsStorm");
-    var blizzardWeatherCheck = document.getElementById("weatherButtonsBlizzard");
+var snowParticlesCheck = document.getElementById("particlesButtonSnow");
+var stormWeatherCheck = document.getElementById("weatherButtonsStorm");
+var blizzardWeatherCheck = document.getElementById("weatherButtonsBlizzard");
 
-    const rainGifImage = document.getElementById("rainGifImage");
-    const rainGif = document.getElementById("rainGif");
-    const particlesButtonRain = document.getElementById("particlesButtonRain");
-    const snowGifImage = document.getElementById("snowGifImage");
-    const snowGif = document.getElementById("snowGif");
-    const particlesButtonSnow = document.getElementById("particlesButtonSnow");
-    const blizzardGifImage = document.getElementById("blizzardGifImage");
-    const blizzardGif = document.getElementById("blizzardGif");
-    const weatherButtonsBlizzard = document.getElementById("weatherButtonsBlizzard");
-    const weatherButtonsStorm = document.getElementById("weatherButtonsStorm");
+const rainGifImage = document.getElementById("rainGifImage");
+const rainGif = document.getElementById("rainGif");
+const particlesButtonRain = document.getElementById("particlesButtonRain");
+const snowGifImage = document.getElementById("snowGifImage");
+const snowGif = document.getElementById("snowGif");
+const particlesButtonSnow = document.getElementById("particlesButtonSnow");
+const blizzardGifImage = document.getElementById("blizzardGifImage");
+const blizzardGif = document.getElementById("blizzardGif");
+const weatherButtonsBlizzard = document.getElementById("weatherButtonsBlizzard");
+const weatherButtonsStorm = document.getElementById("weatherButtonsStorm");
 
 
     // ------------- START OF PARTICLES BUTTONS JS ----------------
@@ -362,48 +921,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+    let stormActive = false;
+let lightningInterval;
 
+function enableStorm() {
+    if (stormActive) {
+        // Stop the storm
+        clearInterval(lightningInterval);
+        rainGifImage.style.visibility = "hidden";
+        rainGif.style.visibility = "hidden";
+        lightningGifImage.style.visibility = "hidden";
+        lightningGif.style.visibility = "hidden";
+        weatherButtonsStorm.textContent = "Enable";
 
-    function enableStorm() {
+        rainParticlesCheck.disabled = false;
+        snowParticlesCheck.disabled = false;
+        blizzardWeatherCheck.disabled = false;
+        stormActive = false;
+    } else {
+        // Start the storm
+        rainGifImage.style.visibility = "visible";
+        rainGif.style.visibility = "visible";
+        lightningGifImage.style.visibility = "visible";
+        lightningGif.style.visibility = "visible";
+        weatherButtonsStorm.textContent = "Disable";
 
-        if (rainGifImage.style.visibility === "visible") {
-            // Hide the rain GIFs and change button text to "Enable"
-            rainGifImage.style.visibility = "hidden";
-            rainGif.style.visibility = "hidden";
-            lightningGifImage.style.visibility = "hidden";
-            lightningGif.style.visibility = "hidden";
-            weatherButtonsStorm.textContent = "Enable";
+        rainParticlesCheck.disabled = true;
+        snowParticlesCheck.disabled = true;
+        blizzardWeatherCheck.disabled = true;
+        stormActive = true;
 
-            rainParticlesCheck.disabled = false;
-            snowParticlesCheck.disabled = false;
-            blizzardWeatherCheck.disabled = false;
-        } else {
-            // Show the rain GIFs and change button text to "Disable"
-            rainGifImage.style.visibility = "visible";
-            rainGif.style.visibility = "visible";
-            lightningGifImage.style.visibility = "visible";
-            lightningGif.style.visibility = "visible";
-            weatherButtonsStorm.textContent = "Disable";
+        // Make the lightning alternate positions continuously
+        lightningInterval = setInterval(() => {
+            let randomPosition = Math.random();
 
-            rainParticlesCheck.disabled = true;
-            snowParticlesCheck.disabled = true;
-            blizzardWeatherCheck.disabled = true;
-        }
+            if (randomPosition < 0.75) {
+                // 75% chance for left or right
+                let isLeftSide = Math.random() < 0.5; // 50% for left, 50% for right
+                if (isLeftSide) {
+                    lightningGifImage.style.left = "10px";  // Move to left side
+                    lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
+                } else {
+                    lightningGifImage.style.left = "calc(100% - 100px)";  // Move to right side
+                    lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
+                }
+            } else if (randomPosition < 0.9) {
+                // 15% chance for middle-left or middle-right (split equally)
+                let isMiddleLeft = Math.random() < 0.5; // 50% for middle-left, 50% for middle-right
+                if (isMiddleLeft) {
+                    lightningGifImage.style.left = "calc(25% - 50px)";  // Move to middle left
+                    lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
+                    lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+                } else {
+                    lightningGifImage.style.left = "calc(75% - 50px)";  // Move to middle right
+                    lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
+                    lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+                }
+            } else {
+                // 5% chance for pure middle
+                lightningGifImage.style.left = "calc(50% - 50px)";  // Move to pure middle
+                lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
+                lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+            }
+
+            // Flash effect with 1.75x longer duration (350ms)
+            lightningGifImage.style.opacity = "1";  // Show
+            setTimeout(() => lightningGifImage.style.opacity = "0", 350); // Hide after 350ms
+        }, 750); // Change position every 750ms (3/4 second)
     }
+}
 
-    if (weatherButtonsStorm) {
-        weatherButtonsStorm.addEventListener("click", enableStorm);
-    }
+// Attach event listener
+if (weatherButtonsStorm) {
+    weatherButtonsStorm.addEventListener("click", enableStorm);
+}
 
     // ------------ END OF WEATHER BUTTONS JS ------------------
 
 
-
-
-
-
+    
+    
+    
     //----------- CODE FOR BACKGROUND IMAGE CHANGING ------------------
-
     
     var wallpaperBg1Btn = document.getElementById("wallpaperBg1Btn");
     var wallpaperBg2Btn = document.getElementById("wallpaperBg2Btn");
@@ -533,10 +1132,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //------------- END OF WALLPAPER CODE -------------------
 
-
-
-
-
+    
+    
+    
+    
     // Audio player code
 
     const songs = [
@@ -684,7 +1283,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ------------- END OF AUDIO PLAYER CODE -----------------
 
 
-
+    
     // To Do List
 
     const todoList = document.getElementById('todo-list');
@@ -875,8 +1474,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ------------- END OF TODOLIST JS ---------------
 
-
-
+    
+    
     // ----------- START OF GENRE DROPDOWN JS ------------
 
     const genres = [
@@ -902,670 +1501,254 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ---------------- START OF MORE BUTTON JS ---------------
 
-    const moreBtn = document.getElementById("more-btn");
+    // --------------------- START OF SIDE-PANEL JS ---------------------
 
-    moreBtn.addEventListener('click', () => {
+    let openBtn = document.getElementById("hm-icon");
+    let sideBar = document.getElementById("mySidebar");
+    let closeBtn = document.getElementById("closeBtn");
+    let sidePanelOverlay = document.getElementById("sidePanelOverlay");
 
-        const morePanelOverlay = document.createElement('div');
-        morePanelOverlay.style.position = "fixed";
-        morePanelOverlay.style.top = "0";
-        morePanelOverlay.style.left = "0";
-        morePanelOverlay.style.width = "100vw";
-        morePanelOverlay.style.height = "100vh";
-        morePanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // dark semi-transparent eh
-        morePanelOverlay.style.zIndex = "400"; // making sure it is behind the panel
-        morePanelOverlay.style.transition = "opacity 0.3s ease-in-out";
+    openBtn.addEventListener('click', () => {
+        sideBar.style.width = "230px";
+        sidePanelOverlay.style.display = "block";
+    });
 
+    closeBtn.addEventListener('click', () => {
+        sideBar.style.width = "0px";
+        sidePanelOverlay.style.display = "none";
+    });
 
-        const morePanel = document.createElement('div');
-        morePanel.style.height = "70vh";
-        morePanel.style.width = "70vw";
-        morePanel.style.zIndex = "500";
-        morePanel.style.backgroundColor = "black";
-        morePanel.style.position = "absolute";
-        morePanel.style.top = "50%";
-        morePanel.style.left = "50%";
-        morePanel.style.display = "flex";
-        morePanel.style.justifyContent = "center";
-        morePanel.style.alignItems = "center";
-        morePanel.style.transform = "translate(-50%, -50%)";
-        morePanel.style.borderRadius = "15px";
-        morePanel.style.transition = "transform 0.3s ease-in-out";
-
-
-        morePanel.addEventListener("mouseover", () => {
-            morePanel.style.transform = "translate(-50%, -50%) scale(1.02)";
-        });
-
-        morePanel.addEventListener("mouseout", () => {
-            morePanel.style.transform = "translate(-50%, -50%) scale(1)";
-        });
-
-
-
-        const morePanelClose = document.createElement('button');
-        morePanelClose.style.height = "30px";
-        morePanelClose.style.width = "50px";
-        morePanelClose.innerHTML = "&times";
-        morePanelClose.style.fontSize = "20px";
-        morePanelClose.style.border = "none";
-        morePanelClose.style.transition = "transform 0.3s ease-in-out";
-        morePanelClose.style.cursor = "pointer";
-        morePanelClose.style.borderRadius = "10px";
-        
-        morePanelClose.addEventListener("mouseover", () => {
-            morePanelClose.style.transform = "scale(1.15)";
-        });
-
-        morePanelClose.addEventListener("mouseout", () => {
-            morePanelClose.style.transform = "scale(1)";
-        });
-
-        morePanelClose.addEventListener('click', () => {
-            morePanel.remove();
-            morePanelOverlay.remove();
-        });
-
-
-        document.body.appendChild(morePanel);
-        document.body.appendChild(morePanelOverlay);
-        morePanel.appendChild(morePanelClose);
+    sidePanelOverlay.addEventListener('click', () => {
+        sideBar.style.width = "0px";
+        sidePanelOverlay.style.display = "none";
     });
 
 
+    let signOutSpBtn = document.getElementById("sign-out-sp-btn");
 
-    // ------------------ END OF MORE BUTTON JS-------------------
+    signOutSpBtn.addEventListener('click', () => {
+        auth.setPersistence(firebase.auth.Auth.Persistence.NONE).then(() => {
+            auth.signOut().then(() => {
+                // After setting persistence to NONE, sign out and reset the UI
+                window.location.href = "index.html";  // Redirect to index.html after sign-out
+            }).catch(error => console.error("Sign-out error:", error));
+        }).catch(error => console.error("Error clearing persistence:", error));
+    });
 
 
-    // ------------------ START OF SETTINGS BUTTON JS -----------------
+    let friendsSPBtn = document.getElementById("friends-sp-btn");
 
-    const settingsBtn = document.getElementById("settings-btn");
+    friendsSPBtn.addEventListener("click", () => {
+        document.getElementById("container").style.display = "block";
+    });
 
-    settingsBtn.addEventListener('click', () => {
-        const settingsPanelOverlay = document.createElement('div');
-        settingsPanelOverlay.style.position = "fixed";
-        settingsPanelOverlay.style.top = "0";
-        settingsPanelOverlay.style.left = "0";
-        settingsPanelOverlay.style.width = "100vw";
-        settingsPanelOverlay.style.height = "100vh";
-        settingsPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-        settingsPanelOverlay.style.zIndex = "400"; 
-        settingsPanelOverlay.style.opacity = "0"; // Start hidden
-        settingsPanelOverlay.style.transition = "opacity 0.3s ease-in-out";
 
-        const settingsPanel = document.createElement('div');
-        settingsPanel.style.height = "75vh";
-        settingsPanel.style.width = "70vw";
-        settingsPanel.style.zIndex = "500";
-        settingsPanel.style.position = "absolute";
-        settingsPanel.style.top = "50%";
-        settingsPanel.style.left = "50%";
-        settingsPanel.style.display = "flex";
-        settingsPanel.style.justifyContent = "center";
-        settingsPanel.style.alignItems = "center";
-        settingsPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
-        settingsPanel.style.borderRadius = "15px";
-        settingsPanel.style.overflow = "hidden";
-        settingsPanel.style.border = "8px solid black";
-        settingsPanel.style.opacity = "0"; // Start hidden
-        settingsPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+    let profileSpBtn = document.getElementById("profile-sp-btn");
+    let profilePanel = document.getElementById("profilePanel");
+    let profilePanelOverlay = document.getElementById("profilePanelOverlay");
 
-        const settingsPanelBg = document.createElement('div');
-        settingsPanelBg.style.position = "absolute";
-        settingsPanelBg.style.top = "0";
-        settingsPanelBg.style.left = "0";
-        settingsPanelBg.style.width = "100%";
-        settingsPanelBg.style.height = "100%";
-        settingsPanelBg.style.backgroundImage = "url('https://i.postimg.cc/hvwphNzQ/ezgif-com-resize.gif')";
-        settingsPanelBg.style.backgroundSize = "cover";
-        settingsPanelBg.style.backgroundPosition = "center";
-        settingsPanelBg.style.backgroundRepeat = "no-repeat";
-        settingsPanelBg.style.filter = "blur(5px)"; 
-        settingsPanelBg.style.zIndex = "-1"; 
+    profileSpBtn.addEventListener('click', () => {
+        sideBar.style.width = "0px";
+        sidePanelOverlay.style.display = "none";
 
-        const settingsPanelClose = document.createElement('button');
-        settingsPanelClose.style.height = "30px";
-        settingsPanelClose.style.width = "50px";
-        settingsPanelClose.innerHTML = "&times;";
-        settingsPanelClose.style.fontSize = "20px";
-        settingsPanelClose.style.border = "none";
-        settingsPanelClose.style.cursor = "pointer";
-        settingsPanelClose.style.borderRadius = "10px";
-        settingsPanelClose.style.zIndex = "1";
-        settingsPanelClose.style.transition = "transform 0.2s ease-in-out";
+        profilePanelOverlay.style.opacity = "1";
+        profilePanelOverlay.style.pointerEvents = "auto";
+        profilePanelOverlay.style.display = "block";
 
-        settingsPanelClose.addEventListener("mouseenter", () => {
-            settingsPanelClose.style.transform = "scale(1.15)";
-        });
-
-        settingsPanelClose.addEventListener("mouseleave", () => {
-            settingsPanelClose.style.transform = "scale(1)";
-        });
-
-        settingsPanelClose.addEventListener('click', () => {
-            settingsPanel.style.opacity = "0";
-            settingsPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
-            settingsPanelOverlay.style.opacity = "0";
-            
-            // Remove elements after fade-out
-            setTimeout(() => {
-                settingsPanel.remove();
-                settingsPanelOverlay.remove();
-            }, 300);
-        });
-
-        document.body.appendChild(settingsPanelOverlay);
-        document.body.appendChild(settingsPanel);
-        settingsPanel.appendChild(settingsPanelBg);
-        settingsPanel.appendChild(settingsPanelClose);
-
-        // Use a slight delay to allow the transition to take effect
         setTimeout(() => {
-            settingsPanel.style.opacity = "1";
-            settingsPanel.style.transform = "translate(-50%, -50%) scale(1)";
-            settingsPanelOverlay.style.opacity = "1";
-        }, 10);
+            profilePanel.style.opacity = "1";
+            profilePanel.style.pointerEvents = "auto";
+        }, 50);
+
+        openBtn.style.pointerEvents = "none";
+        openBtn.style.opacity = "0.5";
     });
 
 
 
-    // ----------------- END OF SETTINGS BUTTON JS -----------------
+    function closeProfilePanel() {
+        profilePanel.style.opacity = "0";
+        profilePanel.style.pointerEvents = "none";
 
+        profilePanelOverlay.style.opacity = "0";
+        profilePanelOverlay.style.pointerEvents = "none";
 
-    // ------------------- START OF PROFILE ICON JS -----------------
+        profileCustomizationPanel.style.opacity = "0";
+        profileCustomizationPanel.style.pointerEvents = "none";
 
-    // Load the profile picture from localStorage when the page loads
-window.addEventListener('load', () => {
-    const profileIcon = document.getElementById("profileIcon");
-    const storedProfilePic = localStorage.getItem("profilePic");
-
-    if (storedProfilePic) {
-        profileIcon.src = storedProfilePic;
-    }
-});
-
-const profileIconBtn = document.getElementById("profileIcon");
-
-profileIconBtn.addEventListener('click', () => {
-    const pfpPanelOverlay = document.createElement('div');
-    pfpPanelOverlay.id = "pfpPanelOverlay";
-    pfpPanelOverlay.style.position = "fixed";
-    pfpPanelOverlay.style.top = "0";
-    pfpPanelOverlay.style.left = "0";
-    pfpPanelOverlay.style.width = "100vw";
-    pfpPanelOverlay.style.height = "100vh";
-    pfpPanelOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-    pfpPanelOverlay.style.zIndex = "400";
-    pfpPanelOverlay.style.opacity = "0";
-    pfpPanelOverlay.style.transition = "opacity 0.3s ease-in-out";
-
-    const pfpPanel = document.createElement('div');
-    pfpPanel.style.height = "47vh";
-    pfpPanel.style.width = "40vw";
-    pfpPanel.style.zIndex = "500";
-    pfpPanel.style.position = "absolute";
-    pfpPanel.style.top = "50%";
-    pfpPanel.style.left = "50%";
-    pfpPanel.style.display = "flex";
-    pfpPanel.style.flexDirection = "column";
-    pfpPanel.style.alignItems = "center";
-    pfpPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
-    pfpPanel.style.borderRadius = "15px";
-    pfpPanel.style.overflow = "hidden";
-    pfpPanel.style.border = "8px solid black";
-    pfpPanel.style.opacity = "0";
-    pfpPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
-
-    const pfpPanelBg = document.createElement('div');
-    pfpPanelBg.style.position = "absolute";
-    pfpPanelBg.style.top = "0";
-    pfpPanelBg.style.left = "0";
-    pfpPanelBg.style.width = "100%";
-    pfpPanelBg.style.height = "100%";
-    pfpPanelBg.style.backgroundImage = "url('https://img.freepik.com/free-vector/gradient-black-background-with-wavy-lines_23-2149146012.jpg?semt=ais_hybrid')";
-    pfpPanelBg.style.backgroundSize = "cover";
-    pfpPanelBg.style.backgroundPosition = "center";
-    pfpPanelBg.style.backgroundRepeat = "no-repeat";
-    pfpPanelBg.style.zIndex = "-1";
-
-    const pfpPanelHeader = document.createElement('div');
-    pfpPanelHeader.style.display = "flex";
-    pfpPanelHeader.style.justifyContent = "center";
-    pfpPanelHeader.style.alignItems = "center";
-    pfpPanelHeader.style.width = "100%";
-    pfpPanelHeader.style.padding = "0 15px";
-
-    const pfpPanelTitle = document.createElement('h2');
-    pfpPanelTitle.style.fontSize = "25px";
-    pfpPanelTitle.style.color = "white";
-    pfpPanelTitle.style.textAlign = "center";
-    pfpPanelTitle.textContent = "Change Profile Picture";
-    pfpPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
-    pfpPanelTitle.style.textAlign = "center";
-
-    // Close button
-    const closeButton = document.createElement("button");
-    closeButton.style.height = "100%";
-    closeButton.style.width = "7vw";
-    closeButton.textContent = "Cancel";
-    closeButton.style.backgroundColor = "transparent";
-    closeButton.style.borderRadius = "10px";
-    closeButton.style.border = "3px solid white";
-    closeButton.style.fontSize = "15px";
-    closeButton.style.color = "white";
-    closeButton.style.cursor = "pointer";
-    closeButton.style.transition = "transform 0.3s ease-in-out";
-
-    closeButton.addEventListener('mouseenter', () => {
-        closeButton.style.transform = "scale(1.1)";
-    });
-
-    closeButton.addEventListener('mouseleave', () => {
-        closeButton.style.transform = "scale(1)";
-    });
-
-    closeButton.addEventListener("click", () => {
-        pfpPanel.style.opacity = "0";
-        pfpPanelOverlay.style.opacity = "0";
-    
         setTimeout(() => {
-            pfpPanelOverlay.remove();
-            pfpPanel.remove();
+            profilePanelOverlay.style.display = "none";
         }, 300);
+
+        openBtn.style.pointerEvents = "auto";
+        openBtn.style.opacity = "1";
+    }
+
+    profilePanelOverlay.addEventListener('click', closeProfilePanel);
+
+
+
+
+    let profileEditBtn = document.getElementById("ppbb-1");
+    let profileCustomizationPanel = document.getElementById("profile-customization-panel");
+
+    function openProfileCustomizationPanel() {
+        profilePanel.style.opacity = "0";
+        profilePanel.style.pointerEvents = "none";
+
+        profilePanelOverlay.style.opacity = "1";
+        profilePanelOverlay.style.pointerEvents = "auto";
+
+        profileCustomizationPanel.style.pointerEvents = "auto";
+
+        setTimeout(() => {
+            profileCustomizationPanel.style.opacity = "1";
+        }, 10);
+    }
+
+    profileEditBtn.addEventListener('click', openProfileCustomizationPanel);
+
+
+    // ---------------- END OF SIDE-PANEL JS ---------------------
+
+
+
+    // ---------------- TOOLTIPS START ---------------------
+
+
+    let mainScreenProfileCustomizationBtn = document.getElementById("profileEdit-icon");
+
+    mainScreenProfileCustomizationBtn.addEventListener('mouseenter', () => {
+        let tooltipText = mainScreenProfileCustomizationBtn.getAttribute("data-tooltip");
+        let tooltip = document.createElement("div");
+        tooltip.className = "profileEditMainPageTooltip";
+        tooltip.textContent = tooltipText;
+
+        document.body.appendChild(tooltip);
+
+        // Position tooltip above the profile edit icon
+        let rect = mainScreenProfileCustomizationBtn.getBoundingClientRect();
+        tooltip.style.left = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + "px";
+        tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 5 + "px";
+
+        setTimeout(() => {
+            tooltip.classList.add("show");
+        }, 10);
+
+        mainScreenProfileCustomizationBtn.tooltipElement = tooltip;
     });
 
-    const pfpPanelContainers = document.createElement('div');
-    pfpPanelContainers.style.width = "85%";
-    pfpPanelContainers.style.height = "27vh";
-    pfpPanelContainers.style.display = "flex";
-    pfpPanelContainers.style.justifyContent = "center";
-    pfpPanelContainers.style.alignItems = "center";
-    pfpPanelContainers.style.gap = "2%";
-    // pfpPanelContainers.style.backgroundColor = "red";
+    mainScreenProfileCustomizationBtn.addEventListener('mouseleave', () => {
+        if (mainScreenProfileCustomizationBtn.tooltipElement) {
+            mainScreenProfileCustomizationBtn.tooltipElement.classList.remove("show");
 
-    const pfpPanelItemContainer = document.createElement('div');
-    pfpPanelItemContainer.style.display = "flex";
-    pfpPanelItemContainer.style.flexDirection = "column";
-    pfpPanelItemContainer.style.justifyContent = "center";
-    pfpPanelItemContainer.style.alignItems = "center";
-    pfpPanelItemContainer.style.width = "70%";
-    pfpPanelItemContainer.style.height = "27vh";
-    pfpPanelItemContainer.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
-    pfpPanelItemContainer.style.border = "5px solid white";
-    pfpPanelItemContainer.style.borderRadius = "10px";
-
-    const pfpPanelCurrentPfpContainer = document.createElement('div');
-    pfpPanelCurrentPfpContainer.style.display = "flex";
-    pfpPanelCurrentPfpContainer.style.flexDirection = "column";
-    pfpPanelCurrentPfpContainer.style.justifyContent = "center";
-    pfpPanelCurrentPfpContainer.style.alignItems = "center";
-    pfpPanelCurrentPfpContainer.style.width = "30%";
-    pfpPanelCurrentPfpContainer.style.height = "27vh";
-    pfpPanelCurrentPfpContainer.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
-    pfpPanelCurrentPfpContainer.style.border = "5px solid white";
-    pfpPanelCurrentPfpContainer.style.borderRadius = "10px";
-
-    const pfpPanelRow1Container = document.createElement('div');
-    pfpPanelRow1Container.style.display = "flex";
-    pfpPanelRow1Container.style.justifyContent = "center";
-    pfpPanelRow1Container.style.alignItems = "center";
-    pfpPanelRow1Container.style.width = "90%";
-    pfpPanelRow1Container.style.height = "10vh";
-    // pfpPanelRow1Container.style.backgroundColor = "blue";
-
-    const pfpPanelIcon1 = document.createElement('img');
-    pfpPanelIcon1.id = "currentPfp";
-    pfpPanelIcon1.style.width = "70px";
-    pfpPanelIcon1.style.height = "70px";
-    pfpPanelIcon1.style.borderRadius = "50%";
-    pfpPanelIcon1.style.padding = "10px";
-    // pfpPanelIcon1.style.border = "5px solid black";
-    pfpPanelIcon1.src = localStorage.getItem("profilePicture");
-    pfpPanelIcon1.style.transition = "transform 0.3s ease-in-out";
-
-    pfpPanelIcon1.addEventListener('mouseenter', () => {
-        pfpPanelIcon1.style.transform = "scale(1.05)";
-    });
-
-    pfpPanelIcon1.addEventListener('mouseleave', () => {
-        pfpPanelIcon1.style.transform = "scale(1)";
-    });
-
-    const pfpPanelBtnContainer = document.createElement('div');
-    pfpPanelBtnContainer.style.display = "flex";
-    pfpPanelBtnContainer.style.justifyContent = "center";
-    pfpPanelBtnContainer.style.alignItems = "center";
-    pfpPanelBtnContainer.style.width = "80%";
-    pfpPanelBtnContainer.style.height = "5vh";
-    pfpPanelBtnContainer.style.marginTop = "20px";
-    pfpPanelBtnContainer.style.gap = "1vw";
-    pfpPanelBtnContainer.style.marginBottom = "2.5vh";
-
-    const pfpPanelSelectBtn = document.createElement('button');
-    pfpPanelSelectBtn.disabled = true;
-    pfpPanelSelectBtn.style.height = "100%";
-    pfpPanelSelectBtn.style.width = "7vw";
-    pfpPanelSelectBtn.textContent = "Select";
-    pfpPanelSelectBtn.style.backgroundColor = "#ccc";
-    pfpPanelSelectBtn.style.borderRadius = "10px";
-    pfpPanelSelectBtn.style.border = "3px solid white";
-    pfpPanelSelectBtn.style.fontSize = "15px";
-    pfpPanelSelectBtn.style.color = "white";
-    pfpPanelSelectBtn.style.cursor = "not-allowed";
-    pfpPanelSelectBtn.style.transition = "transform 0.3s ease-in-out";
-
-    pfpPanelSelectBtn.addEventListener('mouseenter', () => {
-        pfpPanelSelectBtn.style.transform = "scale(1.05)";
-    });
-
-    pfpPanelSelectBtn.addEventListener('mouseleave', () => {
-        pfpPanelSelectBtn.style.transform = "scale(1)";
-    });
-
-    const pfpPanelUploadBtn = document.createElement('button');
-    pfpPanelUploadBtn.style.height = "100%";
-    pfpPanelUploadBtn.style.width = "8vw";
-    pfpPanelUploadBtn.textContent = "Upload Image";
-    pfpPanelUploadBtn.style.backgroundColor = "transparent";
-    pfpPanelUploadBtn.style.borderRadius = "10px";
-    pfpPanelUploadBtn.style.border = "3px solid white";
-    pfpPanelUploadBtn.style.fontSize = "15px";
-    pfpPanelUploadBtn.style.color = "white";
-    pfpPanelUploadBtn.style.cursor = "pointer";
-    pfpPanelUploadBtn.style.transition = "transform 0.3s ease-in-out";
-
-    pfpPanelUploadBtn.addEventListener('mouseenter', () => {
-        pfpPanelUploadBtn.style.transform = "scale(1.05)";
-    });
-
-    pfpPanelUploadBtn.addEventListener('mouseleave', () => {
-        pfpPanelUploadBtn.style.transform = "scale(1)";
-    });
-
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
-    fileInput.style.display = "none";
-
-    pfpPanelUploadBtn.addEventListener("click", () => {
-        pfpPanel.remove();
-
-        const uploadImgPanel = document.createElement('div');
-        uploadImgPanel.id = "uploadImgPanel";
-        uploadImgPanel.style.height = "37vh";
-        uploadImgPanel.style.width = "30vw";
-        uploadImgPanel.style.zIndex = "500";
-        uploadImgPanel.style.position = "absolute";
-        uploadImgPanel.style.top = "50%";
-        uploadImgPanel.style.left = "50%";
-        uploadImgPanel.style.display = "flex";
-        uploadImgPanel.style.flexDirection = "column";
-        uploadImgPanel.style.alignItems = "center";
-        uploadImgPanel.style.transform = "translate(-50%, -50%) scale(0.95)";
-        uploadImgPanel.style.borderRadius = "15px";
-        uploadImgPanel.style.overflow = "hidden";
-        uploadImgPanel.style.border = "8px solid black";
-        uploadImgPanel.style.opacity = "1";
-        uploadImgPanel.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
-
-        const uploadPanelBg = document.createElement('div');
-        uploadPanelBg.style.position = "absolute";
-        uploadPanelBg.style.top = "0";
-        uploadPanelBg.style.left = "0";
-        uploadPanelBg.style.width = "100%";
-        uploadPanelBg.style.height = "100%";
-        uploadPanelBg.style.backgroundImage = "url('https://img.freepik.com/free-vector/gradient-black-background-with-wavy-lines_23-2149146012.jpg?semt=ais_hybrid')";
-        uploadPanelBg.style.backgroundSize = "cover";
-        uploadPanelBg.style.backgroundPosition = "center";
-        uploadPanelBg.style.backgroundRepeat = "no-repeat";
-        uploadPanelBg.style.zIndex = "-1";
-
-
-        const uploadImgHeader = document.createElement('div');
-        uploadImgHeader.style.display = "flex";
-        uploadImgHeader.style.justifyContent = "center";
-        uploadImgHeader.style.alignItems = "center";
-        uploadImgHeader.style.width = "100%";
-        uploadImgHeader.style.height = "10vh";
-        // uploadImgHeader.style.backgroundColor = "green";
-        uploadImgHeader.style.padding = "0 15px";
-
-        const uploadPanelTitle = document.createElement('h2');
-        uploadPanelTitle.style.fontSize = "25px";
-        uploadPanelTitle.style.color = "white";
-        uploadPanelTitle.style.textAlign = "center";
-        uploadPanelTitle.textContent = "Upload Picture";
-        uploadPanelTitle.style.fontFamily = "'IBM Plex Mono', serif";
-        uploadPanelTitle.style.textAlign = "center";
-
-
-        const uploadImgPlaceholder = document.createElement('img');
-        uploadImgPlaceholder.id = "uploadImgPlaceholder";
-        uploadImgPlaceholder.style.width = "60px";
-        uploadImgPlaceholder.style.height = "60px";
-        uploadImgPlaceholder.style.padding = "10px";
-        uploadImgPlaceholder.style.backgroundColor = "white";
-        uploadImgPlaceholder.src = "https://static-00.iconduck.com/assets.00/upload-icon-2048x2048-eu9n5hco.png";
-        uploadImgPlaceholder.style.border = "5px solid white";
-        uploadImgPlaceholder.style.borderRadius = "10px";
-        uploadImgPlaceholder.style.marginTop = "2%";
-        uploadImgPlaceholder.style.cursor = "pointer";
-        uploadImgPlaceholder.style.transition = "transform 0.3s ease-in-out";
-
-        uploadImgPlaceholder.addEventListener('mouseenter', () => {
-            uploadImgPlaceholder.style.transform = "scale(1.05)";
-        });
-
-        uploadImgPlaceholder.addEventListener('mouseleave', () => {
-            uploadImgPlaceholder.style.transform = "scale(1)";
-        });
-
-
-
-        const uploadImgBtnContainer = document.createElement('div');
-        uploadImgBtnContainer.style.display = "flex";
-        uploadImgBtnContainer.style.justifyContent = "center";
-        uploadImgBtnContainer.style.alignItems = "center";
-        uploadImgBtnContainer.style.width = "80%";
-        uploadImgBtnContainer.style.height = "5vh";
-        uploadImgBtnContainer.style.marginTop = "7%";
-        uploadImgBtnContainer.style.gap = "1vw";
-        uploadImgBtnContainer.style.marginBottom = "2.5vh";
-
-
-        const upCloseBtn = document.createElement('button');
-        upCloseBtn.style.height = "100%";
-        upCloseBtn.style.width = "7vw";
-        upCloseBtn.textContent = "Cancel";
-        upCloseBtn.style.borderRadius = "10px";
-        upCloseBtn.style.border = "3px solid white";
-        upCloseBtn.style.backgroundColor = "transparent";
-        upCloseBtn.style.fontSize = "15px";
-        upCloseBtn.style.color = "white";
-        upCloseBtn.style.cursor = "pointer";
-        upCloseBtn.style.transition = "transform 0.3s ease-in-out";
-
-        upCloseBtn.addEventListener('mouseenter', () => {
-            upCloseBtn.style.transform = "scale(1.1)";
-        });
-    
-        upCloseBtn.addEventListener('mouseleave', () => {
-            upCloseBtn.style.transform = "scale(1)";
-        });
-
-        upCloseBtn.addEventListener("click", () => {
-            uploadImgPanel.style.opacity = "0";
-            pfpPanelOverlay.style.opacity = "0";
-        
             setTimeout(() => {
-                pfpPanelOverlay.remove();
-                uploadImgPanel.remove();
+                mainScreenProfileCustomizationBtn.tooltipElement.remove();
             }, 300);
-        });
-
-
-        document.body.appendChild(uploadImgPanel);
-        uploadImgPanel.appendChild(uploadImgHeader);
-        uploadImgHeader.appendChild(uploadPanelTitle);
-        uploadImgPanel.appendChild(uploadPanelBg);
-        uploadImgPanel.appendChild(uploadImgPlaceholder);
-        uploadImgPanel.appendChild(uploadImgBtnContainer);
-        uploadImgBtnContainer.appendChild(upCloseBtn);
-
-
-        uploadImgPlaceholder.addEventListener("click", () => {
-            fileInput.click();
-        });
-    });
-
-    fileInput.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const imageUrl = e.target.result;
-    
-                // Create an image element to load the selected file
-                const img = new Image();
-                img.src = imageUrl;
-    
-                img.onload = function () {
-                    // Create a canvas to resize the image
-                    const canvas = document.createElement("canvas");
-                    const ctx = canvas.getContext("2d");
-    
-                    // Set the canvas size to 90px by 90px
-                    canvas.width = 90;
-                    canvas.height = 90;
-    
-                    // Draw the image on the canvas with the new dimensions
-                    ctx.drawImage(img, 0, 0, 90, 90);
-    
-                    // Get the resized image data URL
-                    const resizedImageUrl = canvas.toDataURL();
-    
-                    // Save the resized image URL to localStorage
-                    localStorage.setItem("profilePicture", resizedImageUrl);
-    
-                    // Update the profileIcon and currentPfp with the new image URL
-                    document.getElementById("profileIcon").src = resizedImageUrl;
-    
-                    // Update the uploadImgPlaceholder with the new image
-                    const uploadImgPanel = document.getElementById("uploadImgPanel");
-                    uploadImgPanel.style.display = "none";
-    
-                    const successPanelImg = document.createElement('div');
-                    successPanelImg.id = "uploadImgPanel";
-                    successPanelImg.style.height = "25vh";
-                    successPanelImg.style.width = "30vw";
-                    successPanelImg.style.zIndex = "500";
-                    successPanelImg.style.position = "absolute";
-                    successPanelImg.style.top = "50%";
-                    successPanelImg.style.left = "50%";
-                    successPanelImg.style.display = "flex";
-                    successPanelImg.style.flexDirection = "column";
-                    successPanelImg.style.alignItems = "center";
-                    successPanelImg.style.justifyContent = "center";
-                    successPanelImg.style.transform = "translate(-50%, -50%) scale(0.95)";
-                    successPanelImg.style.borderRadius = "15px";
-                    successPanelImg.style.overflow = "hidden";
-                    successPanelImg.style.border = "8px solid black";
-                    successPanelImg.style.opacity = "1";
-                    successPanelImg.style.transition = "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
-    
-                    const successPanelImgBg = document.createElement('div');
-                    successPanelImgBg.style.position = "absolute";
-                    successPanelImgBg.style.top = "0";
-                    successPanelImgBg.style.left = "0";
-                    successPanelImgBg.style.width = "100%";
-                    successPanelImgBg.style.height = "100%";
-                    successPanelImgBg.style.backgroundImage = "url('https://img.freepik.com/free-vector/gradient-black-background-with-wavy-lines_23-2149146012.jpg?semt=ais_hybrid')";
-                    successPanelImgBg.style.backgroundSize = "cover";
-                    successPanelImgBg.style.backgroundPosition = "center";
-                    successPanelImgBg.style.backgroundRepeat = "no-repeat";
-                    successPanelImgBg.style.zIndex = "-1";
-    
-                    const successPanelImgMsg = document.createElement('h2');
-                    successPanelImgMsg.style.fontSize = "22px";
-                    successPanelImgMsg.style.color = "white";
-                    successPanelImgMsg.style.textAlign = "center";
-                    successPanelImgMsg.textContent = "Image changed successfully!";
-                    successPanelImgMsg.style.fontFamily = "'IBM Plex Mono', serif";
-                    successPanelImgMsg.style.textAlign = "center";
-    
-                    const successPanelImgCloseBtn = document.createElement('button');
-                    successPanelImgCloseBtn.style.height = "20%";
-                    successPanelImgCloseBtn.style.width = "30%";
-                    successPanelImgCloseBtn.textContent = "Close";
-                    successPanelImgCloseBtn.style.backgroundColor = "transparent";
-                    successPanelImgCloseBtn.style.borderRadius = "10px";
-                    successPanelImgCloseBtn.style.border = "3px solid white";
-                    successPanelImgCloseBtn.style.marginTop = "2%";
-                    successPanelImgCloseBtn.style.fontSize = "15px";
-                    successPanelImgCloseBtn.style.color = "white";
-                    successPanelImgCloseBtn.style.cursor = "pointer";
-                    successPanelImgCloseBtn.style.transition = "transform 0.3s ease-in-out";
-    
-                    successPanelImgCloseBtn.addEventListener('mouseenter', () => {
-                        successPanelImgCloseBtn.style.transform = "scale(1.05)";
-                    });
-    
-                    successPanelImgCloseBtn.addEventListener('mouseleave', () => {
-                        successPanelImgCloseBtn.style.transform = "scale(1)";
-                    });
-    
-                    successPanelImgCloseBtn.addEventListener("click", () => {
-                        successPanelImg.style.opacity = "0";
-    
-                        setTimeout(() => {
-                            successPanelImg.remove();
-                            uploadImgPanel.remove();
-                            const pfpPanelOverlay = document.getElementById("pfpPanelOverlay");
-                            pfpPanelOverlay.remove();
-                        }, 300);
-                    });
-    
-                    document.body.appendChild(successPanelImg);
-                    successPanelImg.appendChild(successPanelImgBg);
-                    successPanelImg.appendChild(successPanelImgMsg);
-                    successPanelImg.appendChild(successPanelImgCloseBtn);
-                };
-            };
-            reader.readAsDataURL(file);
         }
     });
+
+    mainScreenProfileCustomizationBtn.addEventListener('click', () => {
+        profilePanelOverlay.style.opacity = "1";
+        profilePanelOverlay.style.pointerEvents = "auto";
+        profilePanelOverlay.style.display = "block";
+
+        setTimeout(() => {
+            profileCustomizationPanel.style.opacity = "1";
+            profileCustomizationPanel.style.pointerEvents = "auto";
+        }, 50);
+
+        openBtn.style.pointerEvents = "none";
+        openBtn.style.opacity = "0.5";
+    });
+
     
+    document.getElementById("user-info").addEventListener("click", (event) => {
+        if (event.target.tagName === "P") {
+            profilePanelOverlay.style.opacity = "1";
+            profilePanelOverlay.style.pointerEvents = "auto";
+            profilePanelOverlay.style.display = "block";
+
+        setTimeout(() => {
+            profilePanel.style.opacity = "1";
+            profilePanel.style.pointerEvents = "auto";
+        }, 50);
+        }
+    });
+
+
+    let mainScreenProfileSettingsBtn = document.getElementById("profileSettings-icon");
+
+    mainScreenProfileSettingsBtn.addEventListener('mouseenter', () => {
+        let tooltipText = mainScreenProfileSettingsBtn.getAttribute("data-tooltip");
+        let tooltip = document.createElement("div");
+        tooltip.className = "profileSettingsMainPageTooltip";
+        tooltip.textContent = tooltipText;
+
+        document.body.appendChild(tooltip);
+
+        let rect = mainScreenProfileSettingsBtn.getBoundingClientRect();
+        tooltip.style.left = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + "px";
+        tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 5 + "px";
+
+        setTimeout(() => {
+            tooltip.classList.add("show");
+        }, 10);
+
+        mainScreenProfileSettingsBtn.tooltipElement = tooltip;
+    });
+
+    mainScreenProfileSettingsBtn.addEventListener('mouseleave', () => {
+        if (mainScreenProfileSettingsBtn.tooltipElement) {
+            mainScreenProfileSettingsBtn.tooltipElement.classList.remove("show");
+
+            setTimeout(() => {
+                mainScreenProfileSettingsBtn.tooltipElement.remove();
+            }, 300);
+        }
+    });
+
+
+
+    let hmMenuBtn = document.getElementById("hm-icon");
+
+    hmMenuBtn.addEventListener('mouseenter', () => {
+        let tooltipText = hmMenuBtn.getAttribute("data-tooltip");
+        let tooltip = document.createElement("div");
+        tooltip.className = "hmBtnTooltip";
+        tooltip.textContent = tooltipText;
     
+        document.body.appendChild(tooltip);
+    
+        // Position tooltip to the right of the hmMenuBtn
+        let rect = hmMenuBtn.getBoundingClientRect();
+        tooltip.style.left = rect.right + window.scrollX + 5 + "px"; // 5px gap to the right
+        tooltip.style.top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2) + "px"; // Centered vertically
+    
+        setTimeout(() => {
+            tooltip.classList.add("show");
+        }, 10);
+    
+        hmMenuBtn.tooltipElement = tooltip;
+    });
+    
+    hmMenuBtn.addEventListener('mouseleave', () => {
+        if (hmMenuBtn.tooltipElement) {
+            hmMenuBtn.tooltipElement.classList.remove("show");
 
-    document.body.appendChild(pfpPanelOverlay);
-    document.body.appendChild(pfpPanel);
-    pfpPanel.appendChild(pfpPanelBg);
-    pfpPanel.appendChild(pfpPanelHeader);
-    pfpPanelHeader.appendChild(pfpPanelTitle);
-    pfpPanel.appendChild(pfpPanelContainers);
-    pfpPanelContainers.appendChild(pfpPanelItemContainer);
-    pfpPanelContainers.appendChild(pfpPanelCurrentPfpContainer);
-    pfpPanelItemContainer.appendChild(pfpPanelRow1Container);
-    pfpPanelCurrentPfpContainer.appendChild(pfpPanelIcon1);
-    pfpPanel.appendChild(pfpPanelBtnContainer);
-    pfpPanelBtnContainer.appendChild(pfpPanelUploadBtn);
-    pfpPanelBtnContainer.appendChild(pfpPanelSelectBtn);
-    pfpPanelBtnContainer.appendChild(closeButton);
-    document.body.appendChild(fileInput);
+            setTimeout(() => {
+                hmMenuBtn.tooltipElement.remove();
+            }, 300);
+        }
+    });
 
-    setTimeout(() => {
-        pfpPanel.style.opacity = "1";
-        pfpPanel.style.transform = "translate(-50%, -50%) scale(1)";
-        pfpPanelOverlay.style.opacity = "1";
-    }, 10);
-});
+    
+    // ---------------- TOOLTIPS END ---------------------
+        
+        
 
-
-    // -------------------- END OF PROFILE ICON JS -------------------
-
-
+    
     // --------------- START OF CLOCK JS ---------------------
 
     let hrs = document.getElementById("hrs");
@@ -1595,10 +1778,5 @@ profileIconBtn.addEventListener('click', () => {
 
 
     // ------------------ END OF CLOCK JS -----------------------
-
-    window.addEventListener("load", () => {
-        document.body.style.opacity = "1"; // Trigger fade-in
-    });
-
 
 });
