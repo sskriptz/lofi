@@ -1747,24 +1747,24 @@ main {
 
 /* ------------------END OF MEDIA QUERIES------------------ */
 
-#container {
+#socialContainer {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 50vw;
-    display: none;
+    z-index: 5001;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
 }
 
-.auth-section, .username-section {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+#socialContainer:hover {
+    transform: translate(-50%, -50%) scale(1.01);
 }
 
-.main-section {
+.spMainSection {
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -1775,9 +1775,9 @@ main {
     margin-bottom: 20px;
 }
 
-.main-section input[type="email"],
-.main-section input[type="password"],
-.main-section input[type="text"] {
+.spMainSection input[type="email"],
+.spMainSection input[type="password"],
+.spMainSection input[type="text"] {
     width: 50%;
     padding: 10px;
     margin: 10px 0;
@@ -1785,7 +1785,7 @@ main {
     border-radius: 4px;
 }
 
-.main-section button {
+.spMainSection button {
     background-color: #1877f2;
     color: white;
     padding: 10px 20px;
@@ -1795,7 +1795,7 @@ main {
     margin: 5px 0;
 }
 
-.main-section button:hover {
+.spMainSection button:hover {
     background-color: #166fe5;
 }
 
@@ -1877,7 +1877,7 @@ main {
     flex-grow: 1;
 }
 
-.section-title {
+.fr-section-title {
     margin: 20px 0 10px;
     color: #1877f2;
 }
@@ -1900,4 +1900,15 @@ main {
 
 .friend-item.active {
     background-color: #e3f2fd;
+}
+
+#socialPanelOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5000;
 }
