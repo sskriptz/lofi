@@ -1,1001 +1,1023 @@
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAwUAqTV07AahyfD55owmyAcxDG3TP_KnI",
-  authDomain: "lofi-168cb.firebaseapp.com",
-  projectId: "lofi-168cb",
-  storageBucket: "lofi-168cb.firebasestorage.app",
-  messagingSenderId: "331670095312",
-  appId: "1:331670095312:web:7538041673a10b1b4aa5d5"
-};
+    apiKey: "AIzaSyAwUAqTV07AahyfD55owmyAcxDG3TP_KnI",
+    authDomain: "lofi-168cb.firebaseapp.com",
+    projectId: "lofi-168cb",
+    storageBucket: "lofi-168cb.firebasestorage.app",
+    messagingSenderId: "331670095312",
+    appId: "1:331670095312:web:7538041673a10b1b4aa5d5"
+  };
+  
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  
+  let currentChatUser = null;
+  let messageListener = null;
+  
+  document.addEventListener("DOMContentLoaded", () => {
+  
+      // Create the welcome panel element and style it dynamically (Frosted glass effect)
+      const welcomePanel = document.createElement("div");
+      welcomePanel.id = "welcome-panel";
+      welcomePanel.style.position = "absolute"; // Absolute positioning to position it relative to the page
+      welcomePanel.style.top = "-100px"; // Start off-screen
+      welcomePanel.style.background = "rgba(255, 255, 255, 0.8)"; // Reduced transparency for frosted glass effect
+      welcomePanel.style.borderRadius = "15px"; // Rounded corners
+      welcomePanel.style.border = "3px solid rgba(0, 0, 0, 0.7)"; // Increased thickness of black border
+      welcomePanel.style.padding = "20px";
+      welcomePanel.style.fontSize = "18px";
+      welcomePanel.style.textAlign = "center";
+      welcomePanel.style.width = "80%";
+      welcomePanel.style.maxWidth = "400px";
+      welcomePanel.style.zIndex = "9999"; // On top of everything else
+      welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Soft shadow for depth
+      welcomePanel.style.transition = "top 0.5s ease, opacity 0.3s ease, transform 0.3s ease"; // Smooth animation
+      welcomePanel.style.opacity = "0"; // Start as invisible
+      welcomePanel.style.fontFamily = "'Inconsolata', monospace"; // Inconsolata font
+      welcomePanel.style.backdropFilter = "blur(15px)"; // Frosted glass effect
+      document.body.appendChild(welcomePanel);
+      
+      // Create the welcome message paragraph (Text in white)
+      const welcomeMessage = document.createElement("p");
+      welcomeMessage.style.color = "black"; // Ensure the text is white
+      welcomePanel.appendChild(welcomeMessage);
+      
+      // Create the continue button for the panel
+      const closePanelBtn = document.createElement("button");
+      closePanelBtn.textContent = "Continue";
+      closePanelBtn.style.background = "#333333"; // Dark background for button
+      closePanelBtn.style.border = "2px solid transparent"; // Initially no border
+      closePanelBtn.style.color = "white";
+      closePanelBtn.style.fontSize = "20px";
+      closePanelBtn.style.marginTop = "20px";
+      closePanelBtn.style.cursor = "pointer";
+      closePanelBtn.style.padding = "12px 30px"; // More padding for a rectangular button
+      closePanelBtn.style.borderRadius = "8px"; // Curved edges
+      closePanelBtn.style.transition = "background-color 0.3s ease, border-color 0.3s ease";
+      closePanelBtn.style.fontWeight = "bold";
+      closePanelBtn.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+      welcomePanel.appendChild(closePanelBtn);
+      
+      // Hover effect for button: border and color change
+      closePanelBtn.onmouseover = () => {
+          closePanelBtn.style.borderColor = "#ffffff"; // Border shows up on hover
+          closePanelBtn.style.backgroundColor = "#555555"; // Darker background on hover
+      };
+      closePanelBtn.onmouseout = () => {
+          closePanelBtn.style.borderColor = "transparent"; // No border on mouse out
+          closePanelBtn.style.backgroundColor = "#333333"; // Original background
+      };
+      
+      // Hover effect for the panel itself: subtle brightness increase
+      welcomePanel.onmouseover = () => {
+          welcomePanel.style.transform = "translateX(-50%) scale(1.05)"; // Slight scale-up
+          welcomePanel.style.boxShadow = "0 15px 50px rgba(0, 0, 0, 0.4)"; // Increase shadow on hover
+      };
+      welcomePanel.onmouseout = () => {
+          welcomePanel.style.transform = "translateX(-50%) scale(1)"; // Return to normal scale
+          welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Return to original shadow
+      };
+      
+      // Add CSS for hover animation
+      const style = document.createElement('style');
+      style.innerHTML = 
+          `@keyframes hoverUpDown {
+              0% { transform: translateY(0); }
+              50% { transform: translateY(10px); }
+              100% { transform: translateY(0); }
+          }`;
+      document.head.appendChild(style);
+  
+  
+      // Check if the user is new or returning
+      function checkIfNewUser(user) {
+          const creationTime = user.metadata.creationTime;
+          const lastSignInTime = user.metadata.lastSignInTime;
+      
+          if (creationTime === lastSignInTime) {
+              // New user
+              welcomeMessage.innerHTML = `Welcome, ${user.displayName}!`;
+          } else {
+              // Returning user
+              welcomeMessage.innerHTML = `Welcome back, ${user.displayName}!`;
+          }
+      
+          // Delay the animation of the welcome panel
+          setTimeout(() => {
+              // Show the welcome panel with slide-down animation
+              welcomePanel.style.opacity = "1"; // Make the panel visible
+              welcomePanel.style.top = "20px"; // Slide the panel down smoothly
+              // Apply the hover animation
+              welcomePanel.style.animation = "hoverUpDown 3s infinite ease-in-out"; // Infinite up and down animation
+          }, 500); // Delay by 500ms
+      }
+  
+  
+      // Close the welcome panel
+      closePanelBtn.onclick = () => {
+          welcomePanel.style.top = "-100px"; // Hide the panel again
+          welcomePanel.style.opacity = "0"; // Make it invisible again
+      
+          // After the panel is completely out of view, set it to display none
+          setTimeout(() => {
+              welcomePanel.style.display = "none"; // Remove the panel from the view
+          }, 500); // Match the transition duration
+      };
+  
+  
+  
+  
+      auth.onAuthStateChanged(async (user) => {
+          if (user) {
+              checkIfNewUser(user);
+          } else {
+              // If user is not signed in, redirect to index page
+              window.location.href = "index.html";
+              return;
+          }
+  
+          // Rest of your existing landing page auth code
+          document.getElementById('chatContainer').style.display = 'none';
+          currentChatUser = null;
+          if (messageListener) {
+              messageListener();
+              messageListener = null;
+          }
+  
+          // ----------------- UPDATE USER INFO -----------------
+  
+  
+  
+  
+  
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          
+          const profilePicElement = document.getElementById('userProfilePic');
+          if (user.photoURL) {
+              profilePicElement.src = user.photoURL;
+          } else {
+              profilePicElement.src = 'https://www.gravatar.com/avatar/?d=mp';
+          }
+  
+  
+  
+  
+  
+          // Update user info display
+          const userInfo = document.getElementById('user-info');
+          userInfo.innerHTML = `
+              <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                   alt="Profile" 
+                   width="50" 
+                   style="border-radius: 50%">
+              <p>Hello, ${user.displayName}</p>
+          `;
+  
+  
+  
+  
+  
+  
+          const profileUserInfo = document.getElementById("pp-user-info");
+          profileUserInfo.innerHTML = `
+              <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                   alt="Profile" 
+                   width="50" 
+                   style="border-radius: 50%">
+              <p>${user.displayName}</p>
+          `;
+  
+  
+  
+  
+  
+  
+          const accCreationDateP = document.getElementById("acc-creation-date");
+  
+          // Function to format the date
+          function formatDate(timestamp) {
+              const date = new Date(timestamp);
+              return date.toLocaleDateString("en-US", {  
+                  year: "numeric",  
+                  month: "long",  
+                  day: "numeric"  
+              });
+          }
+  
+          if (user) {
+              const creationTimestamp = user.metadata.creationTime;
+              if (creationTimestamp) {
+                  accCreationDateP.textContent = `Account Created On: ${formatDate(creationTimestamp)}`;
+              } else {
+                  accCreationDateP.textContent = "Creation date not available.";
+              }
+          }
+  
+  
+  
+  
+  
+  
+          // -----------------------------------------------
+  
+          if (!userDoc.exists) {
+              // Create new user document with Google display name
+              await db.collection('users').doc(user.uid).set({
+                  email: user.email,
+                  username: user.displayName,
+                  friends: [],
+                  friendRequests: [],
+                  profilePicture: user.photoURL || null
+              });
+              document.getElementById('userUsername').textContent = user.displayName;
+          } else {
+              document.getElementById('userUsername').textContent = userDoc.data().username;
+          }
+  
+          // Show main section
+          document.getElementById('spMainSection').style.display = 'block';
+          loadFriendRequests();
+          loadFriends();
+          setupSearchListener();
+  
+  
+  
+          // Retrieve the "About Me" text when the user is signed in
+          if (user) {
+              // Fetch the user's "About Me" from Firestore
+              db.collection("users").doc(user.uid).get()
+              .then(doc => {
+                  if (doc.exists) {
+                      // Display the saved "About Me" text if it exists
+                      aboutMeOfficialP.textContent = doc.data().aboutMe || "You haven't set an About Me yet.";
+                  } else {
+                      aboutMeOfficialP.textContent = "You haven't set an About Me yet.";
+                  }
+              })
+              .catch(error => {
+                  console.error("Error fetching About Me:", error);
+              });
+          }
+  
+  
+          // Retrieve the "Socials" text when the user is signed in
+  
+          if (user) {
+              db.collection("users").doc(user.uid).get()
+              .then(doc => {
+                  if (doc.exists) {
+                      socialsOfficialP.innerHTML = (doc.data().socials || "You haven't set your Socials yet.").replace(/\n/g, "<br>");
+                  } else {
+                      socialsOfficialP.innerHTML = "You haven't set your Socials yet.";
+                  }
+              })
+              .catch(error => {
+                  console.error("Error fetching Socials:", error);
+              });
+          }
+      });
+  
+      // Get the input and save button elements for username change
+      const usernameInput = document.getElementById("username-input"); // The input field for the new username
+      const usernameSaveBtn = document.getElementById("username-save-btn"); // The save button
+      
+      // Function to handle username change
+      function changeUsername() {
+          const newUsername = usernameInput.value; // Get the value from the input field
+      
+          if (newUsername) {
+              const user = auth.currentUser;
+              user.updateProfile({
+                  displayName: newUsername
+              }).then(() => {
+                  alert("Username updated successfully!");
+                  window.location.reload(true);
+                  // Update UI to reflect new username
+                  userInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>Hello, ${user.displayName}</p>`;
+                  profilePanelUserInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>${user.displayName}</p>`;
+              }).catch(error => {
+                  console.error("Error updating username:", error);
+              });
+          } else {
+              console.log("Username cannot be empty");
+          }
+      }
+      
+      // Add event listener for the save button to trigger the change
+      usernameSaveBtn.addEventListener("click", changeUsername); 
+  
+  
+      // Get elements for "About Me"
+      const aboutMeInput = document.getElementById("aboutme-input");
+      const aboutMeSaveBtn = document.getElementById("aboutme-save-btn");
+      const aboutMeOfficialP = document.getElementById("aboutme-official-p");
+  
+  
+      const maxLines = 5;  // Set the maximum number of lines allowed
+  
+  
+      aboutMeInput.addEventListener("input", () => {
+          const lines = aboutMeInput.value.split("\n"); // Split the value into lines by newline characters
+          
+          if (lines.length > maxLines) {
+              // If the number of lines exceeds maxLines, limit the textarea to maxLines
+              // We only keep the first `maxLines` lines and join them back into a string
+              aboutMeInput.value = lines.slice(0, maxLines).join("\n");
+          }
+      });
+  
+  
+      // Function to save the About Me content to Firestore
+      function saveAboutMe() {
+          const aboutMeText = aboutMeInput.value.trim(); // Get and trim the input text
+          const user = firebase.auth().currentUser; // Get the current user
+  
+          if (user && aboutMeText) {
+              // Save the text to Firestore under the user's document
+              db.collection("users").doc(user.uid).set({
+                  aboutMe: aboutMeText
+              }, { merge: true }) // Use merge to only update the aboutMe field without overwriting the entire document
+              .then(() => {
+                  alert("About Me saved successfully!");
+                  // Update the "About Me" text in the HTML immediately
+                  aboutMeOfficialP.textContent = aboutMeText;
+                  aboutMeInput.value = ''; // Clear the input field
+              })
+              .catch(error => {
+                  console.error("Error saving About Me:", error);
+              });
+          } else {
+              console.log("About Me is empty or user not signed in");
+          }
+      }
+  
+      // Add event listener to the save button
+      aboutMeSaveBtn.addEventListener("click", saveAboutMe);
+  
+  
+  
+      // Get elements for "Socials"
+      const socialsInput = document.getElementById("socials-input");
+      const socialsSaveBtn = document.getElementById("socials-save-btn");
+      const socialsOfficialP = document.getElementById("socials-official-p");
+  
+      const maxSocialLines = 5; // Limit the number of lines for Socials
+  
+      socialsInput.addEventListener("input", () => {
+          const lines = socialsInput.value.split("\n");
+  
+          if (lines.length > maxSocialLines) {
+              socialsInput.value = lines.slice(0, maxSocialLines).join("\n");
+          }
+      });
+  
+      // Function to save the Socials content to Firestore
+      function saveSocials() {
+          const socialsText = socialsInput.value.trim();
+          const user = firebase.auth().currentUser;
+  
+          if (user && socialsText) {
+              db.collection("users").doc(user.uid).set({
+                  socials: socialsText
+              }, { merge: true }) // Only update socials field without overwriting the whole document
+              .then(() => {
+                  alert("Socials saved successfully!");
+                  socialsOfficialP.innerHTML = socialsText.replace(/\n/g, "<br>"); // Preserve line breaks
+                  socialsInput.value = ''; // Clear the input field
+              })
+              .catch(error => {
+                  console.error("Error saving Socials:", error);
+              });
+          } else {
+              console.log("Socials is empty or user not signed in");
+          }
+      }
+  
+      // Add event listener to the save button
+      socialsSaveBtn.addEventListener("click", saveSocials);
+  });
+  
+  
+  // Authentication functions
+  async function signUp() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      try {
+          await auth.createUserWithEmailAndPassword(email, password);
+      } catch (error) {
+          alert(error.message);
+      }
+  }
+  
+  async function signIn() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      try {
+          await auth.signInWithEmailAndPassword(email, password);
+      } catch (error) {
+          alert(error.message);
+      }
+  }
+  
+  function signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+          .then((result) => {
+              const user = result.user;
+              if (!user.displayName) {
+                  // If for some reason there's no display name, use email without the domain
+                  const username = user.email.split('@')[0];
+                  return db.collection('users').doc(user.uid).set({
+                      email: user.email,
+                      username: username,
+                      friends: [],
+                      friendRequests: [],
+                      profilePicture: user.photoURL || null
+                  });
+              }
+          })
+          .catch((error) => {
+              alert(error.message);
+          });
+  }
+  
+  function signOut() {
+      // Clear chat container and reset chat state
+      document.getElementById('chatContainer').style.display = 'none';
+      currentChatUser = null;
+      
+      // Remove message listener if it exists
+      if (messageListener) {
+          messageListener();  // If it's a function, you call it like this
+          messageListener = null;  // Reset listener
+      } else if (messageListener && typeof messageListener === 'function') {
+          firebase.database().ref('messages').off('child_added', messageListener); // Detach the Firebase listener
+      }
+  
+      auth.setPersistence(firebase.auth.Auth.Persistence.NONE).then(() => {
+          auth.signOut().then(() => {
+              // After signing out, redirect to the index page
+              window.location.href = "index.html";  // Redirect to index.html after sign-out
+          }).catch(error => console.error("Sign-out error:", error));
+      }).catch(error => console.error("Error clearing persistence:", error));
+  }
+  
+  
+  function setupSearchListener() {
+      const searchInput = document.getElementById('searchInput');
+      let timeout = null;
+  
+      searchInput.addEventListener('input', () => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+              const searchTerm = searchInput.value.toLowerCase();
+              if (searchTerm.length > 2) {
+                  searchUsers(searchTerm);
+              } else {
+                  document.getElementById('searchResults').innerHTML = '';
+              }
+          }, 500);
+      });
+  }
+  
+  async function searchUsers(searchTerm) {
+      const currentUser = auth.currentUser;
+      const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
+      const currentUserData = currentUserDoc.data();
+      const currentUserFriends = currentUserData.friends || [];
+      
+      const usersRef = db.collection('users');
+      // Get all users and filter client-side for better partial matches
+      const snapshot = await usersRef.get();
+      const searchResults = document.getElementById('searchResults');
+      searchResults.innerHTML = '';
+  
+      snapshot.forEach(doc => {
+          const userData = doc.data();
+          // Check if username contains search term (case insensitive)
+          if (
+              userData.username.toLowerCase().includes(searchTerm.toLowerCase()) && // Matches anywhere in username
+              doc.id !== currentUser.uid // Not the current user
+          ) {
+              const isAlreadyFriend = currentUserFriends.some(friend => friend.userId === doc.id);
+              const hasPendingRequest = currentUserData.friendRequests?.some(
+                  request => request.userId === doc.id && request.status === 'pending'
+              );
+              
+              const userCard = document.createElement('div');
+              userCard.className = 'user-card';
+              userCard.innerHTML = `
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                      <img src="${userData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                          alt="Profile" 
+                          style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                      <span>${userData.username}</span>
+                  </div>
+                  ${
+                      isAlreadyFriend ? '<button disabled>Already Friends</button>' : 
+                      hasPendingRequest ? '<button disabled>Request Pending</button>' :
+                      `<button onclick="sendFriendRequest('${doc.id}')">Send Friend Request</button>`
+                  }
+              `;
+              searchResults.appendChild(userCard);
+          }
+      });
+  }
+  
+  async function sendFriendRequest(targetUserId) {
+      const currentUser = auth.currentUser;
+      
+      // Additional safety check to prevent self-friend requests
+      if (targetUserId === currentUser.uid) {
+          alert('You cannot send a friend request to yourself!');
+          return;
+      }
+      
+      try {
+          const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
+          const currentUserData = currentUserDoc.data();
+          const targetUserDoc = await db.collection('users').doc(targetUserId).get();
+          const targetUserData = targetUserDoc.data();
+  
+          // Check if already friends
+          const isAlreadyFriend = currentUserData.friends?.some(friend => friend.userId === targetUserId);
+          if (isAlreadyFriend) {
+              alert('You are already friends with this user!');
+              return;
+          }
+  
+          // Check if friend request already sent
+          const requestAlreadySent = targetUserData.friendRequests?.some(
+              request => request.userId === currentUser.uid && request.status === 'pending'
+          );
+          if (requestAlreadySent) {
+              alert('Friend request already sent!');
+              return;
+          }
+  
+          const targetUserRef = db.collection('users').doc(targetUserId);
+          await targetUserRef.update({
+              friendRequests: firebase.firestore.FieldValue.arrayUnion({
+                  userId: currentUser.uid,
+                  username: currentUserData.username,
+                  status: 'pending'
+              })
+          });
+  
+          document.getElementById('searchResults').innerHTML = '';
+          document.getElementById('searchInput').value = '';
+          alert('Friend request sent!');
+      } catch (error) {
+          alert('Error sending friend request: ' + error.message);
+      }
+  }
+  
+  async function loadFriendRequests() {
+      const currentUser = auth.currentUser;
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      const userData = userDoc.data();
+      const notifications = document.getElementById('fr-notifications');
+      notifications.innerHTML = '';
+  
+      if (userData.friendRequests && userData.friendRequests.length > 0) {
+          for (const request of userData.friendRequests) {
+              if (request.status === 'pending') {
+                  // Fetch requester's current data to get their up-to-date profile picture
+                  const requesterDoc = await db.collection('users').doc(request.userId).get();
+                  const requesterData = requesterDoc.data();
+                  
+                  const notification = document.createElement('div');
+                  notification.className = 'notification';
+                  notification.innerHTML = `
+                      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                          <img src="${requesterData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                              alt="Profile" 
+                              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                          <p>Friend request from ${request.username}</p>
+                      </div>
+                      <div>
+                          <button onclick="acceptFriendRequest('${request.userId}')">Accept</button>
+                          <button onclick="rejectFriendRequest('${request.userId}')">Reject</button>
+                      </div>
+                  `;
+                  notifications.appendChild(notification);
+              }
+          }
+      }
+  }
+  
+  async function acceptFriendRequest(requesterId) {
+      const currentUser = auth.currentUser;
+      const currentUserRef = db.collection('users').doc(currentUser.uid);
+      const requesterRef = db.collection('users').doc(requesterId);
+  
+      try {
+          const currentUserDoc = await currentUserRef.get();
+          const requesterDoc = await requesterRef.get();
+          const currentUserData = currentUserDoc.data();
+          const requesterData = requesterDoc.data();
+  
+          // Add to current user's friends list
+          await currentUserRef.update({
+              friends: firebase.firestore.FieldValue.arrayUnion({
+                  userId: requesterId,
+                  username: requesterData.username
+              }),
+              friendRequests: firebase.firestore.FieldValue.arrayRemove({
+                  userId: requesterId,
+                  username: requesterData.username,
+                  status: 'pending'
+              })
+          });
+  
+          // Add to requester's friends list
+          await requesterRef.update({
+              friends: firebase.firestore.FieldValue.arrayUnion({
+                  userId: currentUser.uid,
+                  username: currentUserData.username
+              })
+          });
+  
+          loadFriendRequests();
+          loadFriends();
+      } catch (error) {
+          alert('Error accepting friend request: ' + error.message);
+      }
+  }
+  
+  async function rejectFriendRequest(requesterId) {
+      const currentUser = auth.currentUser;
+      const currentUserRef = db.collection('users').doc(currentUser.uid);
+      const requesterRef = db.collection('users').doc(requesterId);
+  
+      try {
+          const requesterDoc = await requesterRef.get();
+          await currentUserRef.update({
+              friendRequests: firebase.firestore.FieldValue.arrayRemove({
+                  userId: requesterId,
+                  username: requesterDoc.data().username,
+                  status: 'pending'
+              })
+          });
+          loadFriendRequests();
+      } catch (error) {
+          alert('Error rejecting friend request: ' + error.message);
+      }
+  }
+  
+  async function loadFriends() {
+      const currentUser = auth.currentUser;
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      const userData = userDoc.data();
+      const friendsList = document.getElementById('friendsList');
+      friendsList.innerHTML = '';
+  
+      if (userData.friends && userData.friends.length > 0) {
+          for (const friend of userData.friends) {
+              // Fetch friend's current data to get their up-to-date profile picture
+              const friendDoc = await db.collection('users').doc(friend.userId).get();
+              const friendData = friendDoc.data();
+              
+              const friendItem = document.createElement('div');
+              friendItem.className = 'friend-item';
+              friendItem.innerHTML = `
+                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                      <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                          alt="Profile" 
+                          style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                      <span>${friend.username}</span>
+                  </div>
+                  <div>
+                      <button onclick="removeFriend('${friend.userId}')">Remove</button>
+                      <button onclick="openChat('${friend.userId}', '${friend.username}')">Chat</button>
+                  </div>
+              `;
+              friendsList.appendChild(friendItem);
+          }
+      } else {
+          friendsList.innerHTML = '<p>No friends yet</p>';
+      }
+  }
+  
+  async function removeFriend(friendId) {
+      const currentUser = auth.currentUser;
+      const currentUserRef = db.collection('users').doc(currentUser.uid);
+      const friendRef = db.collection('users').doc(friendId);
+  
+      try {
+          const currentUserDoc = await currentUserRef.get();
+          const friendDoc = await friendRef.get();
+          const currentUserData = currentUserDoc.data();
+          const friendData = friendDoc.data();
+  
+          // Remove from current user's friends list
+          await currentUserRef.update({
+              friends: firebase.firestore.FieldValue.arrayRemove({
+                  userId: friendId,
+                  username: friendData.username
+              })
+          });
+  
+          // Remove from friend's friends list
+          await friendRef.update({
+              friends: firebase.firestore.FieldValue.arrayRemove({
+                  userId: currentUser.uid,
+                  username: currentUserData.username
+              })
+          });
+  
+          loadFriends();
+          if (currentChatUser === friendId) {
+              document.getElementById('chatContainer').style.display = 'none';
+          }
+      } catch (error) {
+          alert('Error removing friend: ' + error.message);
+      }
+  }
+  
+  function openChat(friendId, friendUsername) {
+      currentChatUser = friendId;
+      document.getElementById('chatContainer').style.display = 'block';
+      document.querySelector('#chatUsername span').textContent = friendUsername;
+      loadMessages(friendId);
+  }
+  
+  async function loadMessages(friendId) {
+      const currentUser = auth.currentUser;
+      const chatMessages = document.getElementById('chatMessages');
+      chatMessages.innerHTML = '';
+  
+      // Clear previous listener
+      if (messageListener) {
+          messageListener();
+      }
+  
+      // Create a chat ID that's consistent regardless of who started the chat
+      const chatId = [currentUser.uid, friendId].sort().join('_');
+  
+      // Set up real-time listener for messages
+      messageListener = db.collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .orderBy('timestamp')
+          .onSnapshot((snapshot) => {
+              snapshot.docChanges().forEach((change) => {
+                  if (change.type === 'added') {
+                      const message = change.doc.data();
+                      const messageDiv = document.createElement('div');
+                      messageDiv.className = `message ${message.senderId === currentUser.uid ? 'sent' : 'received'}`;
+                      messageDiv.textContent = message.text;
+                      chatMessages.appendChild(messageDiv);
+                  }
+              });
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+          });
+  }
+  
+  async function sendMessage(event) {
+      event.preventDefault();
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value.trim();
+      
+      if (!message || !currentChatUser) return;
+  
+      const currentUser = auth.currentUser;
+      const chatId = [currentUser.uid, currentChatUser].sort().join('_');
+  
+      try {
+          await db.collection('chats')
+              .doc(chatId)
+              .collection('messages')
+              .add({
+                  text: message,
+                  senderId: currentUser.uid,
+                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+              });
+  
+          messageInput.value = '';
+      } catch (error) {
+          alert('Error sending message: ' + error.message);
+      }
+  }
+  
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
 
-let currentChatUser = null;
-let messageListener = null;
+  function socialPanelClose() {
+      document.getElementById("chatContainer").style.display = "none";
 
-document.addEventListener("DOMContentLoaded", () => {
+      socialContainer.style.opacity = "0";
+      socialContainer.style.pointerEvents = "none";
 
-    // Create the welcome panel element and style it dynamically (Frosted glass effect)
-    const welcomePanel = document.createElement("div");
-    welcomePanel.id = "welcome-panel";
-    welcomePanel.style.position = "absolute"; // Absolute positioning to position it relative to the page
-    welcomePanel.style.top = "-100px"; // Start off-screen
-    welcomePanel.style.background = "rgba(255, 255, 255, 0.8)"; // Reduced transparency for frosted glass effect
-    welcomePanel.style.borderRadius = "15px"; // Rounded corners
-    welcomePanel.style.border = "3px solid rgba(0, 0, 0, 0.7)"; // Increased thickness of black border
-    welcomePanel.style.padding = "20px";
-    welcomePanel.style.fontSize = "18px";
-    welcomePanel.style.textAlign = "center";
-    welcomePanel.style.width = "80%";
-    welcomePanel.style.maxWidth = "400px";
-    welcomePanel.style.zIndex = "9999"; // On top of everything else
-    welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Soft shadow for depth
-    welcomePanel.style.transition = "top 0.5s ease, opacity 0.3s ease, transform 0.3s ease"; // Smooth animation
-    welcomePanel.style.opacity = "0"; // Start as invisible
-    welcomePanel.style.fontFamily = "'Inconsolata', monospace"; // Inconsolata font
-    welcomePanel.style.backdropFilter = "blur(15px)"; // Frosted glass effect
-    document.body.appendChild(welcomePanel);
+      socialPanelOverlay.style.opacity = "0";
+      socialPanelOverlay.style.pointerEvents = "none";
+
+      setTimeout(() => {
+          socialPanelOverlay.style.display = "none";
+      }, 300);
+
+      document.getElementById("hm-icon").style.pointerEvents = "auto";
+      document.getElementById("hm-icon").style.opacity = "1";
+  }
+
+
+
+
+
+
+
+
+
+  
+  document.addEventListener('DOMContentLoaded', function () {
+  
+      window.addEventListener("load", () => {
+          document.body.style.opacity = "1";
+      });
+  
+  
+      var rainParticlesCheck = document.getElementById("particlesButtonRain");
+      var snowParticlesCheck = document.getElementById("particlesButtonSnow");
+      var stormWeatherCheck = document.getElementById("weatherButtonsStorm");
+      var blizzardWeatherCheck = document.getElementById("weatherButtonsBlizzard");
     
-    // Create the welcome message paragraph (Text in white)
-    const welcomeMessage = document.createElement("p");
-    welcomeMessage.style.color = "black"; // Ensure the text is white
-    welcomePanel.appendChild(welcomeMessage);
-    
-    // Create the continue button for the panel
-    const closePanelBtn = document.createElement("button");
-    closePanelBtn.textContent = "Continue";
-    closePanelBtn.style.background = "#333333"; // Dark background for button
-    closePanelBtn.style.border = "2px solid transparent"; // Initially no border
-    closePanelBtn.style.color = "white";
-    closePanelBtn.style.fontSize = "20px";
-    closePanelBtn.style.marginTop = "20px";
-    closePanelBtn.style.cursor = "pointer";
-    closePanelBtn.style.padding = "12px 30px"; // More padding for a rectangular button
-    closePanelBtn.style.borderRadius = "8px"; // Curved edges
-    closePanelBtn.style.transition = "background-color 0.3s ease, border-color 0.3s ease";
-    closePanelBtn.style.fontWeight = "bold";
-    closePanelBtn.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
-    welcomePanel.appendChild(closePanelBtn);
-    
-    // Hover effect for button: border and color change
-    closePanelBtn.onmouseover = () => {
-        closePanelBtn.style.borderColor = "#ffffff"; // Border shows up on hover
-        closePanelBtn.style.backgroundColor = "#555555"; // Darker background on hover
-    };
-    closePanelBtn.onmouseout = () => {
-        closePanelBtn.style.borderColor = "transparent"; // No border on mouse out
-        closePanelBtn.style.backgroundColor = "#333333"; // Original background
-    };
-    
-    // Hover effect for the panel itself: subtle brightness increase
-    welcomePanel.onmouseover = () => {
-        welcomePanel.style.transform = "translateX(-50%) scale(1.05)"; // Slight scale-up
-        welcomePanel.style.boxShadow = "0 15px 50px rgba(0, 0, 0, 0.4)"; // Increase shadow on hover
-    };
-    welcomePanel.onmouseout = () => {
-        welcomePanel.style.transform = "translateX(-50%) scale(1)"; // Return to normal scale
-        welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Return to original shadow
-    };
-    
-    // Add CSS for hover animation
-    const style = document.createElement('style');
-    style.innerHTML = 
-        `@keyframes hoverUpDown {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
-            100% { transform: translateY(0); }
-        }`;
-    document.head.appendChild(style);
-
-
-    // Check if the user is new or returning
-    function checkIfNewUser(user) {
-        const creationTime = user.metadata.creationTime;
-        const lastSignInTime = user.metadata.lastSignInTime;
-    
-        if (creationTime === lastSignInTime) {
-            // New user
-            welcomeMessage.innerHTML = `Welcome, ${user.displayName}!`;
-        } else {
-            // Returning user
-            welcomeMessage.innerHTML = `Welcome back, ${user.displayName}!`;
-        }
-    
-        // Delay the animation of the welcome panel
-        setTimeout(() => {
-            // Show the welcome panel with slide-down animation
-            welcomePanel.style.opacity = "1"; // Make the panel visible
-            welcomePanel.style.top = "20px"; // Slide the panel down smoothly
-            // Apply the hover animation
-            welcomePanel.style.animation = "hoverUpDown 3s infinite ease-in-out"; // Infinite up and down animation
-        }, 500); // Delay by 500ms
-    }
-
-
-    // Close the welcome panel
-    closePanelBtn.onclick = () => {
-        welcomePanel.style.top = "-100px"; // Hide the panel again
-        welcomePanel.style.opacity = "0"; // Make it invisible again
-    
-        // After the panel is completely out of view, set it to display none
-        setTimeout(() => {
-            welcomePanel.style.display = "none"; // Remove the panel from the view
-        }, 500); // Match the transition duration
-    };
-
-
-
-
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            checkIfNewUser(user);
-        } else {
-            // If user is not signed in, redirect to index page
-            window.location.href = "index.html";
-            return;
-        }
-
-        // Rest of your existing landing page auth code
-        document.getElementById('chatContainer').style.display = 'none';
-        currentChatUser = null;
-        if (messageListener) {
-            messageListener();
-            messageListener = null;
-        }
-
-        // ----------------- UPDATE USER INFO -----------------
-
-
-
-
-
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        
-        const profilePicElement = document.getElementById('userProfilePic');
-        if (user.photoURL) {
-            profilePicElement.src = user.photoURL;
-        } else {
-            profilePicElement.src = 'https://www.gravatar.com/avatar/?d=mp';
-        }
-
-
-
-
-
-        // Update user info display
-        const userInfo = document.getElementById('user-info');
-        userInfo.innerHTML = `
-            <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                 alt="Profile" 
-                 width="50" 
-                 style="border-radius: 50%">
-            <p>Hello, ${user.displayName}</p>
-        `;
-
-
-
-
-
-
-        const profileUserInfo = document.getElementById("pp-user-info");
-        profileUserInfo.innerHTML = `
-            <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                 alt="Profile" 
-                 width="50" 
-                 style="border-radius: 50%">
-            <p>${user.displayName}</p>
-        `;
-
-
-
-
-
-
-        const accCreationDateP = document.getElementById("acc-creation-date");
-
-        // Function to format the date
-        function formatDate(timestamp) {
-            const date = new Date(timestamp);
-            return date.toLocaleDateString("en-US", {  
-                year: "numeric",  
-                month: "long",  
-                day: "numeric"  
-            });
-        }
-
-        if (user) {
-            const creationTimestamp = user.metadata.creationTime;
-            if (creationTimestamp) {
-                accCreationDateP.textContent = `Account Created On: ${formatDate(creationTimestamp)}`;
-            } else {
-                accCreationDateP.textContent = "Creation date not available.";
-            }
-        }
-
-
-
-
-
-
-        // -----------------------------------------------
-
-        if (!userDoc.exists) {
-            // Create new user document with Google display name
-            await db.collection('users').doc(user.uid).set({
-                email: user.email,
-                username: user.displayName,
-                friends: [],
-                friendRequests: [],
-                profilePicture: user.photoURL || null
-            });
-            document.getElementById('userUsername').textContent = user.displayName;
-        } else {
-            document.getElementById('userUsername').textContent = userDoc.data().username;
-        }
-
-        // Show main section
-        document.getElementById('authSection').style.display = 'none';
-        document.getElementById('usernameSection').style.display = 'none';
-        document.getElementById('mainSection').style.display = 'block';
-        loadFriendRequests();
-        loadFriends();
-        setupSearchListener();
-
-
-
-        // Retrieve the "About Me" text when the user is signed in
-        if (user) {
-            // Fetch the user's "About Me" from Firestore
-            db.collection("users").doc(user.uid).get()
-            .then(doc => {
-                if (doc.exists) {
-                    // Display the saved "About Me" text if it exists
-                    aboutMeOfficialP.textContent = doc.data().aboutMe || "You haven't set an About Me yet.";
-                } else {
-                    aboutMeOfficialP.textContent = "You haven't set an About Me yet.";
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching About Me:", error);
-            });
-        }
-
-
-        // Retrieve the "Socials" text when the user is signed in
-
-        if (user) {
-            db.collection("users").doc(user.uid).get()
-            .then(doc => {
-                if (doc.exists) {
-                    socialsOfficialP.innerHTML = (doc.data().socials || "You haven't set your Socials yet.").replace(/\n/g, "<br>");
-                } else {
-                    socialsOfficialP.innerHTML = "You haven't set your Socials yet.";
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching Socials:", error);
-            });
-        }
-    });
-
-    // Get the input and save button elements for username change
-    const usernameInput = document.getElementById("username-input"); // The input field for the new username
-    const usernameSaveBtn = document.getElementById("username-save-btn"); // The save button
-    
-    // Function to handle username change
-    function changeUsername() {
-        const newUsername = usernameInput.value; // Get the value from the input field
-    
-        if (newUsername) {
-            const user = auth.currentUser;
-            user.updateProfile({
-                displayName: newUsername
-            }).then(() => {
-                alert("Username updated successfully!");
-                window.location.reload(true);
-                // Update UI to reflect new username
-                userInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>Hello, ${user.displayName}</p>`;
-                profilePanelUserInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>${user.displayName}</p>`;
-            }).catch(error => {
-                console.error("Error updating username:", error);
-            });
-        } else {
-            console.log("Username cannot be empty");
-        }
-    }
-    
-    // Add event listener for the save button to trigger the change
-    usernameSaveBtn.addEventListener("click", changeUsername); 
-
-
-    // Get elements for "About Me"
-    const aboutMeInput = document.getElementById("aboutme-input");
-    const aboutMeSaveBtn = document.getElementById("aboutme-save-btn");
-    const aboutMeOfficialP = document.getElementById("aboutme-official-p");
-
-
-    const maxLines = 5;  // Set the maximum number of lines allowed
-
-
-    aboutMeInput.addEventListener("input", () => {
-        const lines = aboutMeInput.value.split("\n"); // Split the value into lines by newline characters
-        
-        if (lines.length > maxLines) {
-            // If the number of lines exceeds maxLines, limit the textarea to maxLines
-            // We only keep the first `maxLines` lines and join them back into a string
-            aboutMeInput.value = lines.slice(0, maxLines).join("\n");
-        }
-    });
-
-
-    // Function to save the About Me content to Firestore
-    function saveAboutMe() {
-        const aboutMeText = aboutMeInput.value.trim(); // Get and trim the input text
-        const user = firebase.auth().currentUser; // Get the current user
-
-        if (user && aboutMeText) {
-            // Save the text to Firestore under the user's document
-            db.collection("users").doc(user.uid).set({
-                aboutMe: aboutMeText
-            }, { merge: true }) // Use merge to only update the aboutMe field without overwriting the entire document
-            .then(() => {
-                alert("About Me saved successfully!");
-                // Update the "About Me" text in the HTML immediately
-                aboutMeOfficialP.textContent = aboutMeText;
-                aboutMeInput.value = ''; // Clear the input field
-            })
-            .catch(error => {
-                console.error("Error saving About Me:", error);
-            });
-        } else {
-            console.log("About Me is empty or user not signed in");
-        }
-    }
-
-    // Add event listener to the save button
-    aboutMeSaveBtn.addEventListener("click", saveAboutMe);
-
-
-
-    // Get elements for "Socials"
-    const socialsInput = document.getElementById("socials-input");
-    const socialsSaveBtn = document.getElementById("socials-save-btn");
-    const socialsOfficialP = document.getElementById("socials-official-p");
-
-    const maxSocialLines = 5; // Limit the number of lines for Socials
-
-    socialsInput.addEventListener("input", () => {
-        const lines = socialsInput.value.split("\n");
-
-        if (lines.length > maxSocialLines) {
-            socialsInput.value = lines.slice(0, maxSocialLines).join("\n");
-        }
-    });
-
-    // Function to save the Socials content to Firestore
-    function saveSocials() {
-        const socialsText = socialsInput.value.trim();
-        const user = firebase.auth().currentUser;
-
-        if (user && socialsText) {
-            db.collection("users").doc(user.uid).set({
-                socials: socialsText
-            }, { merge: true }) // Only update socials field without overwriting the whole document
-            .then(() => {
-                alert("Socials saved successfully!");
-                socialsOfficialP.innerHTML = socialsText.replace(/\n/g, "<br>"); // Preserve line breaks
-                socialsInput.value = ''; // Clear the input field
-            })
-            .catch(error => {
-                console.error("Error saving Socials:", error);
-            });
-        } else {
-            console.log("Socials is empty or user not signed in");
-        }
-    }
-
-    // Add event listener to the save button
-    socialsSaveBtn.addEventListener("click", saveSocials);
-});
-
-
-// Authentication functions
-async function signUp() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    try {
-        await auth.createUserWithEmailAndPassword(email, password);
-    } catch (error) {
-        alert(error.message);
-    }
-}
-
-async function signIn() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    try {
-        await auth.signInWithEmailAndPassword(email, password);
-    } catch (error) {
-        alert(error.message);
-    }
-}
-
-function signInWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-        .then((result) => {
-            const user = result.user;
-            if (!user.displayName) {
-                // If for some reason there's no display name, use email without the domain
-                const username = user.email.split('@')[0];
-                return db.collection('users').doc(user.uid).set({
-                    email: user.email,
-                    username: username,
-                    friends: [],
-                    friendRequests: [],
-                    profilePicture: user.photoURL || null
-                });
-            }
-        })
-        .catch((error) => {
-            alert(error.message);
-        });
-}
-
-function signOut() {
-    // Clear chat container and reset chat state
-    document.getElementById('chatContainer').style.display = 'none';
-    currentChatUser = null;
-    
-    // Remove message listener if it exists
-    if (messageListener) {
-        messageListener();  // If it's a function, you call it like this
-        messageListener = null;  // Reset listener
-    } else if (messageListener && typeof messageListener === 'function') {
-        firebase.database().ref('messages').off('child_added', messageListener); // Detach the Firebase listener
-    }
-
-    auth.setPersistence(firebase.auth.Auth.Persistence.NONE).then(() => {
-        auth.signOut().then(() => {
-            // After signing out, redirect to the index page
-            window.location.href = "index.html";  // Redirect to index.html after sign-out
-        }).catch(error => console.error("Sign-out error:", error));
-    }).catch(error => console.error("Error clearing persistence:", error));
-}
-
-
-function setupSearchListener() {
-    const searchInput = document.getElementById('searchInput');
-    let timeout = null;
-
-    searchInput.addEventListener('input', () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            const searchTerm = searchInput.value.toLowerCase();
-            if (searchTerm.length > 2) {
-                searchUsers(searchTerm);
-            } else {
-                document.getElementById('searchResults').innerHTML = '';
-            }
-        }, 500);
-    });
-}
-
-async function searchUsers(searchTerm) {
-    const currentUser = auth.currentUser;
-    const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
-    const currentUserData = currentUserDoc.data();
-    const currentUserFriends = currentUserData.friends || [];
-    
-    const usersRef = db.collection('users');
-    // Get all users and filter client-side for better partial matches
-    const snapshot = await usersRef.get();
-    const searchResults = document.getElementById('searchResults');
-    searchResults.innerHTML = '';
-
-    snapshot.forEach(doc => {
-        const userData = doc.data();
-        // Check if username contains search term (case insensitive)
-        if (
-            userData.username.toLowerCase().includes(searchTerm.toLowerCase()) && // Matches anywhere in username
-            doc.id !== currentUser.uid // Not the current user
-        ) {
-            const isAlreadyFriend = currentUserFriends.some(friend => friend.userId === doc.id);
-            const hasPendingRequest = currentUserData.friendRequests?.some(
-                request => request.userId === doc.id && request.status === 'pending'
-            );
-            
-            const userCard = document.createElement('div');
-            userCard.className = 'user-card';
-            userCard.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="${userData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                        alt="Profile" 
-                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                    <span>${userData.username}</span>
-                </div>
-                ${
-                    isAlreadyFriend ? '<button disabled>Already Friends</button>' : 
-                    hasPendingRequest ? '<button disabled>Request Pending</button>' :
-                    `<button onclick="sendFriendRequest('${doc.id}')">Send Friend Request</button>`
-                }
-            `;
-            searchResults.appendChild(userCard);
-        }
-    });
-}
-
-async function sendFriendRequest(targetUserId) {
-    const currentUser = auth.currentUser;
-    
-    // Additional safety check to prevent self-friend requests
-    if (targetUserId === currentUser.uid) {
-        alert('You cannot send a friend request to yourself!');
-        return;
-    }
-    
-    try {
-        const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
-        const currentUserData = currentUserDoc.data();
-        const targetUserDoc = await db.collection('users').doc(targetUserId).get();
-        const targetUserData = targetUserDoc.data();
-
-        // Check if already friends
-        const isAlreadyFriend = currentUserData.friends?.some(friend => friend.userId === targetUserId);
-        if (isAlreadyFriend) {
-            alert('You are already friends with this user!');
-            return;
-        }
-
-        // Check if friend request already sent
-        const requestAlreadySent = targetUserData.friendRequests?.some(
-            request => request.userId === currentUser.uid && request.status === 'pending'
-        );
-        if (requestAlreadySent) {
-            alert('Friend request already sent!');
-            return;
-        }
-
-        const targetUserRef = db.collection('users').doc(targetUserId);
-        await targetUserRef.update({
-            friendRequests: firebase.firestore.FieldValue.arrayUnion({
-                userId: currentUser.uid,
-                username: currentUserData.username,
-                status: 'pending'
-            })
-        });
-
-        document.getElementById('searchResults').innerHTML = '';
-        document.getElementById('searchInput').value = '';
-        alert('Friend request sent!');
-    } catch (error) {
-        alert('Error sending friend request: ' + error.message);
-    }
-}
-
-async function loadFriendRequests() {
-    const currentUser = auth.currentUser;
-    const userDoc = await db.collection('users').doc(currentUser.uid).get();
-    const userData = userDoc.data();
-    const notifications = document.getElementById('notifications');
-    notifications.innerHTML = '';
-
-    if (userData.friendRequests && userData.friendRequests.length > 0) {
-        for (const request of userData.friendRequests) {
-            if (request.status === 'pending') {
-                // Fetch requester's current data to get their up-to-date profile picture
-                const requesterDoc = await db.collection('users').doc(request.userId).get();
-                const requesterData = requesterDoc.data();
-                
-                const notification = document.createElement('div');
-                notification.className = 'notification';
-                notification.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                        <img src="${requesterData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                            alt="Profile" 
-                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                        <p>Friend request from ${request.username}</p>
-                    </div>
-                    <div>
-                        <button onclick="acceptFriendRequest('${request.userId}')">Accept</button>
-                        <button onclick="rejectFriendRequest('${request.userId}')">Reject</button>
-                    </div>
-                `;
-                notifications.appendChild(notification);
-            }
-        }
-    }
-}
-
-async function acceptFriendRequest(requesterId) {
-    const currentUser = auth.currentUser;
-    const currentUserRef = db.collection('users').doc(currentUser.uid);
-    const requesterRef = db.collection('users').doc(requesterId);
-
-    try {
-        const currentUserDoc = await currentUserRef.get();
-        const requesterDoc = await requesterRef.get();
-        const currentUserData = currentUserDoc.data();
-        const requesterData = requesterDoc.data();
-
-        // Add to current user's friends list
-        await currentUserRef.update({
-            friends: firebase.firestore.FieldValue.arrayUnion({
-                userId: requesterId,
-                username: requesterData.username
-            }),
-            friendRequests: firebase.firestore.FieldValue.arrayRemove({
-                userId: requesterId,
-                username: requesterData.username,
-                status: 'pending'
-            })
-        });
-
-        // Add to requester's friends list
-        await requesterRef.update({
-            friends: firebase.firestore.FieldValue.arrayUnion({
-                userId: currentUser.uid,
-                username: currentUserData.username
-            })
-        });
-
-        loadFriendRequests();
-        loadFriends();
-    } catch (error) {
-        alert('Error accepting friend request: ' + error.message);
-    }
-}
-
-async function rejectFriendRequest(requesterId) {
-    const currentUser = auth.currentUser;
-    const currentUserRef = db.collection('users').doc(currentUser.uid);
-    const requesterRef = db.collection('users').doc(requesterId);
-
-    try {
-        const requesterDoc = await requesterRef.get();
-        await currentUserRef.update({
-            friendRequests: firebase.firestore.FieldValue.arrayRemove({
-                userId: requesterId,
-                username: requesterDoc.data().username,
-                status: 'pending'
-            })
-        });
-        loadFriendRequests();
-    } catch (error) {
-        alert('Error rejecting friend request: ' + error.message);
-    }
-}
-
-async function loadFriends() {
-    const currentUser = auth.currentUser;
-    const userDoc = await db.collection('users').doc(currentUser.uid).get();
-    const userData = userDoc.data();
-    const friendsList = document.getElementById('friendsList');
-    friendsList.innerHTML = '';
-
-    if (userData.friends && userData.friends.length > 0) {
-        for (const friend of userData.friends) {
-            // Fetch friend's current data to get their up-to-date profile picture
-            const friendDoc = await db.collection('users').doc(friend.userId).get();
-            const friendData = friendDoc.data();
-            
-            const friendItem = document.createElement('div');
-            friendItem.className = 'friend-item';
-            friendItem.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                    <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                        alt="Profile" 
-                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                    <span>${friend.username}</span>
-                </div>
-                <div>
-                    <button onclick="removeFriend('${friend.userId}')">Remove</button>
-                    <button onclick="openChat('${friend.userId}', '${friend.username}')">Chat</button>
-                </div>
-            `;
-            friendsList.appendChild(friendItem);
-        }
-    } else {
-        friendsList.innerHTML = '<p>No friends yet</p>';
-    }
-}
-
-async function removeFriend(friendId) {
-    const currentUser = auth.currentUser;
-    const currentUserRef = db.collection('users').doc(currentUser.uid);
-    const friendRef = db.collection('users').doc(friendId);
-
-    try {
-        const currentUserDoc = await currentUserRef.get();
-        const friendDoc = await friendRef.get();
-        const currentUserData = currentUserDoc.data();
-        const friendData = friendDoc.data();
-
-        // Remove from current user's friends list
-        await currentUserRef.update({
-            friends: firebase.firestore.FieldValue.arrayRemove({
-                userId: friendId,
-                username: friendData.username
-            })
-        });
-
-        // Remove from friend's friends list
-        await friendRef.update({
-            friends: firebase.firestore.FieldValue.arrayRemove({
-                userId: currentUser.uid,
-                username: currentUserData.username
-            })
-        });
-
-        loadFriends();
-        if (currentChatUser === friendId) {
-            document.getElementById('chatContainer').style.display = 'none';
-        }
-    } catch (error) {
-        alert('Error removing friend: ' + error.message);
-    }
-}
-
-function openChat(friendId, friendUsername) {
-    currentChatUser = friendId;
-    document.getElementById('chatContainer').style.display = 'block';
-    document.querySelector('#chatUsername span').textContent = friendUsername;
-    loadMessages(friendId);
-}
-
-async function loadMessages(friendId) {
-    const currentUser = auth.currentUser;
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.innerHTML = '';
-
-    // Clear previous listener
-    if (messageListener) {
-        messageListener();
-    }
-
-    // Create a chat ID that's consistent regardless of who started the chat
-    const chatId = [currentUser.uid, friendId].sort().join('_');
-
-    // Set up real-time listener for messages
-    messageListener = db.collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .orderBy('timestamp')
-        .onSnapshot((snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-                if (change.type === 'added') {
-                    const message = change.doc.data();
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `message ${message.senderId === currentUser.uid ? 'sent' : 'received'}`;
-                    messageDiv.textContent = message.text;
-                    chatMessages.appendChild(messageDiv);
-                }
-            });
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
-}
-
-async function sendMessage(event) {
-    event.preventDefault();
-    const messageInput = document.getElementById('messageInput');
-    const message = messageInput.value.trim();
-    
-    if (!message || !currentChatUser) return;
-
-    const currentUser = auth.currentUser;
-    const chatId = [currentUser.uid, currentChatUser].sort().join('_');
-
-    try {
-        await db.collection('chats')
-            .doc(chatId)
-            .collection('messages')
-            .add({
-                text: message,
-                senderId: currentUser.uid,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-        messageInput.value = '';
-    } catch (error) {
-        alert('Error sending message: ' + error.message);
-    }
-}
-
-function friendsPanelClose() {
-    document.getElementById("container").style.display = "none";
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    window.addEventListener("load", () => {
-        document.body.style.opacity = "1";
-    });
-
-
-    var rainParticlesCheck = document.getElementById("particlesButtonRain");
-var snowParticlesCheck = document.getElementById("particlesButtonSnow");
-var stormWeatherCheck = document.getElementById("weatherButtonsStorm");
-var blizzardWeatherCheck = document.getElementById("weatherButtonsBlizzard");
-
-const rainGifImage = document.getElementById("rainGifImage");
-const rainGif = document.getElementById("rainGif");
-const particlesButtonRain = document.getElementById("particlesButtonRain");
-const snowGifImage = document.getElementById("snowGifImage");
-const snowGif = document.getElementById("snowGif");
-const particlesButtonSnow = document.getElementById("particlesButtonSnow");
-const blizzardGifImage = document.getElementById("blizzardGifImage");
-const blizzardGif = document.getElementById("blizzardGif");
-const weatherButtonsBlizzard = document.getElementById("weatherButtonsBlizzard");
-const weatherButtonsStorm = document.getElementById("weatherButtonsStorm");
-
-
-    // ------------- START OF PARTICLES BUTTONS JS ----------------
-
-    function enableRainParticles() {
-
-        if (rainGifImage.style.visibility === "visible") {
-            rainGifImage.style.visibility = "hidden";
-            rainGif.style.visibility = "hidden";
-            particlesButtonRain.textContent = "Enable";
-
-            snowParticlesCheck.disabled = false;
-            stormWeatherCheck.disabled = false;
-            blizzardWeatherCheck.disabled = false;
-        } else {
-            rainGifImage.style.visibility = "visible";
-            rainGif.style.visibility = "visible";
-            particlesButtonRain.textContent = "Disable";
-
-            snowParticlesCheck.disabled = true;
-            stormWeatherCheck.disabled = true;
-            blizzardWeatherCheck.disabled = true;
-        }
-    }
-
-
-    if (particlesButtonRain) {
-        particlesButtonRain.addEventListener("click", enableRainParticles);
-    }
-
-
-
-
-    function enableSnowParticles () {
-
-        if (snowGifImage.style.visibility === "visible") {
-            snowGifImage.style.visibility = "hidden";
-            snowGif.style.visibility = "hidden";
-            particlesButtonSnow.textContent = "Enable";
-
-            rainParticlesCheck.disabled = false;
-            stormWeatherCheck.disabled = false;
-            blizzardWeatherCheck.disabled = false;
-        } else {
-            snowGifImage.style.visibility = "visible";
-            snowGif.style.visibility = "visible";
-            particlesButtonSnow.textContent = "Disable";
-
-            rainParticlesCheck.disabled = true;
-            stormWeatherCheck.disabled = true;
-            blizzardWeatherCheck.disabled = true;
-        }
-    }
-
-    if (particlesButtonSnow) {
-        particlesButtonSnow.addEventListener("click", enableSnowParticles);
-    }
-
-    // ------------- END OF PARTICLES BUTTONS JS ---------------
-
-
-
-
-
-    // ------------- START OF WEATHER BUTTONS JS ------------------
-
-
-    function enableBlizzard() {
-
-        if (blizzardGifImage.style.visibility === "visible") {
-            blizzardGifImage.style.visibility = "hidden";
-            blizzardGif.style.visibility = "hidden";
-            weatherButtonsBlizzard.textContent = "Enable";
-            rainParticlesCheck.disabled = false;
-            snowParticlesCheck.disabled = false;
-            stormWeatherCheck.disabled = false;
-        } else {
-            blizzardGifImage.style.visibility = "visible";
-            blizzardGif.style.visibility = "visible";
-            weatherButtonsBlizzard.textContent = "Disable";
-            rainParticlesCheck.disabled = true;
-            snowParticlesCheck.disabled = true;
-            stormWeatherCheck.disabled = true;
-        }
-    }
-
-    if (weatherButtonsBlizzard) {
-        weatherButtonsBlizzard.addEventListener("click", enableBlizzard);
-    }
-
-
-
-    let stormActive = false;
-let lightningInterval;
-
-function enableStorm() {
-    if (stormActive) {
-        // Stop the storm
-        clearInterval(lightningInterval);
-        rainGifImage.style.visibility = "hidden";
-        rainGif.style.visibility = "hidden";
-        lightningGifImage.style.visibility = "hidden";
-        lightningGif.style.visibility = "hidden";
-        weatherButtonsStorm.textContent = "Enable";
-
-        rainParticlesCheck.disabled = false;
-        snowParticlesCheck.disabled = false;
-        blizzardWeatherCheck.disabled = false;
-        stormActive = false;
-    } else {
-        // Start the storm
-        rainGifImage.style.visibility = "visible";
-        rainGif.style.visibility = "visible";
-        lightningGifImage.style.visibility = "visible";
-        lightningGif.style.visibility = "visible";
-        weatherButtonsStorm.textContent = "Disable";
-
-        rainParticlesCheck.disabled = true;
-        snowParticlesCheck.disabled = true;
-        blizzardWeatherCheck.disabled = true;
-        stormActive = true;
-
-        // Make the lightning alternate positions continuously
-        lightningInterval = setInterval(() => {
-            let randomPosition = Math.random();
-
-            if (randomPosition < 0.75) {
-                // 75% chance for left or right
-                let isLeftSide = Math.random() < 0.5; // 50% for left, 50% for right
-                if (isLeftSide) {
-                    lightningGifImage.style.left = "10px";  // Move to left side
-                    lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
-                } else {
-                    lightningGifImage.style.left = "calc(100% - 100px)";  // Move to right side
-                    lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
-                }
-            } else if (randomPosition < 0.9) {
-                // 15% chance for middle-left or middle-right (split equally)
-                let isMiddleLeft = Math.random() < 0.5; // 50% for middle-left, 50% for middle-right
-                if (isMiddleLeft) {
-                    lightningGifImage.style.left = "calc(25% - 50px)";  // Move to middle left
-                    lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
-                    lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
-                } else {
-                    lightningGifImage.style.left = "calc(75% - 50px)";  // Move to middle right
-                    lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
-                    lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
-                }
-            } else {
-                // 5% chance for pure middle
-                lightningGifImage.style.left = "calc(50% - 50px)";  // Move to pure middle
-                lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
-                lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
-            }
-
-            // Flash effect with 1.75x longer duration (350ms)
-            lightningGifImage.style.opacity = "1";  // Show
-            setTimeout(() => lightningGifImage.style.opacity = "0", 350); // Hide after 350ms
-        }, 750); // Change position every 750ms (3/4 second)
-    }
-}
-
-// Attach event listener
-if (weatherButtonsStorm) {
-    weatherButtonsStorm.addEventListener("click", enableStorm);
-}
-
+      const rainGifImage = document.getElementById("rainGifImage");
+      const rainGif = document.getElementById("rainGif");
+      const particlesButtonRain = document.getElementById("particlesButtonRain");
+      const snowGifImage = document.getElementById("snowGifImage");
+      const snowGif = document.getElementById("snowGif");
+      const particlesButtonSnow = document.getElementById("particlesButtonSnow");
+      const blizzardGifImage = document.getElementById("blizzardGifImage");
+      const blizzardGif = document.getElementById("blizzardGif");
+      const weatherButtonsBlizzard = document.getElementById("weatherButtonsBlizzard");
+      const weatherButtonsStorm = document.getElementById("weatherButtonsStorm");
+  
+  
+      // ------------- START OF PARTICLES BUTTONS JS ----------------
+  
+      function enableRainParticles() {
+  
+          if (rainGifImage.style.visibility === "visible") {
+              rainGifImage.style.visibility = "hidden";
+              rainGif.style.visibility = "hidden";
+              particlesButtonRain.textContent = "Enable";
+  
+              snowParticlesCheck.disabled = false;
+              stormWeatherCheck.disabled = false;
+              blizzardWeatherCheck.disabled = false;
+          } else {
+              rainGifImage.style.visibility = "visible";
+              rainGif.style.visibility = "visible";
+              particlesButtonRain.textContent = "Disable";
+  
+              snowParticlesCheck.disabled = true;
+              stormWeatherCheck.disabled = true;
+              blizzardWeatherCheck.disabled = true;
+          }
+      }
+  
+  
+      if (particlesButtonRain) {
+          particlesButtonRain.addEventListener("click", enableRainParticles);
+      }
+  
+  
+  
+  
+      function enableSnowParticles () {
+  
+          if (snowGifImage.style.visibility === "visible") {
+              snowGifImage.style.visibility = "hidden";
+              snowGif.style.visibility = "hidden";
+              particlesButtonSnow.textContent = "Enable";
+  
+              rainParticlesCheck.disabled = false;
+              stormWeatherCheck.disabled = false;
+              blizzardWeatherCheck.disabled = false;
+          } else {
+              snowGifImage.style.visibility = "visible";
+              snowGif.style.visibility = "visible";
+              particlesButtonSnow.textContent = "Disable";
+  
+              rainParticlesCheck.disabled = true;
+              stormWeatherCheck.disabled = true;
+              blizzardWeatherCheck.disabled = true;
+          }
+      }
+  
+      if (particlesButtonSnow) {
+          particlesButtonSnow.addEventListener("click", enableSnowParticles);
+      }
+  
+      // ------------- END OF PARTICLES BUTTONS JS ---------------
+  
+  
+  
+  
+  
+      // ------------- START OF WEATHER BUTTONS JS ------------------
+  
+  
+      function enableBlizzard() {
+  
+          if (blizzardGifImage.style.visibility === "visible") {
+              blizzardGifImage.style.visibility = "hidden";
+              blizzardGif.style.visibility = "hidden";
+              weatherButtonsBlizzard.textContent = "Enable";
+              rainParticlesCheck.disabled = false;
+              snowParticlesCheck.disabled = false;
+              stormWeatherCheck.disabled = false;
+          } else {
+              blizzardGifImage.style.visibility = "visible";
+              blizzardGif.style.visibility = "visible";
+              weatherButtonsBlizzard.textContent = "Disable";
+              rainParticlesCheck.disabled = true;
+              snowParticlesCheck.disabled = true;
+              stormWeatherCheck.disabled = true;
+          }
+      }
+  
+      if (weatherButtonsBlizzard) {
+          weatherButtonsBlizzard.addEventListener("click", enableBlizzard);
+      }
+  
+  
+  
+      let stormActive = false;
+  let lightningInterval;
+  
+  function enableStorm() {
+      if (stormActive) {
+          // Stop the storm
+          clearInterval(lightningInterval);
+          rainGifImage.style.visibility = "hidden";
+          rainGif.style.visibility = "hidden";
+          lightningGifImage.style.visibility = "hidden";
+          lightningGif.style.visibility = "hidden";
+          weatherButtonsStorm.textContent = "Enable";
+  
+          rainParticlesCheck.disabled = false;
+          snowParticlesCheck.disabled = false;
+          blizzardWeatherCheck.disabled = false;
+          stormActive = false;
+      } else {
+          // Start the storm
+          rainGifImage.style.visibility = "visible";
+          rainGif.style.visibility = "visible";
+          lightningGifImage.style.visibility = "visible";
+          lightningGif.style.visibility = "visible";
+          weatherButtonsStorm.textContent = "Disable";
+  
+          rainParticlesCheck.disabled = true;
+          snowParticlesCheck.disabled = true;
+          blizzardWeatherCheck.disabled = true;
+          stormActive = true;
+  
+          // Make the lightning alternate positions continuously
+          lightningInterval = setInterval(() => {
+              let randomPosition = Math.random();
+  
+              if (randomPosition < 0.75) {
+                  // 75% chance for left or right
+                  let isLeftSide = Math.random() < 0.5; // 50% for left, 50% for right
+                  if (isLeftSide) {
+                      lightningGifImage.style.left = "10px";  // Move to left side
+                      lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
+                  } else {
+                      lightningGifImage.style.left = "calc(100% - 100px)";  // Move to right side
+                      lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
+                  }
+              } else if (randomPosition < 0.9) {
+                  // 15% chance for middle-left or middle-right (split equally)
+                  let isMiddleLeft = Math.random() < 0.5; // 50% for middle-left, 50% for middle-right
+                  if (isMiddleLeft) {
+                      lightningGifImage.style.left = "calc(25% - 50px)";  // Move to middle left
+                      lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
+                      lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+                  } else {
+                      lightningGifImage.style.left = "calc(75% - 50px)";  // Move to middle right
+                      lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
+                      lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+                  }
+              } else {
+                  // 5% chance for pure middle
+                  lightningGifImage.style.left = "calc(50% - 50px)";  // Move to pure middle
+                  lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
+                  lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+              }
+  
+              // Flash effect with 1.75x longer duration (350ms)
+              lightningGifImage.style.opacity = "1";  // Show
+              setTimeout(() => lightningGifImage.style.opacity = "0", 350); // Hide after 350ms
+          }, 750); // Change position every 750ms (3/4 second)
+      }
+  }
+  
+  // Attach event listener
+  if (weatherButtonsStorm) {
+      weatherButtonsStorm.addEventListener("click", enableStorm);
+  }
+  
     // ------------ END OF WEATHER BUTTONS JS ------------------
 
 
@@ -1537,10 +1559,27 @@ if (weatherButtonsStorm) {
     });
 
 
-    let friendsSPBtn = document.getElementById("friends-sp-btn");
+    let socialContainerSPBtn = document.getElementById("friends-sp-btn");
 
-    friendsSPBtn.addEventListener("click", () => {
-        document.getElementById("container").style.display = "block";
+    socialContainerSPBtn.addEventListener("click", () => {
+        sideBar.style.width = "0px";
+        sidePanelOverlay.style.display = "none";
+
+        let socialPanelOverlay = document.getElementById("socialPanelOverlay");
+
+        let socialContainer = document.getElementById("socialContainer");
+
+        socialPanelOverlay.style.opacity = "1";
+        socialPanelOverlay.style.pointerEvents = "auto";
+        socialPanelOverlay.style.display = "block";
+
+        setTimeout(() => {
+            socialContainer.style.opacity = "1";
+            socialContainer.style.pointerEvents = "auto";
+        }, 50);
+
+        openBtn.style.pointerEvents = "none";
+        openBtn.style.opacity = "0.5";
     });
 
 
@@ -1588,6 +1627,24 @@ if (weatherButtonsStorm) {
     profilePanelOverlay.addEventListener('click', closeProfilePanel);
 
 
+    
+
+    let socialContainer = document.getElementById("socialContainer");
+    let socialContainerOverlay = document.getElementById("socialPanelOverlay");
+    
+    function closeSocialPanelByOverlay() {
+        socialContainer.style.opacity = "0";
+        socialContainer.style.pointerEvents = "none";
+
+        openBtn.style.pointerEvents = "auto";
+        openBtn.style.opacity = "1";
+
+        setTimeout(() => {
+            socialContainerOverlay.style.display = "none";
+        }, 300);
+    }
+
+    socialContainerOverlay.addEventListener('click', closeSocialPanelByOverlay)
 
 
     let profileEditBtn = document.getElementById("ppbb-1");
@@ -1608,6 +1665,7 @@ if (weatherButtonsStorm) {
     }
 
     profileEditBtn.addEventListener('click', openProfileCustomizationPanel);
+
 
 
     // ---------------- END OF SIDE-PANEL JS ---------------------
@@ -1779,4 +1837,4 @@ if (weatherButtonsStorm) {
 
     // ------------------ END OF CLOCK JS -----------------------
 
-});
+  });
