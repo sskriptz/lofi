@@ -1171,16 +1171,23 @@ main {
 
 .sidebar {
     height: 100%;
-    width: 0;
+    width: 230px;
     position: fixed;
     z-index: 5001;
     top: 0;
     left: 0;
     background-color: #111;
-    overflow-x: hidden;
-    transition: 0.5s;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: transform 0.5s ease;
     padding-top: 60px;
+    
+    /* Initially hidden */
+    transform: translateX(-100%); 
+    pointer-events: none;
 }
+
+
 
 .sidebar a {
     padding: 8px 8px 8px 32px;
