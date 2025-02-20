@@ -449,7 +449,7 @@ const firebaseConfig = {
       
       // Remove message listener if it exists
       if (messageListener) {
-          messageListener();  // If it's a function, you call it like this
+          messageListener();  // call the function
           messageListener = null;  // Reset listener
       } else if (messageListener && typeof messageListener === 'function') {
           firebase.database().ref('messages').off('child_added', messageListener); // Detach the Firebase listener
@@ -1531,20 +1531,27 @@ const firebaseConfig = {
     let closeBtn = document.getElementById("closeBtn");
     let sidePanelOverlay = document.getElementById("sidePanelOverlay");
 
+    
+
     openBtn.addEventListener('click', () => {
-        sideBar.style.width = "230px";
+        sideBar.style.transform = "translateX(0)";
+        sideBar.style.pointerEvents = "auto";
         sidePanelOverlay.style.display = "block";
     });
-
+    
     closeBtn.addEventListener('click', () => {
-        sideBar.style.width = "0px";
+        sideBar.style.transform = "translateX(-100%)";
+        sideBar.style.pointerEvents = "none";
         sidePanelOverlay.style.display = "none";
     });
+    
 
     sidePanelOverlay.addEventListener('click', () => {
-        sideBar.style.width = "0px";
+        sideBar.style.transform = "translateX(-100%)";
+        sideBar.style.pointerEvents = "none";
         sidePanelOverlay.style.display = "none";
     });
+    
 
 
     let signOutSpBtn = document.getElementById("sign-out-sp-btn");
@@ -1562,25 +1569,27 @@ const firebaseConfig = {
     let socialContainerSPBtn = document.getElementById("friends-sp-btn");
 
     socialContainerSPBtn.addEventListener("click", () => {
-        sideBar.style.width = "0px";
-        sidePanelOverlay.style.display = "none";
-
+        sideBar.style.transform = "translateX(-100%)";
+        sideBar.style.pointerEvents = "none";
+    
+        sidePanelOverlay.style.display = "none"; 
+    
         let socialPanelOverlay = document.getElementById("socialPanelOverlay");
-
         let socialContainer = document.getElementById("socialContainer");
-
+    
+        socialPanelOverlay.style.display = "block";
         socialPanelOverlay.style.opacity = "1";
         socialPanelOverlay.style.pointerEvents = "auto";
-        socialPanelOverlay.style.display = "block";
-
+    
         setTimeout(() => {
             socialContainer.style.opacity = "1";
             socialContainer.style.pointerEvents = "auto";
-        }, 50);
-
+        }, 100);
+    
         openBtn.style.pointerEvents = "none";
         openBtn.style.opacity = "0.5";
     });
+    
 
 
     let profileSpBtn = document.getElementById("profile-sp-btn");
@@ -1588,21 +1597,24 @@ const firebaseConfig = {
     let profilePanelOverlay = document.getElementById("profilePanelOverlay");
 
     profileSpBtn.addEventListener('click', () => {
-        sideBar.style.width = "0px";
-        sidePanelOverlay.style.display = "none";
-
+        sideBar.style.transform = "translateX(-100%)";
+        sideBar.style.pointerEvents = "none";
+    
+        sidePanelOverlay.style.display = "none"; 
+    
+        profilePanelOverlay.style.display = "block";
         profilePanelOverlay.style.opacity = "1";
         profilePanelOverlay.style.pointerEvents = "auto";
-        profilePanelOverlay.style.display = "block";
-
+    
         setTimeout(() => {
             profilePanel.style.opacity = "1";
             profilePanel.style.pointerEvents = "auto";
-        }, 50);
-
+        }, 100);
+    
         openBtn.style.pointerEvents = "none";
         openBtn.style.opacity = "0.5";
     });
+    
 
 
 
@@ -1627,7 +1639,7 @@ const firebaseConfig = {
     profilePanelOverlay.addEventListener('click', closeProfilePanel);
 
 
-    
+
 
     let socialContainer = document.getElementById("socialContainer");
     let socialContainerOverlay = document.getElementById("socialPanelOverlay");
