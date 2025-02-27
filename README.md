@@ -41,3 +41,10 @@ This is the official lofi website repository that will be used for now. All comm
  - Offline Mode
  - Weekly or Monthly Challenges
  - Community made themes you can install
+ - Study resources like embedded Wikipedia
+ - Note taking app
+ - Gamified productivity
+ - Whiteboard
+ - Smart study break reminders
+ - Study Streaks
+ - Keyboard Shortcuts
