@@ -48,3 +48,10 @@ This is the official lofi website repository that will be used for now. All comm
  - Smart study break reminders
  - Study Streaks
  - Keyboard Shortcuts
+ - Live wallpapers
+ - AI generated Profile themes
+ - Music visualizer
+ - Daily Login rewards
+ - Low power mode
+ - Easter Eggs
+ - Daily Motivational Quotes
