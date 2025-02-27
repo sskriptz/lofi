@@ -14,16 +14,25 @@ This is the official lofi website repository that will be used for now. All comm
  - Find a way to customize your profile even more (Profile Picture, Banner Image, Profile Panel Background, Profile Effects, Badges)
  - Add an option for the user to select their music genre
  - Add minigames to play when bored
- - Add focus mode for users who want to study
+ - Add focus mode for users who want to study (Pomodoro Timer), Add a distraction blocker while in focus mode
  - Add ambient sounds
  - Add a pane that allows customization for the whole website based on the user's preferences
  - Add an about me page and a contact us page
  - Add a settings pane for the whole website that includes Google Account settings for the site
  - Add notifications to the website for example when the user gets a new friend request or new message
  - Improve the To-Do List panel and add more features - Make sure to allow customization for the alarm sound
- - Add a calendar to list important dates
+ - Add a calendar to list important dates along with a countdown timer for them
  - Add a repeat feature to the audio player to listen to songs on repeat
  - Add announcements/update banners
  - Include a community feature
  - Start a Discord Server for this website
  - Be able to link your Spotify account so you can play your songs
+ - Seasonal themes and events with badges for study time and a leaderboard
+ - Allow users to set task prioritizations and deadlines; Allow subtasks and task-sharing with friends
+ - Progress tracking panel that shows a graph of study time activity (User analytics)
+ - Group chats and Activity Feed
+ - Mobile compatibility
+ - Allow a wide variety of media in chat panel
+ - Events, Polls & Surveys
+ - Language Support
+ - Accessibility Features
