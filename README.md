@@ -36,3 +36,8 @@ This is the official lofi website repository that will be used for now. All comm
  - Events, Polls & Surveys
  - Language Support
  - Accessibility Features
+ - Allow users to upload their own things
+ - Collaborative Study Rooms
+ - Offline Mode
+ - Weekly or Monthly Challenges
+ - Community made themes you can install
