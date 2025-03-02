@@ -1792,7 +1792,7 @@ div#spMainSection {
     scrollbar-width: thin;
     scrollbar-color: rgba(128, 128, 128, 0.5) transparent;
     margin-top: 2vh;
-    box-shadow: 0px 1px 6px;
+    box-shadow: 0px 1px 3px;
     background-color: white;
 }
 
