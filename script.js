@@ -894,7 +894,12 @@ async function removeFriend(friendId) {
 
 
   function chatPanelClose() {
-    document.getElementById("chatContainer").style.display = "none";
+    document.getElementById("chatContainer").style.opacity = "0";
+    document.getElementById("chatContainer").style.pointerEvents = "none";
+    
+    setTimeout(() => {
+        document.getElementById("chatContainer").style.display = "none";
+    }, 300);
   }
 
 
@@ -1088,7 +1093,7 @@ function addFriendProfilePanelToDOM() {
             background-color: #c44;
         }
         
-        h3 {
+        #friendProfilePanel h3 {
             margin-top: 0;
             margin-bottom: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -2082,7 +2087,7 @@ loadFriends = async function() {
     }
 
     profilePanelOverlay.addEventListener('click', closeProfilePanel);
-
+    document.getElementById("profilePanelClose").addEventListener('click', closeProfilePanel);
 
 
 
@@ -2095,9 +2100,7 @@ loadFriends = async function() {
         socialContainer.style.pointerEvents = "none";
 
         chatContainer.style.opacity = "0";
-        chatContainer.style.display = "none";
         chatContainer.style.pointerEvents = "none";
-
 
         openBtn.style.pointerEvents = "auto";
         openBtn.style.opacity = "1";
