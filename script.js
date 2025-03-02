@@ -2030,6 +2030,10 @@ loadFriends = async function() {
         socialPanelOverlay.style.display = "block";
         socialPanelOverlay.style.opacity = "1";
         socialPanelOverlay.style.pointerEvents = "auto";
+
+        document.getElementById("chatContainer").style.display = "none";
+        document.getElementById("chatContainer").style.opacity = "0";
+        document.getElementById("chatContainer").style.pointerEvents = "none";
     
         setTimeout(() => {
             socialContainer.style.opacity = "1";
