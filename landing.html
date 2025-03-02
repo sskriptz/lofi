@@ -69,35 +69,28 @@
     <div id="profilePanel">
         <div id="profilePanelHeader">
             <div id="pp-user-info" class="pp-user-info-flex"></div>
-            <!-- <button id="profilePanelClose">&times;</button> -->
+            <button id="profilePanelClose">&times;</button>
         </div>
-        <!-- <hr id="ppHr"> -->
         <div class="pp-option-panel">
-            <form id="pp-aboutme-form">
-                <fieldset>
-                    <legend>About Me</legend>
-                    <p id="aboutme-official-p"></p>
-                </fieldset>
-            </form>
-
-            <div class="pp-row2-forms">
-                <form id="pp-socials-form">
-                    <fieldset>
-                        <legend>Socials</legend>
-                        <p id="socials-official-p"></p>
-                    </fieldset>
-                </form>
-
-                <form id="pp-other-form">
-                    <fieldset>
-                        <legend>Other</legend>
-                        <p id="acc-creation-date"></p>
-                    </fieldset>
-                </form>
+            <div id="pp-aboutme-section">
+                <h3>About Me</h3>
+                <p id="aboutme-official-p"></p>
             </div>
-
+    
+            <div class="pp-row2-sections">
+                <div id="pp-socials-section">
+                    <h3>Socials</h3>
+                    <div id="socials-official-p"></div>
+                </div>
+    
+                <div id="pp-other-section">
+                    <h3>Other</h3>
+                    <p id="acc-creation-date"></p>
+                </div>
+            </div>
+    
             <div class="pp-bottom-buttons">
-                <button id="ppbb-1">Customize Profile ✏️</button>
+                <button id="ppbb-1" class="pp-button">Customize Profile ✏️</button>
             </div>
         </div>
     </div>
@@ -112,32 +105,33 @@
         </div>
         <hr id="pcpHr">
         <div class="pcp-option-panel">
-            <form id="pp-customization-pane1">
+            <form id="pp-customization-pane1" class="customization-pane">
                 <fieldset>
-                    <p>Change Username:</p>
-                    <div class="username-change-items">
-                        <input type="text" id="username-input" maxlength="24">
-                        <button id="username-save-btn" type="button">Save</button>
+                    <p class="section-title">Change Username</p>
+                    <p id="usernameChangeWarning">Warning: Changing your username will result in a page refresh</p>
+                    <div class="username-change-items change-items">
+                        <input type="text" id="username-input" maxlength="24" placeholder="Enter new username">
+                        <button id="username-save-btn" class="save-btn" type="button">Save</button>
                     </div>
                 </fieldset>
             </form>
-
-            <form id="pp-customization-pane2">
+    
+            <form id="pp-customization-pane2" class="customization-pane">
                 <fieldset>
-                    <p>Change About Me:</p>
-                    <div class="change-aboutme-items">
-                        <textarea id="aboutme-input" maxlength="300" rows="4"></textarea>
-                        <button id="aboutme-save-btn" type="button">Save</button>
+                    <p class="section-title">Change About Me</p>
+                    <div class="change-aboutme-items change-items">
+                        <textarea id="aboutme-input" maxlength="300" rows="4" placeholder="Tell people about yourself..."></textarea>
+                        <button id="aboutme-save-btn" class="save-btn" type="button">Save</button>
                     </div>
                 </fieldset>
             </form> 
-
-            <form id="pp-customization-pane3">
+    
+            <form id="pp-customization-pane3" class="customization-pane">
                 <fieldset>
-                    <p>Change Socials:</p>
-                    <div class="change-socials-items">
-                        <textarea id="socials-input" maxlength="300" rows="4"></textarea>
-                        <button id="socials-save-btn" type="button">Save</button>
+                    <p class="section-title">Change Socials</p>
+                    <div class="change-socials-items change-items">
+                        <textarea id="socials-input" maxlength="300" rows="4" placeholder="Add your social media links..."></textarea>
+                        <button id="socials-save-btn" class="save-btn" type="button">Save</button>
                     </div>
                 </fieldset>
             </form>
@@ -350,7 +344,7 @@
             </div> -->
 
             <div id="spMainSection" class="spMainSection clearfix">
-                <button style="float: right;" onclick="socialPanelClose()">Close</button>
+                <button style="float: right;" onclick="socialPanelClose()">✖</button>
 
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;" id="spUserInfoContainer">
                     <img id="userProfilePic" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="Profile Picture">
@@ -381,7 +375,7 @@
         <div id="chatContainer" class="chat-container">
             <div class="chat-header">
                 <h3 id="chatUsername">Chat with <span></span></h3>
-                <button id="chatPanelClose" onclick="chatPanelClose()">Close</button>
+                <button id="chatPanelClose" onclick="chatPanelClose()">✖</button>
             </div>
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input">
