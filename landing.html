@@ -340,50 +340,55 @@
 
     </main>
 
+    <div id="friendsWholeContainer">
+        <div id="socialContainer">
+            <!-- <div id="usernameSection" class="username-section" style="display: none;">
+                <h2>Choose Username</h2>
+                <input type="text" id="username" placeholder="Enter username">
+                <p id="usernameError" style="color: red;"></p>
+                <button onclick="setUsername()">Set Username</button>
+            </div> -->
 
-    <div id="socialContainer">
-        <!-- <div id="usernameSection" class="username-section" style="display: none;">
-            <h2>Choose Username</h2>
-            <input type="text" id="username" placeholder="Enter username">
-            <p id="usernameError" style="color: red;"></p>
-            <button onclick="setUsername()">Set Username</button>
-        </div> -->
+            <div id="spMainSection" class="spMainSection clearfix">
+                <button style="float: right;" onclick="socialPanelClose()">Close</button>
 
-        <div id="spMainSection" class="spMainSection clearfix">
-            <button style="float: right;" onclick="socialPanelClose()">Close</button>
-
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                <img id="userProfilePic" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="Profile Picture">
-                <h2>Welcome, <span id="userUsername"></span></h2>
-            </div>
-            
-            <div class="search-section">
-                <h3 class="section-title">Search Users</h3>
-                <input type="text" id="searchInput" placeholder="Search by username">
-                <div id="searchResults"></div>
-            </div>
-
-            <div class="fr-notifications-section">
-                <h3 class="fr-section-title">Friend Requests</h3>
-                <div id="fr-notifications"></div>
-            </div>
-
-            <div class="friends-list">
-                <h3 class="section-title">Friends</h3>
-                <div id="friendsList"></div>
-            </div>
-
-            <div id="chatContainer" class="chat-container">
-                <div class="chat-header">
-                    <h3 id="chatUsername">Chat with <span></span></h3>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;" id="spUserInfoContainer">
+                    <img id="userProfilePic" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="Profile Picture">
+                    <h2 id="userUsername"></h2>
                 </div>
-                <div class="chat-messages" id="chatMessages"></div>
-                <div class="chat-input">
-                    <form id="messageForm" onsubmit="sendMessage(event)">
-                        <input type="text" id="messageInput" placeholder="Type a message...">
-                        <button type="submit">Send</button>
-                    </form>
+                
+                <div class="search-section">
+                    <h3 class="section-title">Search Users</h3>
+                    <input type="text" id="searchInput" placeholder="Search by username">
+                    <!-- <h4 id="usernameSearchResults"></h4> -->
+                    <div id="searchResults"></div>
                 </div>
+
+                <div id="notifications-and-friends-container">
+                    <div class="fr-notifications-section">
+                        <h3 class="fr-section-title">Friend Requests</h3>
+                        <div id="fr-notifications"></div>
+                    </div>
+
+                    <div class="friends-list">
+                        <h3 class="section-title">Friends</h3>
+                        <div id="friendsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="chatContainer" class="chat-container">
+            <div class="chat-header">
+                <h3 id="chatUsername">Chat with <span></span></h3>
+                <button id="chatPanelClose" onclick="chatPanelClose()">Close</button>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <form id="messageForm" onsubmit="sendMessage(event)">
+                    <input type="text" id="messageInput" placeholder="Type a message...">
+                    <button type="submit">Send</button>
+                </form>
             </div>
         </div>
     </div>
