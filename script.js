@@ -282,28 +282,61 @@ const firebaseConfig = {
       const usernameInput = document.getElementById("username-input"); // The input field for the new username
       const usernameSaveBtn = document.getElementById("username-save-btn"); // The save button
       
-      // Function to handle username change
-      function changeUsername() {
-          const newUsername = usernameInput.value; // Get the value from the input field
-      
-          if (newUsername) {
-              const user = auth.currentUser;
-              user.updateProfile({
-                  displayName: newUsername
-              }).then(() => {
-                  alert("Username updated successfully!");
-                  window.location.reload(true);
-                  // Update UI to reflect new username
-                  userInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>Hello, ${user.displayName}</p>`;
-                  profilePanelUserInfo.innerHTML = `<img src="${user.photoURL}" width="50" style="border-radius:50%"><p>${user.displayName}</p>`;
-              }).catch(error => {
-                  console.error("Error updating username:", error);
-              });
-          } else {
-              console.log("Username cannot be empty");
-          }
-      }
-      
+      async function changeUsername() {
+        const newUsername = usernameInput.value;
+    
+        if (newUsername) {
+            const user = auth.currentUser;
+            try {
+                // Update Firebase Authentication
+                await user.updateProfile({ displayName: newUsername });
+    
+                // Update Firestore for the current user
+                await db.collection('users').doc(user.uid).update({
+                    username: newUsername
+                });
+    
+                // Fetch all users to find those who have the current user in their friends list
+                const allUsersSnapshot = await db.collection('users').get();
+                const batch = db.batch();
+    
+                allUsersSnapshot.forEach(doc => {
+                    const friendRef = db.collection('users').doc(doc.id);
+                    const friendData = doc.data();
+    
+                    if (friendData.friends) {
+                        // Correct the structure of the friends array
+                        const updatedFriends = friendData.friends.map(friend =>
+                            friend.userId === user.uid
+                                ? { 
+                                    userId: user.uid, 
+                                    username: newUsername, 
+                                    profilePicture: user.photoURL || null 
+                                  }
+                                : friend
+                        );
+    
+                        // Only update if there's a change
+                        if (JSON.stringify(updatedFriends) !== JSON.stringify(friendData.friends)) {
+                            batch.update(friendRef, { friends: updatedFriends });
+                        }
+                    }
+                });
+    
+                await batch.commit();
+    
+                alert("Username updated successfully!");
+                window.location.reload(true);
+            } catch (error) {
+                console.error("Error updating username:", error);
+            }
+        } else {
+            console.log("Username cannot be empty");
+        }
+    }
+    
+    
+    
       // Add event listener for the save button to trigger the change
       usernameSaveBtn.addEventListener("click", changeUsername); 
   
@@ -399,27 +432,6 @@ const firebaseConfig = {
   });
   
   
-  // Authentication functions
-  async function signUp() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      try {
-          await auth.createUserWithEmailAndPassword(email, password);
-      } catch (error) {
-          alert(error.message);
-      }
-  }
-  
-  async function signIn() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      try {
-          await auth.signInWithEmailAndPassword(email, password);
-      } catch (error) {
-          alert(error.message);
-      }
-  }
-  
   function signInWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
@@ -474,8 +486,12 @@ const firebaseConfig = {
               const searchTerm = searchInput.value.toLowerCase();
               if (searchTerm.length > 2) {
                   searchUsers(searchTerm);
+                  document.getElementById('searchResults').style.display = 'block';
+                  document.getElementById('searchResults').style.border = '1px solid black';
               } else {
+                  document.getElementById('searchResults').style.display = 'none';
                   document.getElementById('searchResults').innerHTML = '';
+                  document.getElementById('searchResults').style.border = 'none';
               }
           }, 500);
       });
@@ -604,6 +620,8 @@ const firebaseConfig = {
                   notifications.appendChild(notification);
               }
           }
+      } else {
+            notifications.innerHTML = '<p>No friend requests</p>';
       }
   }
   
@@ -667,78 +685,131 @@ const firebaseConfig = {
   }
   
   async function loadFriends() {
-      const currentUser = auth.currentUser;
-      const userDoc = await db.collection('users').doc(currentUser.uid).get();
-      const userData = userDoc.data();
-      const friendsList = document.getElementById('friendsList');
-      friendsList.innerHTML = '';
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+        console.error("No user is signed in.");
+        return;
+    }
+
+    const userDoc = await db.collection('users').doc(currentUser.uid).get();
+    if (!userDoc.exists) {
+        console.error("User document does not exist.");
+        return;
+    }
+
+    const userData = userDoc.data();
+    console.log("User Data:", userData); // 🔍 Debugging
+
+    const friendsList = document.getElementById('friendsList');
+
+    // Store existing friend elements to avoid unnecessary UI changes
+    const existingFriendElements = {};
+    document.querySelectorAll('.friend-item').forEach(item => {
+        const username = item.querySelector('span').textContent;
+        existingFriendElements[username] = item;
+    });
+
+    if (userData.friends && userData.friends.length > 0) {
+        for (const friend of userData.friends) {
+            console.log("Friend Data:", friend); // 🔍 Debugging
+
+            // Fetch friend's data
+            const friendDoc = await db.collection('users').doc(friend.userId).get();
+            if (!friendDoc.exists) {
+                console.warn(`Friend with ID ${friend.userId} not found.`);
+                continue;
+            }
+
+            const friendData = friendDoc.data();
+
+            // Check if the friend is already displayed
+            if (existingFriendElements[friendData.username]) {
+                // Update profile picture if changed
+                const imgElement = existingFriendElements[friendData.username].querySelector('img');
+                if (imgElement.src !== friendData.profilePicture) {
+                    imgElement.src = friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp';
+                }
+                continue;
+            }
+
+            // Create new friend element if it doesn't exist
+            const friendItem = document.createElement('div');
+            friendItem.className = 'friend-item';
+            friendItem.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                        alt="Profile" 
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <span>${friendData.username}</span>
+                </div>
+                <div>
+                    <button onclick="removeFriend('${friend.userId}')">Remove</button>
+                    <button onclick="openChat('${friend.userId}', '${friendData.username}')">Chat</button>
+                </div>
+            `;
+            friendsList.appendChild(friendItem);
+        }
+    } else {
+        if (!friendsList.querySelector('p')) {
+            friendsList.innerHTML = '<p>No friends yet</p>';
+        }
+    }
+}
+
+
   
-      if (userData.friends && userData.friends.length > 0) {
-          for (const friend of userData.friends) {
-              // Fetch friend's current data to get their up-to-date profile picture
-              const friendDoc = await db.collection('users').doc(friend.userId).get();
-              const friendData = friendDoc.data();
-              
-              const friendItem = document.createElement('div');
-              friendItem.className = 'friend-item';
-              friendItem.innerHTML = `
-                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                      <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                          alt="Profile" 
-                          style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                      <span>${friend.username}</span>
-                  </div>
-                  <div>
-                      <button onclick="removeFriend('${friend.userId}')">Remove</button>
-                      <button onclick="openChat('${friend.userId}', '${friend.username}')">Chat</button>
-                  </div>
-              `;
-              friendsList.appendChild(friendItem);
-          }
-      } else {
-          friendsList.innerHTML = '<p>No friends yet</p>';
-      }
-  }
-  
-  async function removeFriend(friendId) {
-      const currentUser = auth.currentUser;
-      const currentUserRef = db.collection('users').doc(currentUser.uid);
-      const friendRef = db.collection('users').doc(friendId);
-  
-      try {
-          const currentUserDoc = await currentUserRef.get();
-          const friendDoc = await friendRef.get();
-          const currentUserData = currentUserDoc.data();
-          const friendData = friendDoc.data();
-  
-          // Remove from current user's friends list
-          await currentUserRef.update({
-              friends: firebase.firestore.FieldValue.arrayRemove({
-                  userId: friendId,
-                  username: friendData.username
-              })
-          });
-  
-          // Remove from friend's friends list
-          await friendRef.update({
-              friends: firebase.firestore.FieldValue.arrayRemove({
-                  userId: currentUser.uid,
-                  username: currentUserData.username
-              })
-          });
-  
-          loadFriends();
-          if (currentChatUser === friendId) {
-              document.getElementById('chatContainer').style.display = 'none';
-          }
-      } catch (error) {
-          alert('Error removing friend: ' + error.message);
-      }
-  }
+async function removeFriend(friendId) {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+        console.error("No user is signed in.");
+        return;
+    }
+
+    const currentUserRef = db.collection('users').doc(currentUser.uid);
+    const friendRef = db.collection('users').doc(friendId);
+
+    try {
+        const currentUserDoc = await currentUserRef.get();
+        const friendDoc = await friendRef.get();
+
+        if (!currentUserDoc.exists || !friendDoc.exists) {
+            console.error("One of the users does not exist.");
+            return;
+        }
+
+        const currentUserData = currentUserDoc.data();
+        const friendData = friendDoc.data();
+
+        // Remove friend from currentUser's list
+        const updatedCurrentUserFriends = currentUserData.friends.filter(friend => friend.userId !== friendId);
+        await currentUserRef.update({ friends: updatedCurrentUserFriends });
+
+        // Remove currentUser from friend's list
+        const updatedFriendFriends = friendData.friends.filter(friend => friend.userId !== currentUser.uid);
+        await friendRef.update({ friends: updatedFriendFriends });
+
+        // Update UI without reloading
+        loadFriends();
+        document.querySelector(`.friend-item[data-userid="${friendId}"]`)?.remove();
+
+        // Hide chat if the removed friend was the active chat
+        if (typeof currentChatUser !== 'undefined' && currentChatUser === friendId) {
+            document.getElementById('chatContainer').style.display = 'none';
+        }
+
+        console.log("Friend removed successfully.");
+    } catch (error) {
+        alert('Error removing friend: ' + error.message);
+    }
+}
+
   
   function openChat(friendId, friendUsername) {
       currentChatUser = friendId;
-      document.getElementById('chatContainer').style.display = 'block';
+      let chatContainer = document.getElementById('chatContainer');
+      chatContainer.style.display = "block";
+      chatContainer.style.opacity = "1";
+      chatContainer.style.pointerEvents = "auto";
       document.querySelector('#chatUsername span').textContent = friendUsername;
       loadMessages(friendId);
   }
@@ -819,6 +890,380 @@ const firebaseConfig = {
       document.getElementById("hm-icon").style.pointerEvents = "auto";
       document.getElementById("hm-icon").style.opacity = "1";
   }
+
+
+
+  function chatPanelClose() {
+    document.getElementById("chatContainer").style.display = "none";
+  }
+
+
+// First, let's add the HTML for the friend profile panel to the document
+function addFriendProfilePanelToDOM() {
+    // Check if panel already exists
+    if (document.getElementById('friendProfilePanel')) return;
+    
+    const friendProfilePanel = document.createElement('div');
+    friendProfilePanel.id = 'friendProfilePanel';
+    friendProfilePanel.innerHTML = `
+        <div id="friendProfilePanelHeader">
+            <div id="fp-user-info" class="fp-user-info-flex"></div>
+            <button id="friendProfilePanelClose">&times;</button>
+        </div>
+        <div class="fp-option-panel">
+            <div id="fp-aboutme-section">
+                <h3>About Me</h3>
+                <p id="fp-aboutme-content"></p>
+            </div>
+
+            <div class="fp-row2-sections">
+                <div id="fp-socials-section">
+                    <h3>Socials</h3>
+                    <div id="fp-socials-content"></div>
+                </div>
+
+                <div id="fp-other-section">
+                    <h3>Other</h3>
+                    <p id="fp-acc-creation-date"></p>
+                </div>
+            </div>
+
+            <div class="fp-bottom-buttons">
+                <button id="fpbb-chat" class="fp-button">Chat</button>
+                <button id="fpbb-remove" class="fp-button">Remove Friend</button>
+            </div>
+        </div>
+    `;
+    
+    const friendProfilePanelOverlay = document.createElement('div');
+    friendProfilePanelOverlay.id = 'friendProfilePanelOverlay';
+    
+    document.body.appendChild(friendProfilePanel);
+    document.body.appendChild(friendProfilePanelOverlay);
+    
+    // Add styles for the friend profile panel
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+        #friendProfilePanel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(40deg, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 12%, rgba(87,104,107,1) 100%);
+            padding: 20px;
+            height: auto;
+            width: 30vw;
+            z-index: 6001;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: 15px;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
+            max-height: 90vh;
+            color: white;
+        }
+        
+        #friendProfilePanel:hover {
+            transform: translate(-50%, -50%) scale(1.01);
+        }
+        
+        #friendProfilePanelHeader {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            width: 100%;
+            height: 20vh;
+            background-image: url("https://i.pinimg.com/originals/6b/43/c3/6b43c3a7991332d25fb37bf8e0099bf7.gif");
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        #friendProfilePanelOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 6000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        #friendProfilePanelClose {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        #friendProfilePanelClose:hover {
+            transform: scale(1.2);
+        }
+        
+        .fp-option-panel {
+            margin-top: 7%;
+        }
+        
+        .fp-user-info-flex {
+            display: flex;  
+            align-items: center;
+            width: auto;
+            height: auto;
+            justify-content: left;
+            margin-left: 0.8vw;
+            margin-bottom: 10px;
+        }
+        
+        .fp-user-info-flex img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid white;
+        }
+        
+        .fp-user-info-flex p {
+            margin: 0;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+        
+        #fp-aboutme-section, #fp-socials-section, #fp-other-section {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .fp-row2-sections {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .fp-row2-sections > div {
+            flex: 1;
+        }
+        
+        .fp-bottom-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .fp-button {
+            background-color: darkslateblue;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease-in-out;
+            flex: 1;
+        }
+        
+        .fp-button:hover {
+            background-color: slateblue;
+        }
+        
+        #fpbb-remove {
+            background-color: #933;
+        }
+        
+        #fpbb-remove:hover {
+            background-color: #c44;
+        }
+        
+        h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+        }
+    `;
+    
+    document.head.appendChild(styleElement);
+    
+    // Add event listeners
+    document.getElementById('friendProfilePanelClose').addEventListener('click', closeFriendProfilePanel);
+    document.getElementById('friendProfilePanelOverlay').addEventListener('click', closeFriendProfilePanel);
+}
+
+// Function to open friend's profile panel
+function openFriendProfile(userId, username) {
+    // Ensure the panel exists in the DOM
+    addFriendProfilePanelToDOM();
+    
+    // Get profile information
+    getFriendProfileInfo(userId, username).then(() => {
+        // Show the profile panel and overlay
+        const friendProfilePanel = document.getElementById('friendProfilePanel');
+        const friendProfilePanelOverlay = document.getElementById('friendProfilePanelOverlay');
+        
+        friendProfilePanel.style.opacity = '1';
+        friendProfilePanel.style.pointerEvents = 'auto';
+        friendProfilePanelOverlay.style.opacity = '1';
+        friendProfilePanelOverlay.style.pointerEvents = 'auto';
+        
+        // Setup action buttons
+        const chatButton = document.getElementById('fpbb-chat');
+        const removeButton = document.getElementById('fpbb-remove');
+        
+        chatButton.onclick = () => {
+            closeFriendProfilePanel();
+            openChat(userId, username);
+        };
+        
+        removeButton.onclick = () => {
+            if (confirm(`Are you sure you want to remove ${username} from your friends?`)) {
+                removeFriend(userId);
+                closeFriendProfilePanel();
+            }
+        };
+    });
+}
+
+// Function to close the friend profile panel
+function closeFriendProfilePanel() {
+    const friendProfilePanel = document.getElementById('friendProfilePanel');
+    const friendProfilePanelOverlay = document.getElementById('friendProfilePanelOverlay');
+    
+    if (friendProfilePanel && friendProfilePanelOverlay) {
+        friendProfilePanel.style.opacity = '0';
+        friendProfilePanel.style.pointerEvents = 'none';
+        friendProfilePanelOverlay.style.opacity = '0';
+        friendProfilePanelOverlay.style.pointerEvents = 'none';
+    }
+}
+
+// Function to fetch friend's profile information with about me, socials, and creation date
+async function getFriendProfileInfo(userId, username) {
+    try {
+        const friendDoc = await db.collection('users').doc(userId).get();
+        
+        if (!friendDoc.exists) {
+            console.error('Friend document does not exist');
+            return;
+        }
+        
+        const friendData = friendDoc.data();
+        
+        // Update profile panel with friend's information
+        const fpUserInfo = document.getElementById('fp-user-info');
+        fpUserInfo.innerHTML = `
+            <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" alt="Profile">
+            <p>${friendData.username}</p>
+        `;
+        
+        // Update about section if available
+        const aboutMeElement = document.getElementById('fp-aboutme-content');
+        aboutMeElement.textContent = friendData.aboutMe || 'No information provided';
+        
+        // Update socials if available
+        const socialsElement = document.getElementById('fp-socials-content');
+        
+        // Check if socials is a string (old format) or an object (new format)
+        if (typeof friendData.socials === 'string') {
+            // If it's a string, display it with line breaks
+            socialsElement.innerHTML = friendData.socials.replace(/\n/g, '<br>') || 'No social links provided';
+        } else if (friendData.socials && typeof friendData.socials === 'object') {
+            // If it's an object, display platform and link
+            let socialsHTML = '';
+            for (const [platform, link] of Object.entries(friendData.socials)) {
+                if (link) {
+                    socialsHTML += `<p><strong>${platform}:</strong> ${link}</p>`;
+                }
+            }
+            socialsElement.innerHTML = socialsHTML || '<p>No social links provided</p>';
+        } else {
+            socialsElement.innerHTML = '<p>No social links provided</p>';
+        }
+        
+        // Get user account creation date
+        // First try to get it from Firestore metadata
+        const accCreationElement = document.getElementById('fp-acc-creation-date');
+        
+        try {
+            // First check if createdAt field exists in the user document
+            if (friendData.createdAt) {
+                const creationDate = friendData.createdAt.toDate ? 
+                    new Date(friendData.createdAt.toDate()) : 
+                    new Date(friendData.createdAt);
+                accCreationElement.textContent = `Account Created On: ${formatDate(creationDate)}`;
+            } else {
+                // If no createdAt field, try to fetch the user auth record
+                const friendAuthUser = await firebase.auth().getUser(userId).catch(() => null);
+                
+                if (friendAuthUser && friendAuthUser.metadata && friendAuthUser.metadata.creationTime) {
+                    accCreationElement.textContent = `Account Created On: ${formatDate(friendAuthUser.metadata.creationTime)}`;
+                } else {
+                    // Fallback if we can't get the auth record
+                    accCreationElement.textContent = 'Account creation date not available';
+                }
+            }
+        } catch (error) {
+            console.error("Error getting creation date:", error);
+            accCreationElement.textContent = 'Account creation date not available';
+        }
+        
+    } catch (error) {
+        console.error('Error fetching friend profile:', error);
+    }
+}
+
+// Update loadFriends function to add the click event for friend profile
+function updateFriendsListWithProfileClick() {
+    // Find all friend items
+    const friendItems = document.querySelectorAll('.friend-item');
+    
+    friendItems.forEach(item => {
+        // Get the friend info container
+        const friendInfo = item.querySelector('div:first-child');
+        const username = friendInfo.querySelector('span').textContent;
+        
+        // Extract user ID from the existing buttons
+        const chatButton = item.querySelector('button:nth-child(2)');
+        const chatOnclick = chatButton.getAttribute('onclick');
+        const userId = chatOnclick.split("'")[1];
+        
+        // Add pointer cursor if not already set
+        if (!friendInfo.style.cursor) {
+            friendInfo.style.cursor = 'pointer';
+        }
+        
+        // Remove existing click event to prevent duplicates
+        const clone = friendInfo.cloneNode(true);
+        friendInfo.parentNode.replaceChild(clone, friendInfo);
+        
+        // Add click event to view profile
+        clone.addEventListener('click', () => {
+            openFriendProfile(userId, username);
+        });
+    });
+}
+
+// Modify the existing loadFriends function to call updateFriendsListWithProfileClick at the end
+const originalLoadFriends = loadFriends;
+loadFriends = async function() {
+    await originalLoadFriends();
+    updateFriendsListWithProfileClick();
+};
+
+
 
 
 
@@ -1643,10 +2088,16 @@ const firebaseConfig = {
 
     let socialContainer = document.getElementById("socialContainer");
     let socialContainerOverlay = document.getElementById("socialPanelOverlay");
+    let chatContainer = document.getElementById("chatContainer");
     
     function closeSocialPanelByOverlay() {
         socialContainer.style.opacity = "0";
         socialContainer.style.pointerEvents = "none";
+
+        chatContainer.style.opacity = "0";
+        chatContainer.style.display = "none";
+        chatContainer.style.pointerEvents = "none";
+
 
         openBtn.style.pointerEvents = "auto";
         openBtn.style.opacity = "1";
