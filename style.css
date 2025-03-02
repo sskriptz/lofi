@@ -86,6 +86,9 @@ main {
 
 
 .column1 {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
     flex-basis: 55%;
 }
 
@@ -466,6 +469,8 @@ main {
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #000000;
     padding-bottom: 10px;
+    height: auto;
+    min-height: 0;
 
     /* Smooth transition for both hover and unhover */
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -569,7 +574,9 @@ main {
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #000000;
     height: 40vh;
-    width: 95%;
+    width: 100%;
+    flex-grow: 1;
+    box-sizing: border-box;
     transition: transform 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
@@ -1248,22 +1255,23 @@ main {
     height: auto;
     width: 30vw;
     z-index: 5001;
-    opacity: 0; /* Initially invisible */
-    pointer-events: none; /* Prevent interaction */
+    opacity: 0;
+    pointer-events: none;
     border-radius: 15px;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
     max-height: 90vh;
+    color: white;
 }
 
 #profilePanel:hover {
     transform: translate(-50%, -50%) scale(1.01);
 }
 
-
 #profilePanelHeader {
     display: flex;
     align-items: end;
+    justify-content: space-between;
     width: 100%;
     height: 20vh;
     background-image: url("https://i.pinimg.com/originals/6b/43/c3/6b43c3a7991332d25fb37bf8e0099bf7.gif");
@@ -1271,6 +1279,7 @@ main {
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 #profilePanelOverlay {
@@ -1293,6 +1302,8 @@ main {
     font-size: 30px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 #profilePanelClose:hover {
@@ -1303,128 +1314,157 @@ main {
     margin-top: 7%;
 }
 
-#pp-user-info {
+.pp-user-info-flex {
     display: flex;  
-    align-items: bottom;
-    width: 100%;
+    align-items: center;
+    width: auto;
     height: auto;
     justify-content: left;
     margin-left: 0.8vw;
+    margin-bottom: 10px;
 }
 
-#pp-user-info img {
-    width: 35px;
-    height: 35px;
+.pp-user-info-flex img {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     margin-right: 15px;
-    /* margin-left: 10px; */
+    border: 2px solid white;
 }
 
-#pp-user-info p {
-    margin-top: 5px;
+.pp-user-info-flex p {
+    margin: 0;
     color: white;
-    font-size: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
 
+#pp-aboutme-section, #pp-socials-section, #pp-other-section {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-#pp-aboutme-form, #pp-socials-form, #pp-other-form {
-    color: white;
+.pp-row2-sections {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.pp-row2-sections > div {
+    flex: 1;
 }
 
 .pp-bottom-buttons {
-    width: 100%;
-    height: auto;
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 7%;
-    margin-bottom: 3%;
+    gap: 15px;
+    margin-top: 20px;
 }
 
-#ppbb-1 {
+.pp-button {
     background-color: darkslateblue;
     border: none;
     color: white;
     font-size: 14px;
     cursor: pointer;
     border-radius: 10px;
-    padding: 10px;
-    width: 100%;
+    padding: 10px 20px;
     transition: background-color 0.3s ease-in-out;
+    flex: 1;
 }
 
-#ppbb-1:hover {
+.pp-button:hover {
     background-color: slateblue;
 }
 
-#pp-aboutme-form fieldset, #pp-socials-form fieldset, #pp-other-form fieldset {
-    border-radius: 15px;
-    border: 2px solid #ccc;
+#pp-aboutme-section h3, #pp-socials-section h3, #pp-other-section h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+}
+
+#aboutme-official-p {
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    word-wrap: break-word; /* Ensure long words break and wrap */
+    color: white;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.5;
+    max-height: 90px;
+    overflow-y: auto;
+}
+
+#socials-official-p {
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    word-wrap: break-word; /* Ensure long words break and wrap */
+    color: white;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.5;
+    max-height: 90px;
+    overflow-y: auto;
+    padding: 10px;
+    font-size: 11px;
+}
+
+#acc-creation-date {
+    color: white;
+    font-size: 15px;
 }
 
 
-.pp-row2-forms {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: auto;
-    margin-top: 2%;
-    gap: 3%;
-}
-
-.pp-row2-forms form {
-    width: 50%;
-}
-
-
-
+/* Profile Customization Panel CSS */
 
 #profile-customization-panel {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(40deg, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 12%, rgba(87,104,107,1) 100%);
-    padding: 20px;
-    height: auto;
+    background: #181818;
+    padding: 30px;
+    height: 70vh;
     width: 30vw;
     z-index: 5001;
     opacity: 0; /* Initially invisible */
     pointer-events: none; /* Prevent interaction */
-    border-radius: 15px;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-out;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 1);
-    max-height: 70vh;
-    overflow-y: auto; /* Allow scrolling if content overflows */
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 #profile-customization-panel:hover {
     transform: translate(-50%, -50%) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* For WebKit Browsers (Chrome, Edge, Safari) */
+/* Custom scrollbar styling */
 #profile-customization-panel::-webkit-scrollbar {
-    width: 8px; /* Slim scrollbar */
+    width: 6px;
     border-radius: 10px;
 }
 
 #profile-customization-panel::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
+    margin: 8px 0;
 }
 
 #profile-customization-panel::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     transition: background 0.3s;
 }
 
 #profile-customization-panel::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.3);
 }
 
-/* Completely hide scrollbar buttons */
 #profile-customization-panel::-webkit-scrollbar-button {
     width: 0;
     height: 0;
@@ -1434,243 +1474,143 @@ main {
 /* For Firefox */
 #profile-customization-panel {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
 }
-
 
 .pcp-header {
     color: white;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.pcp-header h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin: 0;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+#pcpHr {
+    border: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 15px 0 25px;
 }
 
 .pcp-option-panel {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 7%;
+    gap: 22px;
 }
 
-#pp-customization-pane1 {
+/* Common styles for all panes */
+.customization-pane {
     width: 100%;
     color: white;
 }
 
-#pp-customization-pane1 fieldset {
-    border-radius: 15px;
-    border: 2px solid #ccc;
-    padding: 15px;
-    background-color: rgba(255, 255, 255, 0.1);
+.customization-pane fieldset {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
 }
 
-#pp-customization-pane1 p {
-    color: #ccc;
+.customization-pane fieldset:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.customization-pane p {
+    color: #e0e0e0;
     font-size: 1rem;
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 0 0 10px;
+    font-weight: 400;
+}
+
+.customization-pane p.section-title {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: white;
 }
 
 #usernameChangeWarning {
-    font-size: 0.75rem !important;
+    font-size: 0.8rem !important;
     font-style: italic !important;
+    color: #ff9a9a !important;
+    margin-bottom: 12px;
 }
 
-.username-change-items {
+/* Input containers */
+.change-items {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-}
-
-#pp-customization-pane1 input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background: transparent;
-    color: white;
-}
-
-#username-save-btn {
-    border: 1px solid white;
-    background-color: transparent;
-    border-radius: 10px;
-    padding: 8px 15px 8px 15px;
-    color: white;
-    width: 20%;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-#username-save-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-
-/* -------------------------------- */
-
-#pp-customization-pane2 {
-    width: 100%;
-    color: white;
-}
-
-#pp-customization-pane2 fieldset {
-    border-radius: 15px;
-    border: 2px solid #ccc;
-    padding: 15px;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-#pp-customization-pane2 p {
-    color: #ccc;
-    font-size: 1rem;
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.change-aboutme-items {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: stretch;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
 }
 
-#pp-customization-pane2 textarea {
+/* Input fields styling */
+.customization-pane input,
+.customization-pane textarea {
     width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background: transparent;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
     color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.customization-pane textarea {
     resize: none;
-    overflow-y: auto; /* Allow scroll if the text exceeds the height */
-    font-family: 'Arial', sans-serif; /* Optional: Choose a font */
-    line-height: 1.5; /* Optional: Adjust line height */
-    white-space: pre-wrap; /* Ensures that white spaces and line breaks are respected */
-    word-wrap: break-word; /* Ensures long words are wrapped correctly */
+    min-height: 100px;
+    line-height: 1.5;
+    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
+.customization-pane input:focus,
+.customization-pane textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
 
-#aboutme-save-btn {
-    border: 1px solid white;
-    background-color: transparent;
-    border-radius: 10px;
-    padding: 8px 15px 8px 15px;
+.customization-pane input::placeholder,
+.customization-pane textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Button styling */
+.save-btn {
+    min-width: 90px;
+    padding: 10px 18px;
+    background: #333333;
     color: white;
-    width: 20%;
-    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
+    transition: all 0.2s ease;
+}
+
+.save-btn:hover {
+    background: #444444;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.save-btn:active {
+    transform: translateY(1px);
 }
 
 
-#aboutme-save-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-
-#aboutme-official-p {
-    white-space: pre-wrap; /* Preserve line breaks and spaces */
-    word-wrap: break-word; /* Ensure long words break and wrap */
-    color: white; /* Ensure text is white */
-    font-family: 'Arial', sans-serif; /* Set a font for consistency */
-    line-height: 1.5; /* Adjust line height */
-    max-height: 90px; /* Set a maximum height for the element */
-    overflow-y: auto; /* Enable vertical scrolling if content overflows */
-    padding: 10px; /* Optional: Add some padding around the content */
-    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
-    border-radius: 10px; /* Optional: Add rounded corners */
-    background-color: rgba(0, 0, 0, 0.1); /* Optional: Add a background */
-}
-
-
-/* ------------------------ */
-
-#pp-customization-pane3 {
-    width: 100%;
-    color: white;
-}
-
-#pp-customization-pane3 fieldset {
-    border-radius: 15px;
-    border: 2px solid #ccc;
-    padding: 15px;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-#pp-customization-pane3 p {
-    color: #ccc;
-    font-size: 1rem;
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.change-socials-items {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: stretch;
-    gap: 10px;
-    width: 100%;
-}
-
-#pp-customization-pane3 textarea {
-    width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background: transparent;
-    color: white;
-    resize: none;
-    overflow-y: auto; /* Allow scroll if the text exceeds the height */
-    font-family: 'Arial', sans-serif; /* Optional: Choose a font */
-    line-height: 1.5; /* Optional: Adjust line height */
-    white-space: pre-wrap; /* Ensures that white spaces and line breaks are respected */
-    word-wrap: break-word; /* Ensures long words are wrapped correctly */
-}
-
-#socials-save-btn {
-    border: 1px solid white;
-    background-color: transparent;
-    border-radius: 10px;
-    padding: 8px 15px 8px 15px;
-    color: white;
-    width: 20%;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-#socials-save-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-#socials-official-p {
-    white-space: pre-wrap; /* Preserve line breaks and spaces */
-    word-wrap: break-word; /* Ensure long words break and wrap */
-    color: white; /* Ensure text is white */
-    font-family: 'Arial', sans-serif; /* Set a font for consistency */
-    line-height: 1.5; /* Adjust line height */
-    max-height: 90px; /* Set a maximum height for the element */
-    overflow-y: auto; /* Enable vertical scrolling if content overflows */
-    padding: 10px; /* Optional: Add some padding around the content */
-    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
-    border-radius: 10px; /* Optional: Add rounded corners */
-    background-color: rgba(0, 0, 0, 0.1); /* Optional: Add a background */
-    font-size: 12px;
-}
-
-#acc-creation-date {
-    color: white;
-    font-size: 15px;
-}
-
+/* Some Tooltips */
 
 .profileEditMainPageTooltip {
     position: absolute;
@@ -1756,6 +1696,17 @@ main {
 
 #spMainSection > div:first-of-type {
     padding: 0 !important;
+}
+
+#spMainSection > button:first-of-type {
+    padding: 3px 10px 6px 10px !important;
+    border-radius: 5px;
+    background: none !important;
+    font-size: 20px;
+}
+
+#spMainSection > button:first-of-type:hover {
+    background:rgba(0, 0, 0, 0.1) !important;
 }
 
 #friendsWholeContainer {
@@ -2000,6 +1951,7 @@ div#chatContainer {
     background: linear-gradient(135deg, #4a89dc, #5e9cea);
     color: white;
     border-radius: 12px 12px 0 0;
+    border-bottom: 3px solid black;
 }
 
 .chat-header h3 {
@@ -2010,13 +1962,12 @@ div#chatContainer {
 
 #chatPanelClose {
     background-color: transparent !important;
-    color: white;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+    color: white !important;
+    font-size: 15px !important;
+    cursor: pointer !important;
+    padding: 5px 10px !important;
+    border-radius: 5px !important;
+    transition: background-color 0.2s !important;
 }
 
 #chatPanelClose:hover {
@@ -2164,6 +2115,17 @@ div#chatContainer {
     color: #172b4d;
     font-weight: 500;
     font-size: 15px;
+}
+
+
+.friend-item img:hover {
+    cursor: pointer;
+    scale: 1.05;
+}
+
+
+.friend-item span:hover {
+    text-decoration: underline;
 }
 
 
