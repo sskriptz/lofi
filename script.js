@@ -277,6 +277,163 @@ const firebaseConfig = {
               });
           }
       });
+
+
+      // Update user profile picture
+      // Get elements for Profile Picture
+const profilePicInput = document.getElementById("profile-pic-input");
+const profilePicSaveBtn = document.getElementById("profile-pic-save-btn");
+const profilePicPreview = document.getElementById("profile-pic-preview");
+
+// Function to validate image URL
+function isValidImageUrl(url) {
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+    const lowerCaseUrl = url.toLowerCase();
+    return imageExtensions.some(ext => lowerCaseUrl.includes(ext)) || 
+           lowerCaseUrl.includes('imgur') || 
+           lowerCaseUrl.includes('googleusercontent');
+}
+
+// Preview image when URL is entered
+profilePicInput.addEventListener("input", () => {
+    const imageUrl = profilePicInput.value.trim();
+    
+    if (imageUrl && isValidImageUrl(imageUrl)) {
+        profilePicPreview.src = imageUrl;
+        profilePicPreview.style.display = "block";
+        
+        // Add error handling for image loading
+        profilePicPreview.onerror = () => {
+            profilePicPreview.style.display = "none";
+            profilePicPreview.src = "";
+            alert("Invalid image URL or image could not be loaded");
+        };
+    } else {
+        profilePicPreview.style.display = "none";
+    }
+});
+
+// Function to update profile picture
+async function updateProfilePicture() {
+    const imageUrl = profilePicInput.value.trim();
+    
+    if (!imageUrl) {
+        alert("Please enter an image URL");
+        return;
+    }
+    
+    if (!isValidImageUrl(imageUrl)) {
+        alert("Please enter a valid image URL");
+        return;
+    }
+    
+    const user = auth.currentUser;
+    
+    if (!user) {
+        alert("You must be logged in to update your profile picture");
+        return;
+    }
+    
+    try {
+        // Update profile in Firebase Auth
+        await user.updateProfile({
+            photoURL: imageUrl
+        });
+        
+        // Update in Firestore
+        await db.collection("users").doc(user.uid).update({
+            profilePicture: imageUrl
+        });
+        
+        // Update profile pictures in friends' data
+        const allUsersSnapshot = await db.collection('users').get();
+        const batch = db.batch();
+        
+        allUsersSnapshot.forEach(doc => {
+            const friendRef = db.collection('users').doc(doc.id);
+            const friendData = doc.data();
+            
+            if (friendData.friends) {
+                // Update profile picture in friends array
+                const updatedFriends = friendData.friends.map(friend =>
+                    friend.userId === user.uid
+                        ? { 
+                            userId: user.uid, 
+                            username: user.displayName || friend.username, 
+                            profilePicture: imageUrl 
+                          }
+                        : friend
+                );
+                
+                // Only update if there's a change
+                if (JSON.stringify(updatedFriends) !== JSON.stringify(friendData.friends)) {
+                    batch.update(friendRef, { friends: updatedFriends });
+                }
+            }
+        });
+        
+        await batch.commit();
+        
+        // Update all profile picture instances on the page
+        updateAllProfilePictures(imageUrl);
+        
+        alert("Profile picture updated successfully!");
+        profilePicInput.value = ""; // Clear the input
+        
+    } catch (error) {
+        console.error("Error updating profile picture:", error);
+        alert("Failed to update profile picture: " + error.message);
+    }
+}
+
+// Function to update all instances of profile pictures on the page
+function updateAllProfilePictures(imageUrl) {
+    // Update in user-info div
+    const userInfo = document.getElementById('user-info');
+    if (userInfo) {
+        const imgElement = userInfo.querySelector('img');
+        if (imgElement) {
+            imgElement.src = imageUrl;
+        }
+    }
+    
+    // Update in pp-user-info div
+    const profileUserInfo = document.getElementById("pp-user-info");
+    if (profileUserInfo) {
+        const imgElement = profileUserInfo.querySelector('img');
+        if (imgElement) {
+            imgElement.src = imageUrl;
+        }
+    }
+    
+    // Update userProfilePic if it exists
+    const profilePicElement = document.getElementById('userProfilePic');
+    if (profilePicElement) {
+        profilePicElement.src = imageUrl;
+    }
+    
+    // Update any other profile pictures with current user's ID
+    const profilePics = document.querySelectorAll("img[data-userid='" + auth.currentUser.uid + "']");
+    if (profilePics.length > 0) {
+        profilePics.forEach(pic => {
+            pic.src = imageUrl;
+        });
+    }
+    
+    // Update any profile pic that might be using the auth user's photo
+    const userPhotoPics = document.querySelectorAll(".user-photo");
+    if (userPhotoPics.length > 0) {
+        userPhotoPics.forEach(pic => {
+            if (pic.getAttribute('data-uid') === auth.currentUser.uid) {
+                pic.src = imageUrl;
+            }
+        });
+    }
+}
+
+// Add event listener to save button
+profilePicSaveBtn.addEventListener("click", updateProfilePicture);
+
   
       // Get the input and save button elements for username change
       const usernameInput = document.getElementById("username-input"); // The input field for the new username
@@ -431,6 +588,7 @@ const firebaseConfig = {
       socialsSaveBtn.addEventListener("click", saveSocials);
   });
   
+
   
   function signInWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
@@ -582,6 +740,7 @@ const firebaseConfig = {
           });
   
           document.getElementById('searchResults').innerHTML = '';
+          document.getElementById('searchResults').style.display = "none";
           document.getElementById('searchInput').value = '';
           alert('Friend request sent!');
       } catch (error) {
