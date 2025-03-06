@@ -558,6 +558,242 @@ bannerSaveBtn.addEventListener("click", updateProfileBanner);
 
 
 
+// Get Elements
+const solidColorInput = document.getElementById("solid-color-input");
+const gradientColorInput = document.getElementById("gradient-color-input");
+const colorSaveBtn = document.getElementById("color-save-btn");
+
+// Create gradient selector elements
+const gradientContainer = document.createElement("div");
+gradientContainer.classList.add("gradient-container");
+gradientContainer.innerHTML = `
+    <p class="gradient-label">Or create a gradient:</p>
+    <div class="gradient-pickers">
+        <input type="color" id="gradient-color-1" title="Start color">
+        <input type="color" id="gradient-color-2" title="End color">
+        <select id="gradient-direction">
+            <option value="to right">→ Horizontal</option>
+            <option value="to bottom">↓ Vertical</option>
+            <option value="to bottom right">↘ Diagonal</option>
+            <option value="to bottom left">↙ Diagonal</option>
+        </select>
+    </div>
+`;
+
+// Insert gradient selector after the gradient input field
+gradientColorInput.parentNode.insertBefore(gradientContainer, gradientColorInput.nextSibling);
+
+// Style the gradient selectors
+const gradientStyles = document.createElement("style");
+gradientStyles.textContent = `
+    .gradient-container {
+        margin-top: 10px;
+    }
+    .gradient-label {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .gradient-pickers {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    #gradient-color-1, #gradient-color-2 {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background: transparent;
+    }
+    #gradient-direction {
+        flex: 1;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+        font-size: 0.95rem;
+    }
+`;
+document.head.appendChild(gradientStyles);
+
+// Create a preview container
+const colorPreviewContainer = document.createElement("div");
+colorPreviewContainer.classList.add("colorPreviewContainer");
+document.getElementById("pp-customization-pane-color").querySelector("fieldset").appendChild(colorPreviewContainer);
+
+// Style the preview container
+colorPreviewContainer.style.textAlign = "center";
+colorPreviewContainer.style.marginTop = "15px";
+colorPreviewContainer.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+colorPreviewContainer.style.padding = "10px";
+colorPreviewContainer.style.borderRadius = "10px";
+colorPreviewContainer.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
+colorPreviewContainer.style.display = "flex";
+colorPreviewContainer.style.justifyContent = "center";
+colorPreviewContainer.style.height = "50px";
+colorPreviewContainer.style.width = "100%";
+colorPreviewContainer.innerHTML = "<span style='color: rgba(255,255,255,0.6); align-self: center;'>Color preview</span>";
+
+// Get gradient elements
+const gradientColor1 = document.getElementById("gradient-color-1");
+const gradientColor2 = document.getElementById("gradient-color-2");
+const gradientDirection = document.getElementById("gradient-direction");
+
+// Set initial gradient colors
+gradientColor1.value = "#3498db";  // Blue
+gradientColor2.value = "#9b59b6";  // Purple
+
+// Generate a gradient string from the two color pickers
+function generateGradient() {
+    const color1 = gradientColor1.value;
+    const color2 = gradientColor2.value;
+    const direction = gradientDirection.value;
+    return `linear-gradient(${direction}, ${color1}, ${color2})`;
+}
+
+// Update gradient input and preview when gradient pickers change
+function updateGradientFromPickers() {
+    const gradientValue = generateGradient();
+    gradientColorInput.value = gradientValue;
+    colorPreviewContainer.style.background = gradientValue;
+    // Clear the solid color input indicator (without triggering an event)
+    solidColorInput.value = "#000000";
+}
+
+// Add event listeners to gradient pickers
+gradientColor1.addEventListener("input", updateGradientFromPickers);
+gradientColor2.addEventListener("input", updateGradientFromPickers);
+gradientDirection.addEventListener("change", updateGradientFromPickers);
+
+// Initialize with a gradient
+updateGradientFromPickers();
+
+// Preview color when solid color is selected
+solidColorInput.addEventListener("input", () => {
+    const color = solidColorInput.value.trim();
+    
+    // Clear gradient input when using solid color
+    gradientColorInput.value = "";
+    
+    // Update preview
+    colorPreviewContainer.innerHTML = ""; // Remove "Color preview" text
+    colorPreviewContainer.style.background = color;
+});
+
+// Preview color when custom gradient is entered
+gradientColorInput.addEventListener("input", () => {
+    const gradient = gradientColorInput.value.trim();
+    
+    // Update preview
+    if (gradient) {
+        try {
+            colorPreviewContainer.innerHTML = ""; // Remove "Color preview" text
+            colorPreviewContainer.style.background = gradient;
+        } catch (error) {
+            // If gradient syntax is invalid, don't apply it
+            console.error("Invalid gradient format:", error);
+        }
+    } else if (gradient === "") {
+        // If gradient is cleared, show solid color
+        colorPreviewContainer.style.background = solidColorInput.value;
+    }
+});
+
+// Update profile color in Firestore
+async function updateProfileColor() {
+    // Prioritize gradient if provided, otherwise use solid color
+    const colorValue = gradientColorInput.value.trim() || solidColorInput.value.trim();
+    const user = auth.currentUser;
+
+    if (!colorValue) {
+        alert("Please select a color or gradient");
+        return;
+    }
+
+    if (!user) {
+        alert("You must be logged in to update your profile color");
+        return;
+    }
+
+    try {
+        // Store in "profileColor" field
+        await db.collection("users").doc(user.uid).set({ profileColor: colorValue }, { merge: true });
+
+        // Update the profile panel background with the new color
+        const profilePanel = document.getElementById("profilePanel");
+        if (profilePanel) {
+            profilePanel.style.background = colorValue;
+        }
+
+        alert("Profile color updated successfully!");
+    } catch (error) {
+        alert("Failed to update profile color: " + error.message);
+    }
+}
+
+// Load the user's color when they log in or reload the page
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        const userDoc = await db.collection("users").doc(user.uid).get();
+        if (userDoc.exists && userDoc.data().profileColor) {
+            const profileColorValue = userDoc.data().profileColor;
+            
+            // Update the background of profilePanel
+            const profilePanel = document.getElementById("profilePanel");
+            if (profilePanel) {
+                profilePanel.style.background = profileColorValue;
+            }
+
+            // Update the preview
+            colorPreviewContainer.innerHTML = ""; // Remove "Color preview" text
+            colorPreviewContainer.style.background = profileColorValue;
+
+            // Update the input fields
+            if (profileColorValue.includes("gradient")) {
+                gradientColorInput.value = profileColorValue;
+                
+                // Try to parse the gradient colors to set the pickers
+                try {
+                    const matches = profileColorValue.match(/linear-gradient\([^,]+,\s*([^,]+),\s*([^)]+)\)/);
+                    if (matches && matches.length === 3) {
+                        gradientColor1.value = matches[1].trim();
+                        gradientColor2.value = matches[2].trim();
+                        
+                        // Try to set the direction
+                        const dirMatch = profileColorValue.match(/linear-gradient\(([^,]+),/);
+                        if (dirMatch && dirMatch.length === 2) {
+                            const direction = dirMatch[1].trim();
+                            if (["to right", "to bottom", "to bottom right", "to bottom left"].includes(direction)) {
+                                gradientDirection.value = direction;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("Couldn't parse existing gradient:", e);
+                }
+            } else {
+                // Try to set the color picker if it's a solid color
+                try {
+                    solidColorInput.value = profileColorValue;
+                    gradientColorInput.value = "";
+                } catch (e) {
+                    // If not a valid hex color for the picker, put it in the gradient field
+                    gradientColorInput.value = profileColorValue;
+                }
+            }
+        }
+    }
+});
+
+// Event listener for save button
+colorSaveBtn.addEventListener("click", updateProfileColor);
+
+
+
+
 
   
       // Get the input and save button elements for username change
@@ -1439,7 +1675,7 @@ function closeFriendProfilePanel() {
     }
 }
 
-// Function to fetch friend's profile information with about me, socials, creation date, and banner
+// Function to fetch friend's profile information with about me, socials, creation date, banner, and profile color
 async function getFriendProfileInfo(userId, username) {
     try {
         const friendDoc = await db.collection('users').doc(userId).get();
@@ -1482,6 +1718,17 @@ async function getFriendProfileInfo(userId, username) {
             const friendBanner = document.getElementById('friendBanner');
             if (friendBanner) {
                 friendBanner.style.backgroundImage = 'none';
+            }
+        }
+        
+        // Apply the friend's profile color if available
+        const friendProfilePanel = document.getElementById('friendProfilePanel');
+        if (friendData.profileColor && friendProfilePanel) {
+            friendProfilePanel.style.background = friendData.profileColor;
+        } else {
+            // Reset to default if no custom color is available
+            if (friendProfilePanel) {
+                friendProfilePanel.style.background = "linear-gradient(40deg, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 12%, rgba(87,104,107,1) 100%)";
             }
         }
         
