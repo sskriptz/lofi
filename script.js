@@ -287,13 +287,13 @@ const profilePicPreview = document.getElementById("profile-pic-preview");
 
 // Function to validate image URL
 function isValidImageUrl(url) {
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
-    const lowerCaseUrl = url.toLowerCase();
-    return imageExtensions.some(ext => lowerCaseUrl.includes(ext)) || 
-           lowerCaseUrl.includes('imgur') || 
-           lowerCaseUrl.includes('googleusercontent');
+    try {
+        const urlObj = new URL(url); // This will throw an error if the URL is invalid
+        return /\.(jpg|jpeg|png|gif|webp)$/i.test(urlObj.pathname);
+    } catch (e) {
+        return false;
+    }
 }
-
 // Preview image when URL is entered
 profilePicInput.addEventListener("input", () => {
     const imageUrl = profilePicInput.value.trim();
@@ -433,6 +433,131 @@ function updateAllProfilePictures(imageUrl) {
 
 // Add event listener to save button
 profilePicSaveBtn.addEventListener("click", updateProfilePicture);
+
+
+
+
+
+// Get Elements
+const bannerInput = document.getElementById("banner-input");
+const bannerPreview = document.createElement("img"); // Create preview dynamically
+bannerPreview.id = "banner-preview"; 
+document.querySelector(".bannerPreviewContainer").appendChild(bannerPreview); // Append preview to form
+const bannerSaveBtn = document.getElementById("banner-save-btn");
+
+document.querySelector(".bannerPreviewContainer").style.textAlign = "center"; // Center the preview image
+document.querySelector(".bannerPreviewContainer").style.marginTop = "10px"; // Add some margin for spacing
+document.querySelector(".bannerPreviewContainer").style.backgroundColor = "rgba(0, 0, 0, 0.3)"; // Light background for contrast
+document.querySelector(".bannerPreviewContainer").style.padding = "10px"; // Padding for the container
+document.querySelector(".bannerPreviewContainer").style.borderRadius = "10px"; // Rounded corners
+document.querySelector(".bannerPreviewContainer").style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)"; // Soft shadow for depth
+document.querySelector(".bannerPreviewContainer").style.display = "flex";
+document.querySelector(".bannerPreviewContainer").style.justifyContent = "center";
+
+// Apply CSS directly for the image preview to limit the size
+bannerPreview.style.maxWidth = "75%";
+bannerPreview.style.maxHeight = "150px"; // Adjust as needed for your design
+bannerPreview.style.objectFit = "contain"; // Ensure the image fits within the bounds without distortion
+bannerPreview.style.borderRadius = "10px";
+bannerPreview.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 1)"; // Soft shadow for depth
+
+// Validate image URL
+function isValidImageUrl(url) {
+    return /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
+}
+
+// Preview banner when URL is entered
+bannerInput.addEventListener("input", () => {
+    const imageUrl = bannerInput.value.trim();
+    
+    // Clear previous preview before showing a new one
+    bannerPreview.src = "";
+    bannerPreview.style.display = "none"; 
+
+    if (imageUrl && isValidImageUrl(imageUrl)) {
+        bannerPreview.src = imageUrl;
+        bannerPreview.style.display = "block";
+        bannerPreview.onerror = () => {
+            bannerPreview.style.display = "none";
+            alert("Invalid image URL or image could not be loaded");
+        };
+    }
+});
+
+// Update profile banner in Firestore
+async function updateProfileBanner() {
+    const imageUrl = bannerInput.value.trim();
+    const user = auth.currentUser;
+
+    if (!imageUrl || !isValidImageUrl(imageUrl)) {
+        alert("Please enter a valid image URL");
+        return;
+    }
+
+    if (!user) {
+        alert("You must be logged in to update your profile banner");
+        return;
+    }
+
+    try {
+        // ✅ Store only in "bannerURL" field
+        await db.collection("users").doc(user.uid).set({ bannerURL: imageUrl }, { merge: true });
+
+        // Update the profile header background with the new banner image
+        const profileHeader = document.getElementById("profilePanelHeader");
+        if (profileHeader) {
+            profileHeader.style.backgroundImage = `url(${imageUrl})`;  // Set background image
+            profileHeader.style.backgroundColor = "transparent"; // Ensure background color is transparent when the image is set
+        }
+
+        updateBannerOnPage(imageUrl);
+        alert("Banner updated successfully!");
+        bannerInput.value = ""; // Clear the input field
+    } catch (error) {
+        alert("Failed to update banner: " + error.message);
+    }
+}
+
+// Update the banner on the page
+function updateBannerOnPage(imageUrl) {
+    // Update userBanner if it exists
+    const profileBanner = document.getElementById("userBanner");
+    if (profileBanner) profileBanner.style.backgroundImage = `url(${imageUrl})`;
+
+    // Update the preview image
+    bannerPreview.src = imageUrl;
+}
+
+// Load the user's banner when they log in or reload the page
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        const userDoc = await db.collection("users").doc(user.uid).get();
+        if (userDoc.exists && userDoc.data().bannerURL) {
+            const bannerImageUrl = userDoc.data().bannerURL;
+            
+            // Update the background of profilePanelHeader
+            const profileHeader = document.getElementById("profilePanelHeader");
+            if (profileHeader) {
+                profileHeader.style.backgroundImage = `url(${bannerImageUrl})`;
+                profileHeader.style.backgroundColor = "transparent"; // Ensure no black background
+            }
+
+            // Optionally, update the preview image
+            updateBannerOnPage(bannerImageUrl);
+        }
+    }
+});
+
+// Event listener for save button
+bannerSaveBtn.addEventListener("click", updateProfileBanner);
+
+
+
+
+
+
+
+
 
   
       // Get the input and save button elements for username change
@@ -1314,7 +1439,7 @@ function closeFriendProfilePanel() {
     }
 }
 
-// Function to fetch friend's profile information with about me, socials, and creation date
+// Function to fetch friend's profile information with about me, socials, creation date, and banner
 async function getFriendProfileInfo(userId, username) {
     try {
         const friendDoc = await db.collection('users').doc(userId).get();
@@ -1332,6 +1457,33 @@ async function getFriendProfileInfo(userId, username) {
             <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" alt="Profile">
             <p>${friendData.username}</p>
         `;
+        
+        // Apply the friend's banner if available
+        if (friendData.bannerURL) {
+            const friendProfileHeader = document.getElementById('friendProfilePanelHeader');
+            if (friendProfileHeader) {
+                friendProfileHeader.style.backgroundImage = `url(${friendData.bannerURL})`;
+                friendProfileHeader.style.backgroundColor = "transparent";
+            }
+            
+            // If you have another element to show the banner, update it here too
+            const friendBanner = document.getElementById('friendBanner');
+            if (friendBanner) {
+                friendBanner.style.backgroundImage = `url(${friendData.bannerURL})`;
+            }
+        } else {
+            // Reset to default if no banner is available
+            const friendProfileHeader = document.getElementById('friendProfilePanelHeader');
+            if (friendProfileHeader) {
+                friendProfileHeader.style.backgroundImage = 'none';
+                friendProfileHeader.style.backgroundColor = "#333"; // Or your default color
+            }
+            
+            const friendBanner = document.getElementById('friendBanner');
+            if (friendBanner) {
+                friendBanner.style.backgroundImage = 'none';
+            }
+        }
         
         // Update about section if available
         const aboutMeElement = document.getElementById('fp-aboutme-content');
@@ -1358,7 +1510,6 @@ async function getFriendProfileInfo(userId, username) {
         }
         
         // Get user account creation date
-        // First try to get it from Firestore metadata
         const accCreationElement = document.getElementById('fp-acc-creation-date');
         
         try {
@@ -1373,7 +1524,7 @@ async function getFriendProfileInfo(userId, username) {
                 const friendAuthUser = await firebase.auth().getUser(userId).catch(() => null);
                 
                 if (friendAuthUser && friendAuthUser.metadata && friendAuthUser.metadata.creationTime) {
-                    accCreationElement.textContent = `Account Created On: ${formatDate(friendAuthUser.metadata.creationTime)}`;
+                    accCreationElement.textContent = `Account Created On: ${formatDate(new Date(friendAuthUser.metadata.creationTime))}`;
                 } else {
                     // Fallback if we can't get the auth record
                     accCreationElement.textContent = 'Account creation date not available';
