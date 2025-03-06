@@ -2022,7 +2022,8 @@ div#chatContainer {
     flex: 1;
     background-color: #f5f7fa;
     /* Add bottom padding to prevent message cutoff */
-    max-height: 55vh;
+    max-height: 45vh;
+    min-height: 40vh;
 }
 
 #messageForm button {
