@@ -1611,6 +1611,42 @@ main {
     transform: translateY(1px);
 }
 
+/* Profile Color Customization */
+.change-color-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#solid-color-input {
+    width: 100%;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+#gradient-color-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+#gradient-color-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+
+
+
 /* Additional CSS for profile picture section */
 .profile-pic-preview {
     display: flex;
