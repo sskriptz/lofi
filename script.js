@@ -461,9 +461,9 @@ bannerPreview.style.objectFit = "contain"; // Ensure the image fits within the b
 bannerPreview.style.borderRadius = "10px";
 bannerPreview.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 1)"; // Soft shadow for depth
 
-// Validate image URL
+// Validate image URL including base64 data URLs
 function isValidImageUrl(url) {
-    return /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
+    return /\.(jpg|jpeg|png|gif|webp)$/i.test(url) || url.startsWith("data:image");
 }
 
 // Preview banner when URL is entered
