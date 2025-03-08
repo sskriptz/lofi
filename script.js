@@ -2160,22 +2160,65 @@ loadFriends = async function() {
     function populatePlaylist() {
         playlistDropdown.innerHTML = "";
         
-        // Add all songs to the playlist (no default "Select a song" option)
-        songs.forEach((song, index) => {
-            const option = document.createElement("option");
-            option.value = index;
-            option.textContent = `${song.title} - ${song.artist}`;
-            playlistDropdown.appendChild(option);
-        });
+        // Make sure we have the updated favorites list
+        const favoritedSongs = songs.filter(song => favorites.includes(song.title));
+        
+        // If there are no favorites, show a message
+        if (favoritedSongs.length === 0) {
+            const messageOption = document.createElement("option");
+            messageOption.value = "-1"; // Invalid index to prevent selection
+            messageOption.textContent = "Go to Music Tab to add songs";
+            messageOption.disabled = true;
+            messageOption.selected = true;
+            playlistDropdown.appendChild(messageOption);
+            
+            // Disable the dropdown if there are no songs
+            playlistDropdown.disabled = true;
+            
+            // Reset audio player state
+            songTitle.textContent = "Nothing is playing";
+            songArtist.textContent = "";
+            audio.src = "";
+            currentSongIndex = null;
+            
+            // Disable player controls
+            playButton.disabled = true;
+            prevButton.disabled = true;
+            nextButton.disabled = true;
+        } else {
+            // Enable the dropdown and controls if there are songs
+            playlistDropdown.disabled = false;
+            playButton.disabled = false;
+            prevButton.disabled = false;
+            nextButton.disabled = false;
+            
+            // Add all favorited songs to the playlist
+            favoritedSongs.forEach((song, index) => {
+                const option = document.createElement("option");
+                option.value = index; // Use the index in the favorites array
+                option.textContent = `${song.title} - ${song.artist}`;
+                playlistDropdown.appendChild(option);
+            });
+        }
     }
     
+    // Modify the loadSong function to work with the favorites array
     function loadSong(index) {
+        // Get the list of favorited songs
+        const favoritedSongs = songs.filter(song => favorites.includes(song.title));
+        
+        // If index is invalid or there are no favorites, do nothing
+        if (index < 0 || index >= favoritedSongs.length || favoritedSongs.length === 0) {
+            return;
+        }
+        
+        // Load the selected favorited song
+        const song = favoritedSongs[index];
         currentSongIndex = index;
-        const song = songs[index];
         audio.src = song.src;
         songTitle.textContent = song.title;
         songArtist.textContent = song.artist;
-        playlistDropdown.value = currentSongIndex;
+        playlistDropdown.value = index;
         audio.currentTime = 0;
         
         // Don't automatically play the song
@@ -2185,6 +2228,7 @@ loadFriends = async function() {
         // Track that a selection has been made
         firstSelectionMade = true;
     }
+
     
     function playSong() {
         if (!audio.src) return;
@@ -2213,13 +2257,16 @@ loadFriends = async function() {
         }
     }
     
+    // Modify nextSong and prevSong functions to work with favorites
     function nextSong() {
-        if (currentSongIndex === null) {
-            // If no song is currently selected, don't do anything
+        const favoritedSongs = songs.filter(song => favorites.includes(song.title));
+        
+        if (favoritedSongs.length === 0 || currentSongIndex === null) {
+            // If no favorites or no song is currently selected, don't do anything
             return;
         }
         
-        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        currentSongIndex = (currentSongIndex + 1) % favoritedSongs.length;
         loadSong(currentSongIndex);
         
         if (isPlaying) {
@@ -2228,12 +2275,14 @@ loadFriends = async function() {
     }
     
     function prevSong() {
-        if (currentSongIndex === null) {
-            // If no song is currently selected, don't do anything
+        const favoritedSongs = songs.filter(song => favorites.includes(song.title));
+        
+        if (favoritedSongs.length === 0 || currentSongIndex === null) {
+            // If no favorites or no song is currently selected, don't do anything
             return;
         }
         
-        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        currentSongIndex = (currentSongIndex - 1 + favoritedSongs.length) % favoritedSongs.length;
         loadSong(currentSongIndex);
         
         if (isPlaying) {
@@ -2245,6 +2294,29 @@ loadFriends = async function() {
         isAutoplayEnabled = !isAutoplayEnabled;
         autoplayButton.textContent = `Autoplay: ${isAutoplayEnabled ? "On" : "Off"}`;
     });
+
+
+    function updateMainPlayerPlaylist() {
+        populatePlaylist();
+        
+        // If a song is currently playing and it's no longer in favorites, stop playback
+        if (currentSongIndex !== null) {
+            const favoritedSongs = songs.filter(song => favorites.includes(song.title));
+            
+            // Check if the current song index is still valid for the favorites list
+            if (currentSongIndex >= favoritedSongs.length) {
+                // Reset player state
+                audio.pause();
+                audio.src = "";
+                songTitle.textContent = "Nothing is playing";
+                songArtist.textContent = "";
+                playButton.textContent = "▶";
+                isPlaying = false;
+                currentSongIndex = null;
+            }
+        }
+    }
+
     
     audio.addEventListener("ended", () => {
         if (isAutoplayEnabled) {
@@ -2303,8 +2375,30 @@ loadFriends = async function() {
     }
     
     window.onload = () => {
-        populatePlaylist();
+        // Get user data from Firebase first
+        const user = auth.currentUser;
+        if (user) {
+            db.collection('users').doc(user.uid).get()
+                .then(userDoc => {
+                    const userData = userDoc.data();
+                    if (userData) {
+                        favorites = userData.favoriteSongs || [];
+                        recentlyPlayed = userData.recentlyPlayed || [];
+                    }
+                    // Now populate the playlist with favorites
+                    populatePlaylist();
+                })
+                .catch(error => {
+                    console.error("Error fetching user data:", error);
+                    populatePlaylist(); // Still call populate with empty favorites
+                });
+        } else {
+            // If not logged in, just use empty favorites
+            favorites = [];
+            populatePlaylist();
+        }
         
+        // Initialize with "Nothing is playing" text
         songTitle.textContent = "Nothing is playing";
         songArtist.textContent = "";
         
@@ -2345,7 +2439,11 @@ loadFriends = async function() {
                 sidePanelOverlay.style.display = "none";
             }
 
-            musicPanel.style.display = "block";
+            setTimeout(() => {
+                musicPanel.style.opacity= "1";
+                musicPanel.style.pointerEvents = "auto";
+            }, 100);
+
             musicPanelOverlay.style.display = "block";
         });
     }
@@ -2366,7 +2464,8 @@ loadFriends = async function() {
             });
         }
         
-        musicPanel.style.display = "none";
+        musicPanel.style.opacity= "0";
+        musicPanel.style.pointerEvents = "none";
         musicPanelOverlay.style.display = "none";
     });
 
@@ -2404,7 +2503,7 @@ loadFriends = async function() {
         });
     }
 
-    // Get user data from Firebase
+    // Ensure the audio player's playlist is updated when user data is loaded
     async function getUserData() {
         const user = auth.currentUser;
         if (!user) return;
@@ -2416,6 +2515,9 @@ loadFriends = async function() {
             if (userData) {
                 favorites = userData.favoriteSongs || [];
                 recentlyPlayed = userData.recentlyPlayed || [];
+                
+                // Update the main player's playlist whenever favorites are loaded
+                updateMainPlayerPlaylist();
             }
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -2751,7 +2853,6 @@ loadFriends = async function() {
         }
     }
 
-    // Handle favorite click
     async function handleFavoriteClick(e) {
         e.stopPropagation();
         const songTitle = e.currentTarget.dataset.song;
@@ -2792,7 +2893,10 @@ loadFriends = async function() {
             } else {
                 applyCurrentFilter();
             }
-        } 
+        }
+        
+        // Update the main player's playlist to reflect the changes
+        updateMainPlayerPlaylist();
     }
 
     // Add song to recently played
