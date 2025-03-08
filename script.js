@@ -17,69 +17,66 @@ const firebaseConfig = {
   
   document.addEventListener("DOMContentLoaded", () => {
   
-      // Create the welcome panel element and style it dynamically (Frosted glass effect)
       const welcomePanel = document.createElement("div");
       welcomePanel.id = "welcome-panel";
-      welcomePanel.style.position = "absolute"; // Absolute positioning to position it relative to the page
-      welcomePanel.style.top = "-100px"; // Start off-screen
-      welcomePanel.style.background = "rgba(255, 255, 255, 0.8)"; // Reduced transparency for frosted glass effect
+      welcomePanel.style.position = "absolute";
+      welcomePanel.style.top = "-100px";
+      welcomePanel.style.background = "rgba(255, 255, 255, 0.8)";
       welcomePanel.style.borderRadius = "15px"; // Rounded corners
-      welcomePanel.style.border = "3px solid rgba(0, 0, 0, 0.7)"; // Increased thickness of black border
+      welcomePanel.style.border = "3px solid rgba(0, 0, 0, 0.7)";
       welcomePanel.style.padding = "20px";
       welcomePanel.style.fontSize = "18px";
       welcomePanel.style.textAlign = "center";
       welcomePanel.style.width = "80%";
       welcomePanel.style.maxWidth = "400px";
-      welcomePanel.style.zIndex = "9999"; // On top of everything else
-      welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Soft shadow for depth
-      welcomePanel.style.transition = "top 0.5s ease, opacity 0.3s ease, transform 0.3s ease"; // Smooth animation
-      welcomePanel.style.opacity = "0"; // Start as invisible
-      welcomePanel.style.fontFamily = "'Inconsolata', monospace"; // Inconsolata font
-      welcomePanel.style.backdropFilter = "blur(15px)"; // Frosted glass effect
+      welcomePanel.style.zIndex = "9999";
+      welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)";
+      welcomePanel.style.transition = "top 0.5s ease, opacity 0.3s ease, transform 0.3s ease";
+      welcomePanel.style.opacity = "0";
+      welcomePanel.style.fontFamily = "'Inconsolata', monospace";
+      welcomePanel.style.backdropFilter = "blur(15px)";
       document.body.appendChild(welcomePanel);
       
-      // Create the welcome message paragraph (Text in white)
+
       const welcomeMessage = document.createElement("p");
-      welcomeMessage.style.color = "black"; // Ensure the text is white
+      welcomeMessage.style.color = "black";
       welcomePanel.appendChild(welcomeMessage);
+
       
-      // Create the continue button for the panel
       const closePanelBtn = document.createElement("button");
       closePanelBtn.textContent = "Continue";
-      closePanelBtn.style.background = "#333333"; // Dark background for button
-      closePanelBtn.style.border = "2px solid transparent"; // Initially no border
+      closePanelBtn.style.background = "#333333"; 
+      closePanelBtn.style.border = "2px solid transparent";
       closePanelBtn.style.color = "white";
       closePanelBtn.style.fontSize = "20px";
       closePanelBtn.style.marginTop = "20px";
       closePanelBtn.style.cursor = "pointer";
-      closePanelBtn.style.padding = "12px 30px"; // More padding for a rectangular button
-      closePanelBtn.style.borderRadius = "8px"; // Curved edges
+      closePanelBtn.style.padding = "12px 30px";
+      closePanelBtn.style.borderRadius = "8px";
       closePanelBtn.style.transition = "background-color 0.3s ease, border-color 0.3s ease";
       closePanelBtn.style.fontWeight = "bold";
       closePanelBtn.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
       welcomePanel.appendChild(closePanelBtn);
       
-      // Hover effect for button: border and color change
       closePanelBtn.onmouseover = () => {
-          closePanelBtn.style.borderColor = "#ffffff"; // Border shows up on hover
-          closePanelBtn.style.backgroundColor = "#555555"; // Darker background on hover
+          closePanelBtn.style.borderColor = "#ffffff";
+          closePanelBtn.style.backgroundColor = "#555555";
       };
       closePanelBtn.onmouseout = () => {
-          closePanelBtn.style.borderColor = "transparent"; // No border on mouse out
-          closePanelBtn.style.backgroundColor = "#333333"; // Original background
+          closePanelBtn.style.borderColor = "transparent";
+          closePanelBtn.style.backgroundColor = "#333333";
       };
       
-      // Hover effect for the panel itself: subtle brightness increase
       welcomePanel.onmouseover = () => {
-          welcomePanel.style.transform = "translateX(-50%) scale(1.05)"; // Slight scale-up
-          welcomePanel.style.boxShadow = "0 15px 50px rgba(0, 0, 0, 0.4)"; // Increase shadow on hover
+          welcomePanel.style.transform = "translateX(-50%) scale(1.05)";
+          welcomePanel.style.boxShadow = "0 15px 50px rgba(0, 0, 0, 0.4)";
       };
       welcomePanel.onmouseout = () => {
-          welcomePanel.style.transform = "translateX(-50%) scale(1)"; // Return to normal scale
-          welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)"; // Return to original shadow
+          welcomePanel.style.transform = "translateX(-50%) scale(1)";
+          welcomePanel.style.boxShadow = "0 10px 40px rgba(0, 0, 0, 0.3)";
       };
       
-      // Add CSS for hover animation
+
       const style = document.createElement('style');
       style.innerHTML = 
           `@keyframes hoverUpDown {
@@ -90,39 +87,32 @@ const firebaseConfig = {
       document.head.appendChild(style);
   
   
-      // Check if the user is new or returning
+
       function checkIfNewUser(user) {
           const creationTime = user.metadata.creationTime;
           const lastSignInTime = user.metadata.lastSignInTime;
       
           if (creationTime === lastSignInTime) {
-              // New user
               welcomeMessage.innerHTML = `Welcome, ${user.displayName}!`;
           } else {
-              // Returning user
               welcomeMessage.innerHTML = `Welcome back, ${user.displayName}!`;
           }
       
-          // Delay the animation of the welcome panel
           setTimeout(() => {
-              // Show the welcome panel with slide-down animation
-              welcomePanel.style.opacity = "1"; // Make the panel visible
-              welcomePanel.style.top = "20px"; // Slide the panel down smoothly
-              // Apply the hover animation
-              welcomePanel.style.animation = "hoverUpDown 3s infinite ease-in-out"; // Infinite up and down animation
-          }, 500); // Delay by 500ms
+              welcomePanel.style.opacity = "1";
+              welcomePanel.style.top = "20px";
+              welcomePanel.style.animation = "hoverUpDown 3s infinite ease-in-out";
+          }, 500); 
       }
   
   
-      // Close the welcome panel
       closePanelBtn.onclick = () => {
-          welcomePanel.style.top = "-100px"; // Hide the panel again
-          welcomePanel.style.opacity = "0"; // Make it invisible again
+          welcomePanel.style.top = "-100px";
+          welcomePanel.style.opacity = "0";
       
-          // After the panel is completely out of view, set it to display none
           setTimeout(() => {
-              welcomePanel.style.display = "none"; // Remove the panel from the view
-          }, 500); // Match the transition duration
+              welcomePanel.style.display = "none";
+          }, 500);
       };
   
   
@@ -137,18 +127,16 @@ const firebaseConfig = {
               return;
           }
   
-          // Rest of your existing landing page auth code
           document.getElementById('chatContainer').style.display = 'none';
           currentChatUser = null;
           if (messageListener) {
               messageListener();
               messageListener = null;
           }
+
+
   
           // ----------------- UPDATE USER INFO -----------------
-  
-  
-  
   
   
           const userDoc = await db.collection('users').doc(user.uid).get();
@@ -235,7 +223,6 @@ const firebaseConfig = {
               document.getElementById('userUsername').textContent = userDoc.data().username;
           }
   
-          // Show main section
           document.getElementById('spMainSection').style.display = 'block';
           loadFriendRequests();
           loadFriends();
@@ -279,526 +266,510 @@ const firebaseConfig = {
       });
 
 
-      // Update user profile picture
-      // Get elements for Profile Picture
-const profilePicInput = document.getElementById("profile-pic-input");
-const profilePicSaveBtn = document.getElementById("profile-pic-save-btn");
-const profilePicPreview = document.getElementById("profile-pic-preview");
+    // Update user profile picture
+    const profilePicInput = document.getElementById("profile-pic-input");
+    const profilePicSaveBtn = document.getElementById("profile-pic-save-btn");
+    const profilePicPreview = document.getElementById("profile-pic-preview");
 
-// Function to validate image URL
-function isValidImageUrl(url) {
-    try {
-        const urlObj = new URL(url); // This will throw an error if the URL is invalid
-        return /\.(jpg|jpeg|png|gif|webp)$/i.test(urlObj.pathname);
-    } catch (e) {
-        return false;
+    // Function to validate image URL
+    function isValidImageUrl(url) {
+        try {
+            const urlObj = new URL(url); // This will throw an error if the URL is invalid
+            return /\.(jpg|jpeg|png|gif|webp)$/i.test(urlObj.pathname);
+        } catch (e) {
+            return false;
+        }
     }
-}
-// Preview image when URL is entered
-profilePicInput.addEventListener("input", () => {
-    const imageUrl = profilePicInput.value.trim();
-    
-    if (imageUrl && isValidImageUrl(imageUrl)) {
-        profilePicPreview.src = imageUrl;
-        profilePicPreview.style.display = "block";
+    // Preview image when URL is entered
+    profilePicInput.addEventListener("input", () => {
+        const imageUrl = profilePicInput.value.trim();
         
-        // Add error handling for image loading
-        profilePicPreview.onerror = () => {
+        if (imageUrl && isValidImageUrl(imageUrl)) {
+            profilePicPreview.src = imageUrl;
+            profilePicPreview.style.display = "block";
+            
+            // Add error handling for image loading
+            profilePicPreview.onerror = () => {
+                profilePicPreview.style.display = "none";
+                profilePicPreview.src = "";
+                alert("Invalid image URL or image could not be loaded");
+            };
+        } else {
             profilePicPreview.style.display = "none";
-            profilePicPreview.src = "";
-            alert("Invalid image URL or image could not be loaded");
-        };
-    } else {
-        profilePicPreview.style.display = "none";
-    }
-});
+        }
+    });
 
-// Function to update profile picture
-async function updateProfilePicture() {
-    const imageUrl = profilePicInput.value.trim();
-    
-    if (!imageUrl) {
-        alert("Please enter an image URL");
-        return;
-    }
-    
-    if (!isValidImageUrl(imageUrl)) {
-        alert("Please enter a valid image URL");
-        return;
-    }
-    
-    const user = auth.currentUser;
-    
-    if (!user) {
-        alert("You must be logged in to update your profile picture");
-        return;
-    }
-    
-    try {
-        // Update profile in Firebase Auth
-        await user.updateProfile({
-            photoURL: imageUrl
-        });
+    // Function to update profile picture
+    async function updateProfilePicture() {
+        const imageUrl = profilePicInput.value.trim();
         
-        // Update in Firestore
-        await db.collection("users").doc(user.uid).update({
-            profilePicture: imageUrl
-        });
+        if (!imageUrl) {
+            alert("Please enter an image URL");
+            return;
+        }
         
-        // Update profile pictures in friends' data
-        const allUsersSnapshot = await db.collection('users').get();
-        const batch = db.batch();
+        if (!isValidImageUrl(imageUrl)) {
+            alert("Please enter a valid image URL");
+            return;
+        }
         
-        allUsersSnapshot.forEach(doc => {
-            const friendRef = db.collection('users').doc(doc.id);
-            const friendData = doc.data();
+        const user = auth.currentUser;
+        
+        if (!user) {
+            alert("You must be logged in to update your profile picture");
+            return;
+        }
+        
+        try {
+            // Update profile in Firebase Auth
+            await user.updateProfile({
+                photoURL: imageUrl
+            });
             
-            if (friendData.friends) {
-                // Update profile picture in friends array
-                const updatedFriends = friendData.friends.map(friend =>
-                    friend.userId === user.uid
-                        ? { 
-                            userId: user.uid, 
-                            username: user.displayName || friend.username, 
-                            profilePicture: imageUrl 
-                          }
-                        : friend
-                );
+            // Update in Firestore
+            await db.collection("users").doc(user.uid).update({
+                profilePicture: imageUrl
+            });
+            
+            // Update profile pictures in friends' data
+            const allUsersSnapshot = await db.collection('users').get();
+            const batch = db.batch();
+            
+            allUsersSnapshot.forEach(doc => {
+                const friendRef = db.collection('users').doc(doc.id);
+                const friendData = doc.data();
                 
-                // Only update if there's a change
-                if (JSON.stringify(updatedFriends) !== JSON.stringify(friendData.friends)) {
-                    batch.update(friendRef, { friends: updatedFriends });
+                if (friendData.friends) {
+                    // Update profile picture in friends array
+                    const updatedFriends = friendData.friends.map(friend =>
+                        friend.userId === user.uid
+                            ? { 
+                                userId: user.uid, 
+                                username: user.displayName || friend.username, 
+                                profilePicture: imageUrl 
+                            }
+                            : friend
+                    );
+                    
+                    // Only update if there's a change
+                    if (JSON.stringify(updatedFriends) !== JSON.stringify(friendData.friends)) {
+                        batch.update(friendRef, { friends: updatedFriends });
+                    }
                 }
-            }
-        });
-        
-        await batch.commit();
-        
-        // Update all profile picture instances on the page
-        updateAllProfilePictures(imageUrl);
-        
-        alert("Profile picture updated successfully!");
-        profilePicInput.value = ""; // Clear the input
-        
-    } catch (error) {
-        console.error("Error updating profile picture:", error);
-        alert("Failed to update profile picture: " + error.message);
-    }
-}
-
-// Function to update all instances of profile pictures on the page
-function updateAllProfilePictures(imageUrl) {
-    // Update in user-info div
-    const userInfo = document.getElementById('user-info');
-    if (userInfo) {
-        const imgElement = userInfo.querySelector('img');
-        if (imgElement) {
-            imgElement.src = imageUrl;
-        }
-    }
-    
-    // Update in pp-user-info div
-    const profileUserInfo = document.getElementById("pp-user-info");
-    if (profileUserInfo) {
-        const imgElement = profileUserInfo.querySelector('img');
-        if (imgElement) {
-            imgElement.src = imageUrl;
-        }
-    }
-    
-    // Update userProfilePic if it exists
-    const profilePicElement = document.getElementById('userProfilePic');
-    if (profilePicElement) {
-        profilePicElement.src = imageUrl;
-    }
-    
-    // Update any other profile pictures with current user's ID
-    const profilePics = document.querySelectorAll("img[data-userid='" + auth.currentUser.uid + "']");
-    if (profilePics.length > 0) {
-        profilePics.forEach(pic => {
-            pic.src = imageUrl;
-        });
-    }
-    
-    // Update any profile pic that might be using the auth user's photo
-    const userPhotoPics = document.querySelectorAll(".user-photo");
-    if (userPhotoPics.length > 0) {
-        userPhotoPics.forEach(pic => {
-            if (pic.getAttribute('data-uid') === auth.currentUser.uid) {
-                pic.src = imageUrl;
-            }
-        });
-    }
-}
-
-// Add event listener to save button
-profilePicSaveBtn.addEventListener("click", updateProfilePicture);
-
-
-
-
-
-// Get Elements
-const bannerInput = document.getElementById("banner-input");
-const bannerPreview = document.createElement("img"); // Create preview dynamically
-bannerPreview.id = "banner-preview"; 
-document.querySelector(".bannerPreviewContainer").appendChild(bannerPreview); // Append preview to form
-const bannerSaveBtn = document.getElementById("banner-save-btn");
-
-document.querySelector(".bannerPreviewContainer").style.textAlign = "center"; // Center the preview image
-document.querySelector(".bannerPreviewContainer").style.marginTop = "10px"; // Add some margin for spacing
-document.querySelector(".bannerPreviewContainer").style.backgroundColor = "rgba(0, 0, 0, 0.3)"; // Light background for contrast
-document.querySelector(".bannerPreviewContainer").style.padding = "10px"; // Padding for the container
-document.querySelector(".bannerPreviewContainer").style.borderRadius = "10px"; // Rounded corners
-document.querySelector(".bannerPreviewContainer").style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)"; // Soft shadow for depth
-document.querySelector(".bannerPreviewContainer").style.display = "flex";
-document.querySelector(".bannerPreviewContainer").style.justifyContent = "center";
-
-// Apply CSS directly for the image preview to limit the size
-bannerPreview.style.maxWidth = "75%";
-bannerPreview.style.maxHeight = "150px"; // Adjust as needed for your design
-bannerPreview.style.objectFit = "contain"; // Ensure the image fits within the bounds without distortion
-bannerPreview.style.borderRadius = "10px";
-bannerPreview.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 1)"; // Soft shadow for depth
-
-// Validate image URL including base64 data URLs
-function isValidImageUrl(url) {
-    return /\.(jpg|jpeg|png|gif|webp)$/i.test(url) || url.startsWith("data:image");
-}
-
-// Preview banner when URL is entered
-bannerInput.addEventListener("input", () => {
-    const imageUrl = bannerInput.value.trim();
-    
-    // Clear previous preview before showing a new one
-    bannerPreview.src = "";
-    bannerPreview.style.display = "none"; 
-
-    if (imageUrl && isValidImageUrl(imageUrl)) {
-        bannerPreview.src = imageUrl;
-        bannerPreview.style.display = "block";
-        bannerPreview.onerror = () => {
-            bannerPreview.style.display = "none";
-            alert("Invalid image URL or image could not be loaded");
-        };
-    }
-});
-
-// Update profile banner in Firestore
-async function updateProfileBanner() {
-    const imageUrl = bannerInput.value.trim();
-    const user = auth.currentUser;
-
-    if (!imageUrl || !isValidImageUrl(imageUrl)) {
-        alert("Please enter a valid image URL");
-        return;
-    }
-
-    if (!user) {
-        alert("You must be logged in to update your profile banner");
-        return;
-    }
-
-    try {
-        // ✅ Store only in "bannerURL" field
-        await db.collection("users").doc(user.uid).set({ bannerURL: imageUrl }, { merge: true });
-
-        // Update the profile header background with the new banner image
-        const profileHeader = document.getElementById("profilePanelHeader");
-        if (profileHeader) {
-            profileHeader.style.backgroundImage = `url(${imageUrl})`;  // Set background image
-            profileHeader.style.backgroundColor = "transparent"; // Ensure background color is transparent when the image is set
-        }
-
-        updateBannerOnPage(imageUrl);
-        alert("Banner updated successfully!");
-        bannerInput.value = ""; // Clear the input field
-    } catch (error) {
-        alert("Failed to update banner: " + error.message);
-    }
-}
-
-// Update the banner on the page
-function updateBannerOnPage(imageUrl) {
-    // Update userBanner if it exists
-    const profileBanner = document.getElementById("userBanner");
-    if (profileBanner) profileBanner.style.backgroundImage = `url(${imageUrl})`;
-
-    // Update the preview image
-    bannerPreview.src = imageUrl;
-}
-
-// Load the user's banner when they log in or reload the page
-auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        const userDoc = await db.collection("users").doc(user.uid).get();
-        if (userDoc.exists && userDoc.data().bannerURL) {
-            const bannerImageUrl = userDoc.data().bannerURL;
+            });
             
-            // Update the background of profilePanelHeader
+            await batch.commit();
+            
+            // Update all profile picture instances on the page
+            updateAllProfilePictures(imageUrl);
+            
+            alert("Profile picture updated successfully!");
+            profilePicInput.value = "";
+            
+        } catch (error) {
+            console.error("Error updating profile picture:", error);
+            alert("Failed to update profile picture: " + error.message);
+        }
+    }
+
+
+    function updateAllProfilePictures(imageUrl) {
+        const userInfo = document.getElementById('user-info');
+        if (userInfo) {
+            const imgElement = userInfo.querySelector('img');
+            if (imgElement) {
+                imgElement.src = imageUrl;
+            }
+        }
+        
+        // Update in pp-user-info div
+        const profileUserInfo = document.getElementById("pp-user-info");
+        if (profileUserInfo) {
+            const imgElement = profileUserInfo.querySelector('img');
+            if (imgElement) {
+                imgElement.src = imageUrl;
+            }
+        }
+        
+        // Update userProfilePic if it exists
+        const profilePicElement = document.getElementById('userProfilePic');
+        if (profilePicElement) {
+            profilePicElement.src = imageUrl;
+        }
+        
+        // Update any other profile pictures with current user's ID
+        const profilePics = document.querySelectorAll("img[data-userid='" + auth.currentUser.uid + "']");
+        if (profilePics.length > 0) {
+            profilePics.forEach(pic => {
+                pic.src = imageUrl;
+            });
+        }
+        
+        // Update any profile pic that might be using the auth user's photo
+        const userPhotoPics = document.querySelectorAll(".user-photo");
+        if (userPhotoPics.length > 0) {
+            userPhotoPics.forEach(pic => {
+                if (pic.getAttribute('data-uid') === auth.currentUser.uid) {
+                    pic.src = imageUrl;
+                }
+            });
+        }
+    }
+
+    profilePicSaveBtn.addEventListener("click", updateProfilePicture);
+
+
+
+
+
+    const bannerInput = document.getElementById("banner-input");
+    const bannerPreview = document.createElement("img");
+    bannerPreview.id = "banner-preview"; 
+    document.querySelector(".bannerPreviewContainer").appendChild(bannerPreview);
+    const bannerSaveBtn = document.getElementById("banner-save-btn");
+
+    document.querySelector(".bannerPreviewContainer").style.textAlign = "center";
+    document.querySelector(".bannerPreviewContainer").style.marginTop = "10px";
+    document.querySelector(".bannerPreviewContainer").style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+    document.querySelector(".bannerPreviewContainer").style.padding = "10px";
+    document.querySelector(".bannerPreviewContainer").style.borderRadius = "10px";
+    document.querySelector(".bannerPreviewContainer").style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
+    document.querySelector(".bannerPreviewContainer").style.display = "flex";
+    document.querySelector(".bannerPreviewContainer").style.justifyContent = "center";
+
+    bannerPreview.style.maxWidth = "75%";
+    bannerPreview.style.maxHeight = "150px";
+    bannerPreview.style.objectFit = "contain";
+    bannerPreview.style.borderRadius = "10px";
+    bannerPreview.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 1)";
+
+    // Validate image URL including base64 data URLs
+    function isValidImageUrl(url) {
+        return /\.(jpg|jpeg|png|gif|webp)$/i.test(url) || url.startsWith("data:image");
+    }
+
+    // Preview banner when URL is entered
+    bannerInput.addEventListener("input", () => {
+        const imageUrl = bannerInput.value.trim();
+        
+        // Clear previous preview before showing a new one
+        bannerPreview.src = "";
+        bannerPreview.style.display = "none"; 
+
+        if (imageUrl && isValidImageUrl(imageUrl)) {
+            bannerPreview.src = imageUrl;
+            bannerPreview.style.display = "block";
+            bannerPreview.onerror = () => {
+                bannerPreview.style.display = "none";
+                alert("Invalid image URL or image could not be loaded");
+            };
+        }
+    });
+
+    // Update profile banner in Firestore
+    async function updateProfileBanner() {
+        const imageUrl = bannerInput.value.trim();
+        const user = auth.currentUser;
+
+        if (!imageUrl || !isValidImageUrl(imageUrl)) {
+            alert("Please enter a valid image URL");
+            return;
+        }
+
+        if (!user) {
+            alert("You must be logged in to update your profile banner");
+            return;
+        }
+
+        try {
+            // ✅ Store only in "bannerURL" field
+            await db.collection("users").doc(user.uid).set({ bannerURL: imageUrl }, { merge: true });
+
+            // Update the profile header background with the new banner image
             const profileHeader = document.getElementById("profilePanelHeader");
             if (profileHeader) {
-                profileHeader.style.backgroundImage = `url(${bannerImageUrl})`;
-                profileHeader.style.backgroundColor = "transparent"; // Ensure no black background
+                profileHeader.style.backgroundImage = `url(${imageUrl})`;  // Set background image
+                profileHeader.style.backgroundColor = "transparent"; // Ensure background color is transparent when the image is set
             }
 
-            // Optionally, update the preview image
-            updateBannerOnPage(bannerImageUrl);
-        }
-    }
-});
-
-// Event listener for save button
-bannerSaveBtn.addEventListener("click", updateProfileBanner);
-
-
-
-
-
-
-
-
-// Get Elements
-const solidColorInput = document.getElementById("solid-color-input");
-const gradientColorInput = document.getElementById("gradient-color-input");
-const colorSaveBtn = document.getElementById("color-save-btn");
-
-// Create gradient selector elements
-const gradientContainer = document.createElement("div");
-gradientContainer.classList.add("gradient-container");
-gradientContainer.innerHTML = `
-    <p class="gradient-label">Or create a gradient:</p>
-    <div class="gradient-pickers">
-        <input type="color" id="gradient-color-1" title="Start color">
-        <input type="color" id="gradient-color-2" title="End color">
-        <select id="gradient-direction">
-            <option value="to right">→ Horizontal</option>
-            <option value="to bottom">↓ Vertical</option>
-            <option value="to bottom right">↘ Diagonal</option>
-            <option value="to bottom left">↙ Diagonal</option>
-        </select>
-    </div>
-`;
-
-// Insert gradient selector after the gradient input field
-gradientColorInput.parentNode.insertBefore(gradientContainer, gradientColorInput.nextSibling);
-
-// Style the gradient selectors
-const gradientStyles = document.createElement("style");
-gradientStyles.textContent = `
-    .gradient-container {
-        margin-top: 10px;
-    }
-    .gradient-label {
-        margin-bottom: 5px;
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
-    }
-    .gradient-pickers {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-    #gradient-color-1, #gradient-color-2 {
-        width: 40px;
-        height: 40px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        background: transparent;
-    }
-    #gradient-direction {
-        flex: 1;
-        padding: 8px;
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.2);
-        color: white;
-        font-size: 0.95rem;
-    }
-`;
-document.head.appendChild(gradientStyles);
-
-// Create a preview container
-const colorPreviewContainer = document.createElement("div");
-colorPreviewContainer.classList.add("colorPreviewContainer");
-document.getElementById("pp-customization-pane-color").querySelector("fieldset").appendChild(colorPreviewContainer);
-
-// Style the preview container
-colorPreviewContainer.style.textAlign = "center";
-colorPreviewContainer.style.marginTop = "15px";
-colorPreviewContainer.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
-colorPreviewContainer.style.padding = "10px";
-colorPreviewContainer.style.borderRadius = "10px";
-colorPreviewContainer.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
-colorPreviewContainer.style.display = "flex";
-colorPreviewContainer.style.justifyContent = "center";
-colorPreviewContainer.style.height = "50px";
-colorPreviewContainer.style.width = "100%";
-colorPreviewContainer.innerHTML = "<span style='color: rgba(255,255,255,0.6); align-self: center;'>Color preview</span>";
-
-// Get gradient elements
-const gradientColor1 = document.getElementById("gradient-color-1");
-const gradientColor2 = document.getElementById("gradient-color-2");
-const gradientDirection = document.getElementById("gradient-direction");
-
-// Set initial gradient colors
-gradientColor1.value = "#3498db";  // Blue
-gradientColor2.value = "#9b59b6";  // Purple
-
-// Generate a gradient string from the two color pickers
-function generateGradient() {
-    const color1 = gradientColor1.value;
-    const color2 = gradientColor2.value;
-    const direction = gradientDirection.value;
-    return `linear-gradient(${direction}, ${color1}, ${color2})`;
-}
-
-// Update gradient input and preview when gradient pickers change
-function updateGradientFromPickers() {
-    const gradientValue = generateGradient();
-    gradientColorInput.value = gradientValue;
-    colorPreviewContainer.style.background = gradientValue;
-    // Clear the solid color input indicator (without triggering an event)
-    solidColorInput.value = "#000000";
-}
-
-// Add event listeners to gradient pickers
-gradientColor1.addEventListener("input", updateGradientFromPickers);
-gradientColor2.addEventListener("input", updateGradientFromPickers);
-gradientDirection.addEventListener("change", updateGradientFromPickers);
-
-// Initialize with a gradient
-updateGradientFromPickers();
-
-// Preview color when solid color is selected
-solidColorInput.addEventListener("input", () => {
-    const color = solidColorInput.value.trim();
-    
-    // Clear gradient input when using solid color
-    gradientColorInput.value = "";
-    
-    // Update preview
-    colorPreviewContainer.innerHTML = ""; // Remove "Color preview" text
-    colorPreviewContainer.style.background = color;
-});
-
-// Preview color when custom gradient is entered
-gradientColorInput.addEventListener("input", () => {
-    const gradient = gradientColorInput.value.trim();
-    
-    // Update preview
-    if (gradient) {
-        try {
-            colorPreviewContainer.innerHTML = ""; // Remove "Color preview" text
-            colorPreviewContainer.style.background = gradient;
+            updateBannerOnPage(imageUrl);
+            alert("Banner updated successfully!");
+            bannerInput.value = "";
         } catch (error) {
-            // If gradient syntax is invalid, don't apply it
-            console.error("Invalid gradient format:", error);
+            alert("Failed to update banner: " + error.message);
         }
-    } else if (gradient === "") {
-        // If gradient is cleared, show solid color
-        colorPreviewContainer.style.background = solidColorInput.value;
-    }
-});
-
-// Update profile color in Firestore
-async function updateProfileColor() {
-    // Prioritize gradient if provided, otherwise use solid color
-    const colorValue = gradientColorInput.value.trim() || solidColorInput.value.trim();
-    const user = auth.currentUser;
-
-    if (!colorValue) {
-        alert("Please select a color or gradient");
-        return;
     }
 
-    if (!user) {
-        alert("You must be logged in to update your profile color");
-        return;
+    // Update the banner on the page
+    function updateBannerOnPage(imageUrl) {
+        // Update userBanner if it exists
+        const profileBanner = document.getElementById("userBanner");
+        if (profileBanner) profileBanner.style.backgroundImage = `url(${imageUrl})`;
+
+        // Update the preview image
+        bannerPreview.src = imageUrl;
     }
 
-    try {
-        // Store in "profileColor" field
-        await db.collection("users").doc(user.uid).set({ profileColor: colorValue }, { merge: true });
+    // Load the user's banner when they log in or reload the page
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            const userDoc = await db.collection("users").doc(user.uid).get();
+            if (userDoc.exists && userDoc.data().bannerURL) {
+                const bannerImageUrl = userDoc.data().bannerURL;
+                
+                // Update the background of profilePanelHeader
+                const profileHeader = document.getElementById("profilePanelHeader");
+                if (profileHeader) {
+                    profileHeader.style.backgroundImage = `url(${bannerImageUrl})`;
+                    profileHeader.style.backgroundColor = "transparent";
+                }
 
-        // Update the profile panel background with the new color
-        const profilePanel = document.getElementById("profilePanel");
-        if (profilePanel) {
-            profilePanel.style.background = colorValue;
+                updateBannerOnPage(bannerImageUrl);
+            }
+        }
+    });
+
+    bannerSaveBtn.addEventListener("click", updateProfileBanner);
+
+
+
+
+
+
+
+
+    const solidColorInput = document.getElementById("solid-color-input");
+    const gradientColorInput = document.getElementById("gradient-color-input");
+    const colorSaveBtn = document.getElementById("color-save-btn");
+
+    const gradientContainer = document.createElement("div");
+    gradientContainer.classList.add("gradient-container");
+    gradientContainer.innerHTML = `
+        <p class="gradient-label">Or create a gradient:</p>
+        <div class="gradient-pickers">
+            <input type="color" id="gradient-color-1" title="Start color">
+            <input type="color" id="gradient-color-2" title="End color">
+            <select id="gradient-direction">
+                <option value="to right">→ Horizontal</option>
+                <option value="to bottom">↓ Vertical</option>
+                <option value="to bottom right">↘ Diagonal</option>
+                <option value="to bottom left">↙ Diagonal</option>
+            </select>
+        </div>
+    `;
+
+
+    gradientColorInput.parentNode.insertBefore(gradientContainer, gradientColorInput.nextSibling);
+
+
+    const gradientStyles = document.createElement("style");
+    gradientStyles.textContent = `
+        .gradient-container {
+            margin-top: 10px;
+        }
+        .gradient-label {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .gradient-pickers {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        #gradient-color-1, #gradient-color-2 {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: transparent;
+        }
+        #gradient-direction {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 0.95rem;
+        }
+    `;
+    document.head.appendChild(gradientStyles);
+
+    const colorPreviewContainer = document.createElement("div");
+    colorPreviewContainer.classList.add("colorPreviewContainer");
+    document.getElementById("pp-customization-pane-color").querySelector("fieldset").appendChild(colorPreviewContainer);
+
+    colorPreviewContainer.style.textAlign = "center";
+    colorPreviewContainer.style.marginTop = "15px";
+    colorPreviewContainer.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+    colorPreviewContainer.style.padding = "10px";
+    colorPreviewContainer.style.borderRadius = "10px";
+    colorPreviewContainer.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
+    colorPreviewContainer.style.display = "flex";
+    colorPreviewContainer.style.justifyContent = "center";
+    colorPreviewContainer.style.height = "50px";
+    colorPreviewContainer.style.width = "100%";
+    colorPreviewContainer.innerHTML = "<span style='color: rgba(255,255,255,0.6); align-self: center;'>Color preview</span>";
+
+    const gradientColor1 = document.getElementById("gradient-color-1");
+    const gradientColor2 = document.getElementById("gradient-color-2");
+    const gradientDirection = document.getElementById("gradient-direction");
+
+    // Set initial gradient colors
+    gradientColor1.value = "#3498db";  // Blue
+    gradientColor2.value = "#9b59b6";  // Purple
+
+    // Generate a gradient string from the two color pickers
+    function generateGradient() {
+        const color1 = gradientColor1.value;
+        const color2 = gradientColor2.value;
+        const direction = gradientDirection.value;
+        return `linear-gradient(${direction}, ${color1}, ${color2})`;
+    }
+
+    // Update gradient input and preview when gradient pickers change
+    function updateGradientFromPickers() {
+        const gradientValue = generateGradient();
+        gradientColorInput.value = gradientValue;
+        colorPreviewContainer.style.background = gradientValue;
+        // Clear the solid color input indicator (without triggering an event)
+        solidColorInput.value = "#000000";
+    }
+
+    gradientColor1.addEventListener("input", updateGradientFromPickers);
+    gradientColor2.addEventListener("input", updateGradientFromPickers);
+    gradientDirection.addEventListener("change", updateGradientFromPickers);
+
+
+    updateGradientFromPickers();
+
+
+    solidColorInput.addEventListener("input", () => {
+        const color = solidColorInput.value.trim();
+        
+        // Clear gradient input when using solid color
+        gradientColorInput.value = "";
+        
+        colorPreviewContainer.innerHTML = "";
+        colorPreviewContainer.style.background = color;
+    });
+
+    // Preview color when custom gradient is entered
+    gradientColorInput.addEventListener("input", () => {
+        const gradient = gradientColorInput.value.trim();
+        
+        // Update preview
+        if (gradient) {
+            try {
+                colorPreviewContainer.innerHTML = "";
+                colorPreviewContainer.style.background = gradient;
+            } catch (error) {
+                // If gradient syntax is invalid, don't apply it
+                console.error("Invalid gradient format:", error);
+            }
+        } else if (gradient === "") {
+            // If gradient is cleared, show solid color
+            colorPreviewContainer.style.background = solidColorInput.value;
+        }
+    });
+
+
+    async function updateProfileColor() {
+
+        const colorValue = gradientColorInput.value.trim() || solidColorInput.value.trim();
+        const user = auth.currentUser;
+
+        if (!colorValue) {
+            alert("Please select a color or gradient");
+            return;
         }
 
-        alert("Profile color updated successfully!");
-    } catch (error) {
-        alert("Failed to update profile color: " + error.message);
-    }
-}
+        if (!user) {
+            alert("You must be logged in to update your profile color");
+            return;
+        }
 
-// Load the user's color when they log in or reload the page
-auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        const userDoc = await db.collection("users").doc(user.uid).get();
-        if (userDoc.exists && userDoc.data().profileColor) {
-            const profileColorValue = userDoc.data().profileColor;
-            
-            // Update the background of profilePanel
+        try {
+            // Store in "profileColor" field
+            await db.collection("users").doc(user.uid).set({ profileColor: colorValue }, { merge: true });
+
+            // Update the profile panel background with the new color
             const profilePanel = document.getElementById("profilePanel");
             if (profilePanel) {
-                profilePanel.style.background = profileColorValue;
+                profilePanel.style.background = colorValue;
             }
 
-            // Update the preview
-            colorPreviewContainer.innerHTML = ""; // Remove "Color preview" text
-            colorPreviewContainer.style.background = profileColorValue;
+            alert("Profile color updated successfully!");
+        } catch (error) {
+            alert("Failed to update profile color: " + error.message);
+        }
+    }
 
-            // Update the input fields
-            if (profileColorValue.includes("gradient")) {
-                gradientColorInput.value = profileColorValue;
+    // Load the user's color when they log in or reload the page
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            const userDoc = await db.collection("users").doc(user.uid).get();
+            if (userDoc.exists && userDoc.data().profileColor) {
+                const profileColorValue = userDoc.data().profileColor;
                 
-                // Try to parse the gradient colors to set the pickers
-                try {
-                    const matches = profileColorValue.match(/linear-gradient\([^,]+,\s*([^,]+),\s*([^)]+)\)/);
-                    if (matches && matches.length === 3) {
-                        gradientColor1.value = matches[1].trim();
-                        gradientColor2.value = matches[2].trim();
-                        
-                        // Try to set the direction
-                        const dirMatch = profileColorValue.match(/linear-gradient\(([^,]+),/);
-                        if (dirMatch && dirMatch.length === 2) {
-                            const direction = dirMatch[1].trim();
-                            if (["to right", "to bottom", "to bottom right", "to bottom left"].includes(direction)) {
-                                gradientDirection.value = direction;
+                // Update the background of profilePanel
+                const profilePanel = document.getElementById("profilePanel");
+                if (profilePanel) {
+                    profilePanel.style.background = profileColorValue;
+                }
+
+                // Update the preview
+                colorPreviewContainer.innerHTML = "";
+                colorPreviewContainer.style.background = profileColorValue;
+
+                // Update the input fields
+                if (profileColorValue.includes("gradient")) {
+                    gradientColorInput.value = profileColorValue;
+                    
+                    // Try to parse the gradient colors to set the pickers
+                    try {
+                        const matches = profileColorValue.match(/linear-gradient\([^,]+,\s*([^,]+),\s*([^)]+)\)/);
+                        if (matches && matches.length === 3) {
+                            gradientColor1.value = matches[1].trim();
+                            gradientColor2.value = matches[2].trim();
+                            
+                            // Try to set the direction
+                            const dirMatch = profileColorValue.match(/linear-gradient\(([^,]+),/);
+                            if (dirMatch && dirMatch.length === 2) {
+                                const direction = dirMatch[1].trim();
+                                if (["to right", "to bottom", "to bottom right", "to bottom left"].includes(direction)) {
+                                    gradientDirection.value = direction;
+                                }
                             }
                         }
+                    } catch (e) {
+                        console.error("Couldn't parse existing gradient:", e);
                     }
-                } catch (e) {
-                    console.error("Couldn't parse existing gradient:", e);
-                }
-            } else {
-                // Try to set the color picker if it's a solid color
-                try {
-                    solidColorInput.value = profileColorValue;
-                    gradientColorInput.value = "";
-                } catch (e) {
-                    // If not a valid hex color for the picker, put it in the gradient field
-                    gradientColorInput.value = profileColorValue;
+                } else {
+                    // Try to set the color picker if it's a solid color
+                    try {
+                        solidColorInput.value = profileColorValue;
+                        gradientColorInput.value = "";
+                    } catch (e) {
+                        // If not a valid hex color for the picker, put it in the gradient field
+                        gradientColorInput.value = profileColorValue;
+                    }
                 }
             }
         }
-    }
-});
+    });
 
-// Event listener for save button
-colorSaveBtn.addEventListener("click", updateProfileColor);
+    colorSaveBtn.addEventListener("click", updateProfileColor);
 
 
 
 
 
   
-      // Get the input and save button elements for username change
-      const usernameInput = document.getElementById("username-input"); // The input field for the new username
-      const usernameSaveBtn = document.getElementById("username-save-btn"); // The save button
+      const usernameInput = document.getElementById("username-input");
+      const usernameSaveBtn = document.getElementById("username-save-btn");
       
       async function changeUsername() {
         const newUsername = usernameInput.value;
@@ -855,17 +826,16 @@ colorSaveBtn.addEventListener("click", updateProfileColor);
     
     
     
-      // Add event listener for the save button to trigger the change
       usernameSaveBtn.addEventListener("click", changeUsername); 
   
   
-      // Get elements for "About Me"
+
       const aboutMeInput = document.getElementById("aboutme-input");
       const aboutMeSaveBtn = document.getElementById("aboutme-save-btn");
       const aboutMeOfficialP = document.getElementById("aboutme-official-p");
   
   
-      const maxLines = 5;  // Set the maximum number of lines allowed
+      const maxLines = 5;
   
   
       aboutMeInput.addEventListener("input", () => {
@@ -873,16 +843,15 @@ colorSaveBtn.addEventListener("click", updateProfileColor);
           
           if (lines.length > maxLines) {
               // If the number of lines exceeds maxLines, limit the textarea to maxLines
-              // We only keep the first `maxLines` lines and join them back into a string
+              // Only keep the first `maxLines` lines and join them back into a string
               aboutMeInput.value = lines.slice(0, maxLines).join("\n");
           }
       });
   
   
-      // Function to save the About Me content to Firestore
       function saveAboutMe() {
-          const aboutMeText = aboutMeInput.value.trim(); // Get and trim the input text
-          const user = firebase.auth().currentUser; // Get the current user
+          const aboutMeText = aboutMeInput.value.trim();
+          const user = firebase.auth().currentUser;
   
           if (user && aboutMeText) {
               // Save the text to Firestore under the user's document
@@ -891,9 +860,7 @@ colorSaveBtn.addEventListener("click", updateProfileColor);
               }, { merge: true }) // Use merge to only update the aboutMe field without overwriting the entire document
               .then(() => {
                   alert("About Me saved successfully!");
-                  // Update the "About Me" text in the HTML immediately
                   aboutMeOfficialP.textContent = aboutMeText;
-                  aboutMeInput.value = ''; // Clear the input field
               })
               .catch(error => {
                   console.error("Error saving About Me:", error);
@@ -903,17 +870,15 @@ colorSaveBtn.addEventListener("click", updateProfileColor);
           }
       }
   
-      // Add event listener to the save button
       aboutMeSaveBtn.addEventListener("click", saveAboutMe);
   
   
   
-      // Get elements for "Socials"
       const socialsInput = document.getElementById("socials-input");
       const socialsSaveBtn = document.getElementById("socials-save-btn");
       const socialsOfficialP = document.getElementById("socials-official-p");
   
-      const maxSocialLines = 5; // Limit the number of lines for Socials
+      const maxSocialLines = 5;
   
       socialsInput.addEventListener("input", () => {
           const lines = socialsInput.value.split("\n");
@@ -934,8 +899,7 @@ colorSaveBtn.addEventListener("click", updateProfileColor);
               }, { merge: true }) // Only update socials field without overwriting the whole document
               .then(() => {
                   alert("Socials saved successfully!");
-                  socialsOfficialP.innerHTML = socialsText.replace(/\n/g, "<br>"); // Preserve line breaks
-                  socialsInput.value = ''; // Clear the input field
+                  socialsOfficialP.innerHTML = socialsText.replace(/\n/g, "<br>");
               })
               .catch(error => {
                   console.error("Error saving Socials:", error);
@@ -945,485 +909,483 @@ colorSaveBtn.addEventListener("click", updateProfileColor);
           }
       }
   
-      // Add event listener to the save button
       socialsSaveBtn.addEventListener("click", saveSocials);
-  });
+});
   
 
   
-  function signInWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-          .then((result) => {
-              const user = result.user;
-              if (!user.displayName) {
-                  // If for some reason there's no display name, use email without the domain
-                  const username = user.email.split('@')[0];
-                  return db.collection('users').doc(user.uid).set({
-                      email: user.email,
-                      username: username,
-                      friends: [],
-                      friendRequests: [],
-                      profilePicture: user.photoURL || null
-                  });
-              }
-          })
-          .catch((error) => {
-              alert(error.message);
-          });
-  }
-  
-  function signOut() {
-      // Clear chat container and reset chat state
-      document.getElementById('chatContainer').style.display = 'none';
-      currentChatUser = null;
-      
-      // Remove message listener if it exists
-      if (messageListener) {
-          messageListener();  // call the function
-          messageListener = null;  // Reset listener
-      } else if (messageListener && typeof messageListener === 'function') {
-          firebase.database().ref('messages').off('child_added', messageListener); // Detach the Firebase listener
-      }
-  
-      auth.setPersistence(firebase.auth.Auth.Persistence.NONE).then(() => {
-          auth.signOut().then(() => {
-              // After signing out, redirect to the index page
-              window.location.href = "index.html";  // Redirect to index.html after sign-out
-          }).catch(error => console.error("Sign-out error:", error));
-      }).catch(error => console.error("Error clearing persistence:", error));
-  }
-  
-  
-  function setupSearchListener() {
-      const searchInput = document.getElementById('searchInput');
-      let timeout = null;
-  
-      searchInput.addEventListener('input', () => {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => {
-              const searchTerm = searchInput.value.toLowerCase();
-              if (searchTerm.length > 2) {
-                  searchUsers(searchTerm);
-                  document.getElementById('searchResults').style.display = 'block';
-                  document.getElementById('searchResults').style.border = '1px solid black';
-              } else {
-                  document.getElementById('searchResults').style.display = 'none';
-                  document.getElementById('searchResults').innerHTML = '';
-                  document.getElementById('searchResults').style.border = 'none';
-              }
-          }, 500);
-      });
-  }
-  
-  async function searchUsers(searchTerm) {
-      const currentUser = auth.currentUser;
-      const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
-      const currentUserData = currentUserDoc.data();
-      const currentUserFriends = currentUserData.friends || [];
-      
-      const usersRef = db.collection('users');
-      // Get all users and filter client-side for better partial matches
-      const snapshot = await usersRef.get();
-      const searchResults = document.getElementById('searchResults');
-      searchResults.innerHTML = '';
-  
-      snapshot.forEach(doc => {
-          const userData = doc.data();
-          // Check if username contains search term (case insensitive)
-          if (
-              userData.username.toLowerCase().includes(searchTerm.toLowerCase()) && // Matches anywhere in username
-              doc.id !== currentUser.uid // Not the current user
-          ) {
-              const isAlreadyFriend = currentUserFriends.some(friend => friend.userId === doc.id);
-              const hasPendingRequest = currentUserData.friendRequests?.some(
-                  request => request.userId === doc.id && request.status === 'pending'
-              );
-              
-              const userCard = document.createElement('div');
-              userCard.className = 'user-card';
-              userCard.innerHTML = `
-                  <div style="display: flex; align-items: center; gap: 10px;">
-                      <img src="${userData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                          alt="Profile" 
-                          style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                      <span>${userData.username}</span>
-                  </div>
-                  ${
-                      isAlreadyFriend ? '<button disabled>Already Friends</button>' : 
-                      hasPendingRequest ? '<button disabled>Request Pending</button>' :
-                      `<button onclick="sendFriendRequest('${doc.id}')">Send Friend Request</button>`
-                  }
-              `;
-              searchResults.appendChild(userCard);
-          }
-      });
-  }
-  
-  async function sendFriendRequest(targetUserId) {
-      const currentUser = auth.currentUser;
-      
-      // Additional safety check to prevent self-friend requests
-      if (targetUserId === currentUser.uid) {
-          alert('You cannot send a friend request to yourself!');
-          return;
-      }
-      
-      try {
-          const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
-          const currentUserData = currentUserDoc.data();
-          const targetUserDoc = await db.collection('users').doc(targetUserId).get();
-          const targetUserData = targetUserDoc.data();
-  
-          // Check if already friends
-          const isAlreadyFriend = currentUserData.friends?.some(friend => friend.userId === targetUserId);
-          if (isAlreadyFriend) {
-              alert('You are already friends with this user!');
-              return;
-          }
-  
-          // Check if friend request already sent
-          const requestAlreadySent = targetUserData.friendRequests?.some(
-              request => request.userId === currentUser.uid && request.status === 'pending'
-          );
-          if (requestAlreadySent) {
-              alert('Friend request already sent!');
-              return;
-          }
-  
-          const targetUserRef = db.collection('users').doc(targetUserId);
-          await targetUserRef.update({
-              friendRequests: firebase.firestore.FieldValue.arrayUnion({
-                  userId: currentUser.uid,
-                  username: currentUserData.username,
-                  status: 'pending'
-              })
-          });
-  
-          document.getElementById('searchResults').innerHTML = '';
-          document.getElementById('searchResults').style.display = "none";
-          document.getElementById('searchInput').value = '';
-          alert('Friend request sent!');
-      } catch (error) {
-          alert('Error sending friend request: ' + error.message);
-      }
-  }
-  
-  async function loadFriendRequests() {
-      const currentUser = auth.currentUser;
-      const userDoc = await db.collection('users').doc(currentUser.uid).get();
-      const userData = userDoc.data();
-      const notifications = document.getElementById('fr-notifications');
-      notifications.innerHTML = '';
-  
-      if (userData.friendRequests && userData.friendRequests.length > 0) {
-          for (const request of userData.friendRequests) {
-              if (request.status === 'pending') {
-                  // Fetch requester's current data to get their up-to-date profile picture
-                  const requesterDoc = await db.collection('users').doc(request.userId).get();
-                  const requesterData = requesterDoc.data();
-                  
-                  const notification = document.createElement('div');
-                  notification.className = 'notification';
-                  notification.innerHTML = `
-                      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                          <img src="${requesterData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                              alt="Profile" 
-                              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                          <p>Friend request from ${request.username}</p>
-                      </div>
-                      <div>
-                          <button onclick="acceptFriendRequest('${request.userId}')">Accept</button>
-                          <button onclick="rejectFriendRequest('${request.userId}')">Reject</button>
-                      </div>
-                  `;
-                  notifications.appendChild(notification);
-              }
-          }
-      } else {
-            notifications.innerHTML = '<p>No friend requests</p>';
-      }
-  }
-  
-  async function acceptFriendRequest(requesterId) {
-      const currentUser = auth.currentUser;
-      const currentUserRef = db.collection('users').doc(currentUser.uid);
-      const requesterRef = db.collection('users').doc(requesterId);
-  
-      try {
-          const currentUserDoc = await currentUserRef.get();
-          const requesterDoc = await requesterRef.get();
-          const currentUserData = currentUserDoc.data();
-          const requesterData = requesterDoc.data();
-  
-          // Add to current user's friends list
-          await currentUserRef.update({
-              friends: firebase.firestore.FieldValue.arrayUnion({
-                  userId: requesterId,
-                  username: requesterData.username
-              }),
-              friendRequests: firebase.firestore.FieldValue.arrayRemove({
-                  userId: requesterId,
-                  username: requesterData.username,
-                  status: 'pending'
-              })
-          });
-  
-          // Add to requester's friends list
-          await requesterRef.update({
-              friends: firebase.firestore.FieldValue.arrayUnion({
-                  userId: currentUser.uid,
-                  username: currentUserData.username
-              })
-          });
-  
-          loadFriendRequests();
-          loadFriends();
-      } catch (error) {
-          alert('Error accepting friend request: ' + error.message);
-      }
-  }
-  
-  async function rejectFriendRequest(requesterId) {
-      const currentUser = auth.currentUser;
-      const currentUserRef = db.collection('users').doc(currentUser.uid);
-      const requesterRef = db.collection('users').doc(requesterId);
-  
-      try {
-          const requesterDoc = await requesterRef.get();
-          await currentUserRef.update({
-              friendRequests: firebase.firestore.FieldValue.arrayRemove({
-                  userId: requesterId,
-                  username: requesterDoc.data().username,
-                  status: 'pending'
-              })
-          });
-          loadFriendRequests();
-      } catch (error) {
-          alert('Error rejecting friend request: ' + error.message);
-      }
-  }
-  
-  async function loadFriends() {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-        console.error("No user is signed in.");
-        return;
-    }
-
-    const userDoc = await db.collection('users').doc(currentUser.uid).get();
-    if (!userDoc.exists) {
-        console.error("User document does not exist.");
-        return;
-    }
-
-    const userData = userDoc.data();
-    console.log("User Data:", userData); // 🔍 Debugging
-
-    const friendsList = document.getElementById('friendsList');
-
-    // Store existing friend elements to avoid unnecessary UI changes
-    const existingFriendElements = {};
-    document.querySelectorAll('.friend-item').forEach(item => {
-        const username = item.querySelector('span').textContent;
-        existingFriendElements[username] = item;
-    });
-
-    if (userData.friends && userData.friends.length > 0) {
-        for (const friend of userData.friends) {
-            console.log("Friend Data:", friend); // 🔍 Debugging
-
-            // Fetch friend's data
-            const friendDoc = await db.collection('users').doc(friend.userId).get();
-            if (!friendDoc.exists) {
-                console.warn(`Friend with ID ${friend.userId} not found.`);
-                continue;
+function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+            if (!user.displayName) {
+                // If for some reason there's no display name, use email without the domain
+                const username = user.email.split('@')[0];
+                return db.collection('users').doc(user.uid).set({
+                    email: user.email,
+                    username: username,
+                    friends: [],
+                    friendRequests: [],
+                    profilePicture: user.photoURL || null
+                });
             }
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+}
 
-            const friendData = friendDoc.data();
-
-            // Check if the friend is already displayed
-            if (existingFriendElements[friendData.username]) {
-                // Update profile picture if changed
-                const imgElement = existingFriendElements[friendData.username].querySelector('img');
-                if (imgElement.src !== friendData.profilePicture) {
-                    imgElement.src = friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp';
-                }
-                continue;
-            }
-
-            // Create new friend element if it doesn't exist
-            const friendItem = document.createElement('div');
-            friendItem.className = 'friend-item';
-            friendItem.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                    <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                        alt="Profile" 
-                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                    <span>${friendData.username}</span>
-                </div>
-                <div>
-                    <button onclick="removeFriend('${friend.userId}')">Remove</button>
-                    <button onclick="openChat('${friend.userId}', '${friendData.username}')">Chat</button>
-                </div>
-            `;
-            friendsList.appendChild(friendItem);
-        }
-    } else {
-        if (!friendsList.querySelector('p')) {
-            friendsList.innerHTML = '<p>No friends yet</p>';
-        }
+function signOut() {
+    document.getElementById('chatContainer').style.display = 'none';
+    currentChatUser = null;
+    
+    // Remove message listener if it exists
+    if (messageListener) {
+        messageListener();
+        messageListener = null;
+    } else if (messageListener && typeof messageListener === 'function') {
+        firebase.database().ref('messages').off('child_added', messageListener); // Detach the Firebase listener
     }
+
+    auth.setPersistence(firebase.auth.Auth.Persistence.NONE).then(() => {
+        auth.signOut().then(() => {
+            window.location.href = "index.html";  // Redirect to index.html after sign-out
+        }).catch(error => console.error("Sign-out error:", error));
+    }).catch(error => console.error("Error clearing persistence:", error));
 }
 
 
-  
-async function removeFriend(friendId) {
+function setupSearchListener() {
+    const searchInput = document.getElementById('searchInput');
+    let timeout = null;
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm.length > 2) {
+                searchUsers(searchTerm);
+                document.getElementById('searchResults').style.display = 'block';
+                document.getElementById('searchResults').style.border = '1px solid black';
+            } else {
+                document.getElementById('searchResults').style.display = 'none';
+                document.getElementById('searchResults').innerHTML = '';
+                document.getElementById('searchResults').style.border = 'none';
+            }
+        }, 500);
+    });
+}
+
+async function searchUsers(searchTerm) {
     const currentUser = auth.currentUser;
-    if (!currentUser) {
-        console.error("No user is signed in.");
+    const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
+    const currentUserData = currentUserDoc.data();
+    const currentUserFriends = currentUserData.friends || [];
+    
+    const usersRef = db.collection('users');
+    // Get all users and filter client-side for better partial matches
+    const snapshot = await usersRef.get();
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+
+    snapshot.forEach(doc => {
+        const userData = doc.data();
+        // Check if username contains search term (case insensitive)
+        if (
+            userData.username.toLowerCase().includes(searchTerm.toLowerCase()) && // Matches anywhere in username
+            doc.id !== currentUser.uid // Not the current user
+        ) {
+            const isAlreadyFriend = currentUserFriends.some(friend => friend.userId === doc.id);
+            const hasPendingRequest = currentUserData.friendRequests?.some(
+                request => request.userId === doc.id && request.status === 'pending'
+            );
+            
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+            userCard.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="${userData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                        alt="Profile" 
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <span>${userData.username}</span>
+                </div>
+                ${
+                    isAlreadyFriend ? '<button disabled>Already Friends</button>' : 
+                    hasPendingRequest ? '<button disabled>Request Pending</button>' :
+                    `<button onclick="sendFriendRequest('${doc.id}')">Send Friend Request</button>`
+                }
+            `;
+            searchResults.appendChild(userCard);
+        }
+    });
+}
+
+async function sendFriendRequest(targetUserId) {
+    const currentUser = auth.currentUser;
+    
+    // Additional safety check to prevent self-friend requests
+    if (targetUserId === currentUser.uid) {
+        alert('You cannot send a friend request to yourself!');
         return;
     }
-
-    const currentUserRef = db.collection('users').doc(currentUser.uid);
-    const friendRef = db.collection('users').doc(friendId);
-
+    
     try {
-        const currentUserDoc = await currentUserRef.get();
-        const friendDoc = await friendRef.get();
+        const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
+        const currentUserData = currentUserDoc.data();
+        const targetUserDoc = await db.collection('users').doc(targetUserId).get();
+        const targetUserData = targetUserDoc.data();
 
-        if (!currentUserDoc.exists || !friendDoc.exists) {
-            console.error("One of the users does not exist.");
+        // Check if already friends
+        const isAlreadyFriend = currentUserData.friends?.some(friend => friend.userId === targetUserId);
+        if (isAlreadyFriend) {
+            alert('You are already friends with this user!');
             return;
         }
 
-        const currentUserData = currentUserDoc.data();
-        const friendData = friendDoc.data();
-
-        // Remove friend from currentUser's list
-        const updatedCurrentUserFriends = currentUserData.friends.filter(friend => friend.userId !== friendId);
-        await currentUserRef.update({ friends: updatedCurrentUserFriends });
-
-        // Remove currentUser from friend's list
-        const updatedFriendFriends = friendData.friends.filter(friend => friend.userId !== currentUser.uid);
-        await friendRef.update({ friends: updatedFriendFriends });
-
-        // Update UI without reloading
-        loadFriends();
-        document.querySelector(`.friend-item[data-userid="${friendId}"]`)?.remove();
-
-        // Hide chat if the removed friend was the active chat
-        if (typeof currentChatUser !== 'undefined' && currentChatUser === friendId) {
-            document.getElementById('chatContainer').style.display = 'none';
+        // Check if friend request already sent
+        const requestAlreadySent = targetUserData.friendRequests?.some(
+            request => request.userId === currentUser.uid && request.status === 'pending'
+        );
+        if (requestAlreadySent) {
+            alert('Friend request already sent!');
+            return;
         }
 
-        console.log("Friend removed successfully.");
+        const targetUserRef = db.collection('users').doc(targetUserId);
+        await targetUserRef.update({
+            friendRequests: firebase.firestore.FieldValue.arrayUnion({
+                userId: currentUser.uid,
+                username: currentUserData.username,
+                status: 'pending'
+            })
+        });
+
+        document.getElementById('searchResults').innerHTML = '';
+        document.getElementById('searchResults').style.display = "none";
+        document.getElementById('searchInput').value = '';
+        alert('Friend request sent!');
+    } catch (error) {
+        alert('Error sending friend request: ' + error.message);
+    }
+}
+
+async function loadFriendRequests() {
+    const currentUser = auth.currentUser;
+    const userDoc = await db.collection('users').doc(currentUser.uid).get();
+    const userData = userDoc.data();
+    const notifications = document.getElementById('fr-notifications');
+    notifications.innerHTML = '';
+
+    if (userData.friendRequests && userData.friendRequests.length > 0) {
+        for (const request of userData.friendRequests) {
+            if (request.status === 'pending') {
+                // Fetch requester's current data to get their up-to-date profile picture
+                const requesterDoc = await db.collection('users').doc(request.userId).get();
+                const requesterData = requesterDoc.data();
+                
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <img src="${requesterData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                            alt="Profile" 
+                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <p>Friend request from ${request.username}</p>
+                    </div>
+                    <div>
+                        <button onclick="acceptFriendRequest('${request.userId}')">Accept</button>
+                        <button onclick="rejectFriendRequest('${request.userId}')">Reject</button>
+                    </div>
+                `;
+                notifications.appendChild(notification);
+            }
+        }
+    } else {
+        notifications.innerHTML = '<p>No friend requests</p>';
+    }
+}
+
+async function acceptFriendRequest(requesterId) {
+    const currentUser = auth.currentUser;
+    const currentUserRef = db.collection('users').doc(currentUser.uid);
+    const requesterRef = db.collection('users').doc(requesterId);
+
+    try {
+        const currentUserDoc = await currentUserRef.get();
+        const requesterDoc = await requesterRef.get();
+        const currentUserData = currentUserDoc.data();
+        const requesterData = requesterDoc.data();
+
+        friendsList.innerHTML = '';
+
+        // Add to current user's friends list
+        await currentUserRef.update({
+            friends: firebase.firestore.FieldValue.arrayUnion({
+                userId: requesterId,
+                username: requesterData.username
+            }),
+            friendRequests: firebase.firestore.FieldValue.arrayRemove({
+                userId: requesterId,
+                username: requesterData.username,
+                status: 'pending'
+            })
+        });
+
+        // Add to requester's friends list
+        await requesterRef.update({
+            friends: firebase.firestore.FieldValue.arrayUnion({
+                userId: currentUser.uid,
+                username: currentUserData.username
+            })
+        });
+
+        loadFriendRequests();
+        loadFriends();
+    } catch (error) {
+        alert('Error accepting friend request: ' + error.message);
+    }
+}
+
+async function rejectFriendRequest(requesterId) {
+    const currentUser = auth.currentUser;
+    const currentUserRef = db.collection('users').doc(currentUser.uid);
+    const requesterRef = db.collection('users').doc(requesterId);
+
+    try {
+        const requesterDoc = await requesterRef.get();
+        await currentUserRef.update({
+            friendRequests: firebase.firestore.FieldValue.arrayRemove({
+                userId: requesterId,
+                username: requesterDoc.data().username,
+                status: 'pending'
+            })
+        });
+        loadFriendRequests();
+    } catch (error) {
+        alert('Error rejecting friend request: ' + error.message);
+    }
+}
+
+async function loadFriends() {
+const currentUser = auth.currentUser;
+if (!currentUser) {
+    console.error("No user is signed in.");
+    return;
+}
+
+const userDoc = await db.collection('users').doc(currentUser.uid).get();
+if (!userDoc.exists) {
+    console.error("User document does not exist.");
+    return;
+}
+
+const userData = userDoc.data();
+
+const friendsList = document.getElementById('friendsList');
+
+// Store existing friend elements to avoid unnecessary UI changes
+const existingFriendElements = {};
+document.querySelectorAll('.friend-item').forEach(item => {
+    const username = item.querySelector('span').textContent;
+    existingFriendElements[username] = item;
+});
+
+if (userData.friends && userData.friends.length > 0) {
+    for (const friend of userData.friends) {
+
+        // Fetch friend's data
+        const friendDoc = await db.collection('users').doc(friend.userId).get();
+        if (!friendDoc.exists) {
+            console.warn(`Friend with ID ${friend.userId} not found.`);
+            continue;
+        }
+
+        const friendData = friendDoc.data();
+
+        // Check if the friend is already displayed
+        if (existingFriendElements[friendData.username]) {
+            // Update profile picture if changed
+            const imgElement = existingFriendElements[friendData.username].querySelector('img');
+            if (imgElement.src !== friendData.profilePicture) {
+                imgElement.src = friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp';
+            }
+            continue;
+        }
+
+        // Create new friend element if it doesn't exist
+        const friendItem = document.createElement('div');
+        friendItem.className = 'friend-item';
+        friendItem.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                    alt="Profile" 
+                    style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                <span>${friendData.username}</span>
+            </div>
+            <div>
+                <button onclick="removeFriend('${friend.userId}')">Remove</button>
+                <button onclick="openChat('${friend.userId}', '${friendData.username}')">Chat</button>
+            </div>
+        `;
+        friendsList.appendChild(friendItem);
+    }
+} else {
+    if (!friendsList.querySelector('p')) {
+        friendsList.innerHTML = '<p>No friends yet</p>';
+    }
+}
+}
+
+
+
+async function removeFriend(friendId) {
+const currentUser = auth.currentUser;
+
+if (!currentUser) {
+    console.error("No user is signed in.");
+    return;
+}
+
+const currentUserRef = db.collection('users').doc(currentUser.uid);
+const friendRef = db.collection('users').doc(friendId);
+
+try {
+    const currentUserDoc = await currentUserRef.get();
+    const friendDoc = await friendRef.get();
+
+    if (!currentUserDoc.exists || !friendDoc.exists) {
+        console.error("One of the users does not exist.");
+        return;
+    }
+
+    const currentUserData = currentUserDoc.data();
+    const friendData = friendDoc.data();
+
+    // Remove friend from currentUser's list
+    const updatedCurrentUserFriends = currentUserData.friends.filter(friend => friend.userId !== friendId);
+    await currentUserRef.update({ friends: updatedCurrentUserFriends });
+
+    // Remove currentUser from friend's list
+    const updatedFriendFriends = friendData.friends.filter(friend => friend.userId !== currentUser.uid);
+    await friendRef.update({ friends: updatedFriendFriends });
+
+    loadFriends();
+    document.querySelector(`.friend-item[data-userid="${friendId}"]`)?.remove();
+
+    // Hide chat if the removed friend was the active chat
+    if (typeof currentChatUser !== 'undefined' && currentChatUser === friendId) {
+        document.getElementById('chatContainer').style.display = 'none';
+    }
+
+    console.log("Friend removed successfully.");
+
     } catch (error) {
         alert('Error removing friend: ' + error.message);
     }
 }
 
-  
-  function openChat(friendId, friendUsername) {
-      currentChatUser = friendId;
-      let chatContainer = document.getElementById('chatContainer');
-      chatContainer.style.display = "block";
-      chatContainer.style.opacity = "1";
-      chatContainer.style.pointerEvents = "auto";
-      document.querySelector('#chatUsername span').textContent = friendUsername;
-      loadMessages(friendId);
-  }
-  
-  async function loadMessages(friendId) {
-      const currentUser = auth.currentUser;
-      const chatMessages = document.getElementById('chatMessages');
-      chatMessages.innerHTML = '';
-  
-      // Clear previous listener
-      if (messageListener) {
-          messageListener();
-      }
-  
-      // Create a chat ID that's consistent regardless of who started the chat
-      const chatId = [currentUser.uid, friendId].sort().join('_');
-  
-      // Set up real-time listener for messages
-      messageListener = db.collection('chats')
-          .doc(chatId)
-          .collection('messages')
-          .orderBy('timestamp')
-          .onSnapshot((snapshot) => {
-              snapshot.docChanges().forEach((change) => {
-                  if (change.type === 'added') {
-                      const message = change.doc.data();
-                      const messageDiv = document.createElement('div');
-                      messageDiv.className = `message ${message.senderId === currentUser.uid ? 'sent' : 'received'}`;
-                      messageDiv.textContent = message.text;
-                      chatMessages.appendChild(messageDiv);
-                  }
-              });
-              chatMessages.scrollTop = chatMessages.scrollHeight;
-          });
-  }
-  
-  async function sendMessage(event) {
-      event.preventDefault();
-      const messageInput = document.getElementById('messageInput');
-      const message = messageInput.value.trim();
-      
-      if (!message || !currentChatUser) return;
-  
-      const currentUser = auth.currentUser;
-      const chatId = [currentUser.uid, currentChatUser].sort().join('_');
-  
-      try {
-          await db.collection('chats')
-              .doc(chatId)
-              .collection('messages')
-              .add({
-                  text: message,
-                  senderId: currentUser.uid,
-                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
-              });
-  
-          messageInput.value = '';
-      } catch (error) {
-          alert('Error sending message: ' + error.message);
-      }
-  }
-  
 
+function openChat(friendId, friendUsername) {
+    currentChatUser = friendId;
+    let chatContainer = document.getElementById('chatContainer');
+    chatContainer.style.display = "block";
+    chatContainer.style.opacity = "1";
+    chatContainer.style.pointerEvents = "auto";
+    document.querySelector('#chatUsername span').textContent = friendUsername;
+    loadMessages(friendId);
+}
 
-  function socialPanelClose() {
-      document.getElementById("chatContainer").style.display = "none";
+async function loadMessages(friendId) {
+    const currentUser = auth.currentUser;
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.innerHTML = '';
 
-      socialContainer.style.opacity = "0";
-      socialContainer.style.pointerEvents = "none";
+    // Clear previous listener
+    if (messageListener) {
+        messageListener();
+    }
 
-      socialPanelOverlay.style.opacity = "0";
-      socialPanelOverlay.style.pointerEvents = "none";
+    // Create a chat ID that's consistent regardless of who started the chat
+    const chatId = [currentUser.uid, friendId].sort().join('_');
 
-      setTimeout(() => {
-          socialPanelOverlay.style.display = "none";
-      }, 300);
+    // Set up real-time listener for messages
+    messageListener = db.collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp')
+        .onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const message = change.doc.data();
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${message.senderId === currentUser.uid ? 'sent' : 'received'}`;
+                    messageDiv.textContent = message.text;
+                    chatMessages.appendChild(messageDiv);
+                }
+            });
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+}
 
-      document.getElementById("hm-icon").style.pointerEvents = "auto";
-      document.getElementById("hm-icon").style.opacity = "1";
-  }
+async function sendMessage(event) {
+    event.preventDefault();
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (!message || !currentChatUser) return;
+
+    const currentUser = auth.currentUser;
+    const chatId = [currentUser.uid, currentChatUser].sort().join('_');
+
+    try {
+        await db.collection('chats')
+            .doc(chatId)
+            .collection('messages')
+            .add({
+                text: message,
+                senderId: currentUser.uid,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        messageInput.value = '';
+    } catch (error) {
+        alert('Error sending message: ' + error.message);
+    }
+}
 
 
 
-  function chatPanelClose() {
+function socialPanelClose() {
+    document.getElementById("chatContainer").style.display = "none";
+
+    socialContainer.style.opacity = "0";
+    socialContainer.style.pointerEvents = "none";
+
+    socialPanelOverlay.style.opacity = "0";
+    socialPanelOverlay.style.pointerEvents = "none";
+
+    setTimeout(() => {
+        socialPanelOverlay.style.display = "none";
+    }, 300);
+
+    document.getElementById("hm-icon").style.pointerEvents = "auto";
+    document.getElementById("hm-icon").style.opacity = "1";
+}
+
+
+
+function chatPanelClose() {
     document.getElementById("chatContainer").style.opacity = "0";
     document.getElementById("chatContainer").style.pointerEvents = "none";
-    
+
     setTimeout(() => {
         document.getElementById("chatContainer").style.display = "none";
     }, 300);
-  }
+}
 
 
-// First, let's add the HTML for the friend profile panel to the document
+// Add the HTML for the friend profile panel to the document
 function addFriendProfilePanelToDOM() {
     // Check if panel already exists
     if (document.getElementById('friendProfilePanel')) return;
@@ -1623,19 +1585,16 @@ function addFriendProfilePanelToDOM() {
     
     document.head.appendChild(styleElement);
     
-    // Add event listeners
     document.getElementById('friendProfilePanelClose').addEventListener('click', closeFriendProfilePanel);
     document.getElementById('friendProfilePanelOverlay').addEventListener('click', closeFriendProfilePanel);
 }
 
-// Function to open friend's profile panel
 function openFriendProfile(userId, username) {
     // Ensure the panel exists in the DOM
     addFriendProfilePanelToDOM();
     
     // Get profile information
     getFriendProfileInfo(userId, username).then(() => {
-        // Show the profile panel and overlay
         const friendProfilePanel = document.getElementById('friendProfilePanel');
         const friendProfilePanelOverlay = document.getElementById('friendProfilePanelOverlay');
         
@@ -1644,7 +1603,6 @@ function openFriendProfile(userId, username) {
         friendProfilePanelOverlay.style.opacity = '1';
         friendProfilePanelOverlay.style.pointerEvents = 'auto';
         
-        // Setup action buttons
         const chatButton = document.getElementById('fpbb-chat');
         const removeButton = document.getElementById('fpbb-remove');
         
@@ -1662,7 +1620,7 @@ function openFriendProfile(userId, username) {
     });
 }
 
-// Function to close the friend profile panel
+
 function closeFriendProfilePanel() {
     const friendProfilePanel = document.getElementById('friendProfilePanel');
     const friendProfilePanelOverlay = document.getElementById('friendProfilePanelOverlay');
@@ -1712,7 +1670,7 @@ async function getFriendProfileInfo(userId, username) {
             const friendProfileHeader = document.getElementById('friendProfilePanelHeader');
             if (friendProfileHeader) {
                 friendProfileHeader.style.backgroundImage = 'none';
-                friendProfileHeader.style.backgroundColor = "#333"; // Or your default color
+                friendProfileHeader.style.backgroundColor = "black"; // Or your default color
             }
             
             const friendBanner = document.getElementById('friendBanner');
@@ -1755,8 +1713,10 @@ async function getFriendProfileInfo(userId, username) {
         } else {
             socialsElement.innerHTML = '<p>No social links provided</p>';
         }
+
+
         
-        // Get user account creation date
+
         const accCreationElement = document.getElementById('fp-acc-creation-date');
         
         try {
@@ -1789,7 +1749,6 @@ async function getFriendProfileInfo(userId, username) {
 
 // Update loadFriends function to add the click event for friend profile
 function updateFriendsListWithProfileClick() {
-    // Find all friend items
     const friendItems = document.querySelectorAll('.friend-item');
     
     friendItems.forEach(item => {
@@ -1988,39 +1947,37 @@ loadFriends = async function() {
                   // 75% chance for left or right
                   let isLeftSide = Math.random() < 0.5; // 50% for left, 50% for right
                   if (isLeftSide) {
-                      lightningGifImage.style.left = "10px";  // Move to left side
-                      lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
+                      lightningGifImage.style.left = "10px";
+                      lightningGifImage.style.transform = "scaleX(1)";
                   } else {
-                      lightningGifImage.style.left = "calc(100% - 100px)";  // Move to right side
-                      lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
+                      lightningGifImage.style.left = "calc(100% - 100px)";
+                      lightningGifImage.style.transform = "scaleX(-1)";
                   }
               } else if (randomPosition < 0.9) {
                   // 15% chance for middle-left or middle-right (split equally)
                   let isMiddleLeft = Math.random() < 0.5; // 50% for middle-left, 50% for middle-right
                   if (isMiddleLeft) {
-                      lightningGifImage.style.left = "calc(25% - 50px)";  // Move to middle left
-                      lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
-                      lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+                      lightningGifImage.style.left = "calc(25% - 50px)";
+                      lightningGifImage.style.transform = "scaleX(1)";
+                      lightningGifImage.style.transformOrigin = "center";
                   } else {
-                      lightningGifImage.style.left = "calc(75% - 50px)";  // Move to middle right
-                      lightningGifImage.style.transform = "scaleX(-1)"; // Flip horizontally
-                      lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+                      lightningGifImage.style.left = "calc(75% - 50px)";
+                      lightningGifImage.style.transform = "scaleX(-1)";
+                      lightningGifImage.style.transformOrigin = "center";
                   }
               } else {
                   // 5% chance for pure middle
-                  lightningGifImage.style.left = "calc(50% - 50px)";  // Move to pure middle
-                  lightningGifImage.style.transform = "scaleX(1)"; // Normal orientation
-                  lightningGifImage.style.transformOrigin = "center"; // Ensure it's straight
+                  lightningGifImage.style.left = "calc(50% - 50px)";
+                  lightningGifImage.style.transform = "scaleX(1)";
+                  lightningGifImage.style.transformOrigin = "center";
               }
   
-              // Flash effect with 1.75x longer duration (350ms)
               lightningGifImage.style.opacity = "1";  // Show
-              setTimeout(() => lightningGifImage.style.opacity = "0", 350); // Hide after 350ms
-          }, 750); // Change position every 750ms (3/4 second)
+              setTimeout(() => lightningGifImage.style.opacity = "0", 350);
+          }, 750); // Every 750ms (0.75s)
       }
   }
-  
-  // Attach event listener
+
   if (weatherButtonsStorm) {
       weatherButtonsStorm.addEventListener("click", enableStorm);
   }
@@ -2185,7 +2142,6 @@ loadFriends = async function() {
 
     let currentSongIndex = 0;
     let isAutoplayEnabled = true; // Default to autoplay ON
-    let isDragging = false;
 
     const audio = document.getElementById("audio");
     const songTitle = document.getElementById("song-title");
@@ -2841,10 +2797,9 @@ loadFriends = async function() {
     
         document.body.appendChild(tooltip);
     
-        // Position tooltip to the right of the hmMenuBtn
         let rect = hmMenuBtn.getBoundingClientRect();
-        tooltip.style.right = rect.right + window.scrollX + 5 + "px"; // 5px gap to the right
-        tooltip.style.top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2) + "px"; // Centered vertically
+        tooltip.style.right = rect.right + window.scrollX + 5 + "px";
+        tooltip.style.top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2) + "px";
     
         setTimeout(() => {
             tooltip.classList.add("show");
@@ -2922,7 +2877,6 @@ loadFriends = async function() {
     let sec = document.getElementById("sec");
     let ampm = document.getElementById("ampm");
 
-    // Update the clock every second
     setInterval(() => {
         let currentTime = new Date(); // Get the current time
         let hours = currentTime.getHours();
@@ -2940,7 +2894,7 @@ loadFriends = async function() {
         min.innerHTML = String(minutes).padStart(2, '0');
         sec.innerHTML = String(seconds).padStart(2, '0');
         ampm.innerHTML = meridian;
-    }, 1000); // Refresh every second
+    }, 1000);
 
 
     // ------------------ END OF CLOCK JS -----------------------
