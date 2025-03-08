@@ -59,6 +59,7 @@
         <a id="profile-sp-btn">Profile 👤</a>
         <a href="#" id="friends-sp-btn">Friends 👥</a>
         <a href="#" id="games-sp-btn">Games 🎮</a>
+        <a href="#" id="music-sp-btn">Music 🎵</a>
         <a href="#" id="appearance-sp-btn">Appearance 🎨</a>
         <a href="#" id="settings-sp-btn">Settings ⚙️</a>
         <hr id="sidePanelHr1">
@@ -180,6 +181,78 @@
             </form>
         </div>
     </div>
+
+
+    <!-- Modern Music Panel HTML Structure -->
+    <div id="musicPanel">
+        <!-- Panel Header -->
+        <div class="panel-header">
+            <div class="panel-title">Explore Tracks</div>
+            <div class="now-playing">
+                <span id="currentSongTitle">Select a track</span>
+            </div>
+            <div class="equalizer" id="equalizer">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="searchBar" placeholder="Search music...">
+            <div class="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="rap">Rap</button>
+            <button class="filter-tab" data-filter="pop">Pop</button>
+            <button class="filter-tab" data-filter="electronic">Electronic</button>
+            <button class="filter-tab" data-filter="recent">Recent</button>
+            <button class="filter-tab" data-filter="favorites">Favorites</button>
+        </div>
+
+        <!-- Music List -->
+        <div class="music-list-container">
+            <ul class="music-list" id="musicList">
+                <!-- Songs will be dynamically populated here by JavaScript -->
+            </ul>
+        </div>
+
+        <!-- Player Footer -->
+        <div class="player-footer">
+            <div class="now-preview">Preview: 15 seconds</div>
+            <div class="action-buttons">
+                <button class="action-button tooltip" data-tooltip="Share">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                </button>
+                <button class="action-button tooltip" data-tooltip="More options">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="musicPanelOverlay"></div>
 
 
     <main id="main-legacy">
