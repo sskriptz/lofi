@@ -468,9 +468,9 @@
                 <div class="trademark-links">
                     <!-- <a href="" target="_blank" class="trademark" id="tos">Terms of Service</a> -->
                     <!-- <a href="" target="_blank" class="trademark" id="pp">Privacy Policy</a> -->
-                    <a href="" target="_blank" class="trademark" id="cu">Contact Us</a>
-                    <a href="" target="_blank" class="trademark" id="au">About Us</a>
-                    <a href="" target="_blank" class="trademark" id="au">What is it?</a>
+                    <a href="#" class="trademark" id="cu">Contact Us</a>
+                    <a href="about.html" target="_blank" class="trademark" id="au">About Us</a>
+                    <a href="#" class="trademark" id="au">What is it?</a>
                 </div>
             </div>
         </div>
@@ -498,65 +498,6 @@
     <script>
 
     document.addEventListener("DOMContentLoaded", () => {
-            const cardsContainer = document.querySelector(".cards-container");
-            const trademarkLinks = document.querySelectorAll(".trademark");
-            const backButton = document.createElement("button");
-
-            // Style the Back button
-            backButton.innerText = "Back";
-            backButton.id = "back-btn";
-            backButton.style.display = "none";
-            backButton.style.padding = "12px 24px";
-            backButton.style.fontSize = "20px";
-            backButton.style.background = "rgba(0,0,0,0.4)";
-            backButton.style.border = "1px solid #ddd";
-            backButton.style.cursor = "pointer";
-            backButton.style.borderRadius = "5px";
-            backButton.style.position = "absolute";
-            backButton.style.top = "50%";
-            backButton.style.left = "50%";
-            backButton.style.transform = "translate(-50%, -50%)";
-            backButton.style.transition = "opacity 0.5s ease-in-out";
-            backButton.style.color = "white";
-            backButton.style.transition = "transform 0.2s ease-in-out";
-
-
-
-            document.body.appendChild(backButton);
-
-            cardsContainer.style.transition = "opacity 0.5s ease-in-out";
-            backButton.style.transition = "opacity 0.5s ease-in-out";
-
-            // Hide the cards container and show the back button with fade effect
-            trademarkLinks.forEach(link => {
-                link.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    cardsContainer.style.opacity = "0";
-
-                    setTimeout(() => {
-                        cardsContainer.style.display = "none";
-                        backButton.style.display = "block";
-                        setTimeout(() => {
-                            backButton.style.opacity = "1";
-                        }, 50);
-                    }, 500);
-                });
-            });
-
-            // Show the cards container when Back button is clicked
-            backButton.addEventListener("click", () => {
-                backButton.style.opacity = "0";
-
-                setTimeout(() => {
-                    backButton.style.display = "none";
-                    cardsContainer.style.display = "flex";
-                    setTimeout(() => {
-                        cardsContainer.style.opacity = "1";
-                    }, 50);
-                }, 500);
-            });
-
-
             // Mute/Unmute Functionality
             let isMuted = false;  // Track mute state
             const audio = document.getElementById("background-music");
