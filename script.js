@@ -2120,8 +2120,6 @@ loadFriends = async function() {
 
     
     
-    
-    
     // Audio player code
 
     const songs = [
@@ -2139,6 +2137,8 @@ loadFriends = async function() {
         { title: "Our Time", artist: "Lil Tecca", src: "https://www.dropbox.com/scl/fi/adiktphs5yqeweepi3p29/spotifydown.com-Our-Time-Lil-Tecca.mp3?rlkey=h521ror9j3s5asc9ewbcx5diw&st=p9xkgdnj&raw=1" },
         { title: "Gang Baby", artist: "NLE Choppa", src: "https://www.dropbox.com/scl/fi/yqxibbvz1b4a4edv7ojr0/spotifydown.com-Gang-Baby-NLE-Choppa.mp3?rlkey=pd51n0sxphvyi2ets34bnddjt&st=8enciim4&raw=1" },
     ];
+
+    
 
     let currentSongIndex = 0;
     let isAutoplayEnabled = true; // Default to autoplay ON
@@ -2266,6 +2266,308 @@ loadFriends = async function() {
 
 
     // ------------- END OF AUDIO PLAYER CODE -----------------
+
+
+    // ------------- START OF MUSIC PANEL CODE ----------------
+
+    const musicPanel = document.getElementById("musicPanel");
+    const musicPanelOpen = document.getElementById("music-sp-btn");
+    const musicPanelOverlay = document.getElementById("musicPanelOverlay");
+
+    musicPanelOpen.addEventListener("click", () => {
+        sideBar.style.transform = "translateX(-100%)";
+        sideBar.style.pointerEvents = "none";
+        sidePanelOverlay.style.display = "none";
+
+        musicPanel.style.display = "block";
+        musicPanelOverlay.style.display = "block";
+    });
+
+    musicPanelOverlay.addEventListener("click", () => {
+        musicPanel.style.display = "none";
+        musicPanelOverlay.style.display = "none";
+    });
+
+    // Elements
+    const musicList = document.getElementById('musicList');
+    const searchBar = document.getElementById('searchBar');
+    const currentSongTitle = document.getElementById('currentSongTitle');
+    const equalizer = document.getElementById('equalizer');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    
+    // Audio object for previews
+    let audioPreview = new Audio();
+    let currentPreviewIndex = -1;
+    let previewDuration = 15000; // 15 seconds preview
+    let previewTimer;
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let recentlyPlayed = JSON.parse(localStorage.getItem('recentlyPlayed')) || [];
+
+    // Initialize the music list
+    function initializeMusicList() {
+        renderSongList(songs);
+        
+        // Setup event listeners
+        searchBar.addEventListener('input', handleSearch);
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', handleFilter);
+        });
+    }
+
+    // Render song list based on filter
+    function renderSongList(songList) {
+        musicList.innerHTML = '';
+        
+        if (songList.length === 0) {
+            musicList.innerHTML = `
+                <div class="empty-results">
+                    <div class="empty-icon">🔍</div>
+                    <div>No songs found</div>
+                </div>
+            `;
+            return;
+        }
+        
+        songList.forEach((song, index) => {
+            const isFavorite = favorites.includes(song.title);
+            const listItem = document.createElement('li');
+            listItem.className = 'music-list-item';
+            listItem.dataset.index = index;
+            
+            listItem.innerHTML = `
+                <div class="song-info">
+                    <div class="song-title">${song.title}</div>
+                    <div class="song-artist">${song.artist}</div>
+                </div>
+                <div class="preview-controls">
+                    <div class="preview-progress">
+                        <div class="preview-bar" id="preview-bar-${index}"></div>
+                    </div>
+                    <button class="preview-button tooltip" data-tooltip="Preview" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </button>
+                    <button class="action-button tooltip" data-tooltip="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}" data-action="favorite" data-song="${song.title}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            musicList.appendChild(listItem);
+        });
+        
+        // Add event listeners to preview buttons
+        document.querySelectorAll('.preview-button').forEach(button => {
+            button.addEventListener('click', handlePreviewClick);
+        });
+        
+        // Add event listeners to favorite buttons
+        document.querySelectorAll('[data-action="favorite"]').forEach(button => {
+            button.addEventListener('click', handleFavoriteClick);
+        });
+    }
+
+    // Handle search functionality
+    function handleSearch() {
+        const searchTerm = searchBar.value.toLowerCase();
+        const filteredSongs = songs.filter(song => 
+            song.title.toLowerCase().includes(searchTerm) || 
+            song.artist.toLowerCase().includes(searchTerm)
+        );
+        
+        renderSongList(filteredSongs);
+    }
+
+    // Handle filter tabs
+    function handleFilter(e) {
+        const filter = e.target.dataset.filter;
+        
+        // Update active class
+        filterTabs.forEach(tab => tab.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        let filteredSongs = [];
+        
+        switch(filter) {
+            case 'all':
+                filteredSongs = songs;
+                break;
+            case 'favorites':
+                filteredSongs = songs.filter(song => favorites.includes(song.title));
+                break;
+            case 'recent':
+                filteredSongs = songs.filter(song => recentlyPlayed.includes(song.title));
+                break;
+            default:
+                filteredSongs = songs.filter(song => song.genre === filter);
+        }
+        
+        renderSongList(filteredSongs);
+    }
+
+    // Handle preview click
+    function handlePreviewClick(e) {
+        const index = parseInt(e.currentTarget.dataset.index);
+        const song = songs[index];
+        const previewBar = document.getElementById(`preview-bar-${index}`);
+        
+        // If clicking the currently playing song, pause it
+        if (currentPreviewIndex === index && !audioPreview.paused) {
+            pausePreview();
+            return;
+        }
+        
+        // Stop any currently playing preview
+        if (currentPreviewIndex !== -1) {
+            stopCurrentPreview();
+        }
+        
+        // Update current preview index
+        currentPreviewIndex = index;
+        
+        // Start new preview
+        startPreview(song, previewBar);
+        
+        // Update UI
+        updatePlayingState(index);
+        
+        // Add to recently played
+        addToRecentlyPlayed(song.title);
+    }
+
+    // Start preview playback
+    function startPreview(song, previewBar) {
+        // Set audio source
+        audioPreview.src = song.src;
+        
+        // Set random start time between 30-60 seconds (for a more interesting preview)
+        const songDuration = 180; // Assume average song is 3 minutes
+        const randomStart = Math.floor(Math.random() * 30) + 30;
+        
+        // Update UI
+        currentSongTitle.textContent = `Now previewing: ${song.title}`;
+        equalizer.classList.add('active-eq');
+        
+        // Play from the random position
+        audioPreview.addEventListener('canplaythrough', function() {
+            try {
+                audioPreview.currentTime = randomStart;
+                audioPreview.play();
+                
+                // Update progress bar
+                let startTime = Date.now();
+                
+                previewTimer = setInterval(() => {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min((elapsed / previewDuration) * 100, 100);
+                    
+                    if (previewBar) {
+                        previewBar.style.width = `${progress}%`;
+                    }
+                    
+                    // Stop preview after duration
+                    if (elapsed >= previewDuration) {
+                        stopCurrentPreview();
+                    }
+                }, 100);
+            } catch (error) {
+                console.error("Error starting preview:", error);
+                stopCurrentPreview();
+            }
+        }, { once: true });
+        
+        audioPreview.addEventListener('error', function() {
+            console.error("Error loading audio:", audioPreview.error);
+            stopCurrentPreview();
+        });
+    }
+
+    // Pause current preview
+    function pausePreview() {
+        audioPreview.pause();
+        clearInterval(previewTimer);
+        equalizer.classList.remove('active-eq');
+        
+        const playingItem = document.querySelector('.music-list-item.playing');
+        if (playingItem) {
+            playingItem.classList.remove('playing');
+        }
+        
+        currentSongTitle.textContent = 'Select a track';
+    }
+
+    // Stop current preview
+    function stopCurrentPreview() {
+        pausePreview();
+        
+        // Reset progress bar for previous song
+        if (currentPreviewIndex !== -1) {
+            const prevBar = document.getElementById(`preview-bar-${currentPreviewIndex}`);
+            if (prevBar) {
+                prevBar.style.width = '0%';
+            }
+        }
+        
+        currentPreviewIndex = -1;
+    }
+
+    // Update the visual state for the playing song
+    function updatePlayingState(index) {
+        // Remove playing class from all items
+        document.querySelectorAll('.music-list-item').forEach(item => {
+            item.classList.remove('playing');
+        });
+        
+        // Add playing class to current item
+        const currentItem = document.querySelector(`.music-list-item[data-index="${index}"]`);
+        if (currentItem) {
+            currentItem.classList.add('playing');
+        }
+    }
+
+    // Handle favorite click
+    function handleFavoriteClick(e) {
+        e.stopPropagation();
+        const songTitle = e.currentTarget.dataset.song;
+        
+        if (favorites.includes(songTitle)) {
+            // Remove from favorites
+            favorites = favorites.filter(title => title !== songTitle);
+            e.currentTarget.querySelector('svg').setAttribute('fill', 'none');
+            e.currentTarget.dataset.tooltip = 'Add to favorites';
+        } else {
+            // Add to favorites
+            favorites.push(songTitle);
+            e.currentTarget.querySelector('svg').setAttribute('fill', 'currentColor');
+            e.currentTarget.dataset.tooltip = 'Remove from favorites';
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    // Add song to recently played
+    function addToRecentlyPlayed(songTitle) {
+        // Remove if already in list
+        recentlyPlayed = recentlyPlayed.filter(title => title !== songTitle);
+        
+        // Add to beginning
+        recentlyPlayed.unshift(songTitle);
+        
+        // Limit to 10 items
+        if (recentlyPlayed.length > 10) {
+            recentlyPlayed = recentlyPlayed.slice(0, 10);
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('recentlyPlayed', JSON.stringify(recentlyPlayed));
+    }
+
+    // Initialize
+    initializeMusicList();
 
 
     
