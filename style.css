@@ -752,6 +752,11 @@ main {
 
 /* audio player */
 
+.audio-player-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .audio-player {
     width: 100%;
     position: relative;
@@ -765,8 +770,9 @@ main {
     z-index: 9;
     margin-top: 2%;
     border-radius: 15px;
-    max-width: 97.5%;
+    max-width: 100%;
     min-width: 300px;
+    box-sizing: border-box;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -2443,6 +2449,10 @@ div#chatContainer {
     border: none;
     transition: all 0.2s;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.filter-tab:hover {
+    background-color: #edf2f7;
 }
 
 .filter-tab.active {
