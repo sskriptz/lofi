@@ -26,7 +26,7 @@ body {
     background-attachment: fixed;
     height: 100vh;
     width: 100vw;
-    cursor: url('https://i.ibb.co/60tk0khC/image-removebg-preview-1-1-optimized.png'), auto;
+    /* cursor: url('https://i.ibb.co/60tk0khC/image-removebg-preview-1-1-optimized.png'), auto; */
     transition: opacity 1s ease-in-out;
     font-family: "Inconsolata", monospace;
     opacity: 0;
@@ -2333,4 +2333,370 @@ div#chatContainer {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 5000;
+}
+
+
+/* Modern Music Panel Styles */
+#musicPanel {
+    width: 50vw;
+    background: #ffffff;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    transition: all 0.3s ease;
+    z-index: 5001;
+}
+
+#musicPanelOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5000;
+}
+
+
+.panel-header {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    padding: 20px;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.panel-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.now-playing {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-top: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.search-container {
+    padding: 15px;
+    position: relative;
+}
+
+#searchBar {
+    width: 90%;
+    padding: 12px 15px 12px 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f7fafc;
+    transition: all 0.3s;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#searchBar:focus {
+    outline: none;
+    border-color: #4776E6;
+    box-shadow: 0 0 0 3px rgba(71, 118, 230, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #718096;
+}
+
+.filter-tabs {
+    display: flex;
+    padding: 0 15px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.filter-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-tab {
+    padding: 8px 15px;
+    border-radius: 20px;
+    margin-right: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    background-color: #f7fafc;
+    color: #718096;
+    border: none;
+    transition: all 0.2s;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.filter-tab.active {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    color: white;
+}
+
+.music-list-container {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px 15px;
+    position: relative;
+}
+
+.music-list {
+    list-style: none;
+    border-radius: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+.music-list-item {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    background-color: #f7fafc;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.music-list-item:hover {
+    background-color: #edf2f7;
+    transform: translateY(-2px);
+}
+
+.music-list-item.playing {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    color: white;
+}
+
+#musicPanel .song-info {
+    flex: 1;
+}
+
+#musicPanel .song-title {
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 4px;
+}
+
+.music-list-item.playing .song-title,
+.music-list-item.playing .song-artist {
+    color: white;
+}
+
+#musicPanel .song-artist {
+    font-size: 12px;
+    color: #718096;
+}
+
+.song-duration {
+    font-size: 12px;
+    color: #718096;
+    margin-left: 15px;
+}
+
+.preview-controls {
+    display: flex;
+    align-items: center;
+}
+
+.preview-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #4776E6;
+    margin-left: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.preview-button:hover {
+    background: #4776E6;
+    color: white;
+}
+
+.preview-progress {
+    width: 60px;
+    height: 4px;
+    background-color: #edf2f7;
+    border-radius: 2px;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.preview-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+.player-footer {
+    padding: 15px;
+    border-top: 1px solid #edf2f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.now-preview {
+    font-size: 13px;
+    color: #718096;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    color: #718096;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.action-button:hover {
+    color: #4776E6;
+}
+
+.preview-timer {
+    font-size: 12px;
+    color: #718096;
+    margin-left: 8px;
+}
+
+.equalizer {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 8px;
+    height: 20px;
+}
+
+.eq-bar {
+    width: 3px;
+    border-radius: 1px;
+    background: linear-gradient(to bottom, #ffffff 0%, transparent 100%);
+    animation: equalize 1s infinite;
+    transform-origin: bottom;
+    opacity: 0;
+}
+
+.active-eq .eq-bar {
+    opacity: 1;
+}
+
+.eq-bar:nth-child(1) { animation-delay: 0.1s; }
+.eq-bar:nth-child(2) { animation-delay: 0.2s; }
+.eq-bar:nth-child(3) { animation-delay: 0.3s; }
+.eq-bar:nth-child(4) { animation-delay: 0.4s; }
+.eq-bar:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes equalize {
+    0% { transform: scaleY(0.1); }
+    50% { transform: scaleY(1); }
+    100% { transform: scaleY(0.1); }
+}
+
+.empty-results {
+    text-align: center;
+    padding: 30px 15px;
+    color: #718096;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.empty-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+/* Loading animation for previews */
+.loading-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(71, 118, 230, 0.1);
+    border-radius: 50%;
+    border-top-color: #4776E6;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Tooltip styles for buttons */
+.tooltip {
+    position: relative;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    bottom: calc(100% + 10px);
+}
+
+/* Custom scrollbar for music list */
+.music-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.music-list-container::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 3px;
+}
+
+.music-list-container::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+}
+
+.music-list-container::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
 }
