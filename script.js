@@ -2828,10 +2828,91 @@ loadFriends = async function() {
         }
     });
 
+
+
+
+    let infoIconBtn = document.getElementById("info-icon");
+
+    infoIconBtn.addEventListener('mouseenter', () => {
+        let tooltipText = infoIconBtn.getAttribute("data-tooltip");
+        let tooltip = document.createElement("div");
+        tooltip.className = "infoIconTooltip";
+        tooltip.textContent = tooltipText;
+    
+        document.body.appendChild(tooltip);
+    
+        // Position tooltip to the right of the hmMenuBtn
+        let rect = hmMenuBtn.getBoundingClientRect();
+        tooltip.style.left = rect.right + window.scrollX + 5 + "px"; // 5px gap to the right
+        tooltip.style.top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2) + "px"; // Centered vertically
+    
+        setTimeout(() => {
+            tooltip.classList.add("show");
+        }, 10);
+    
+        infoIconBtn.tooltipElement = tooltip;
+    });
+
+    infoIconBtn.addEventListener('mouseleave', () => {
+        if (infoIconBtn.tooltipElement) {
+            infoIconBtn.tooltipElement.classList.remove("show");
+
+            setTimeout(() => {
+                infoIconBtn.tooltipElement.remove();
+            }, 300);
+        }
+    });
+
     
     // ---------------- TOOLTIPS END ---------------------
+
+
+    // ----------------- START OF CUSTOM CONTEXT MENU JS -------------------
+
+    // const customMenu = document.getElementById("customMenu");
+
+    // document.addEventListener("contextmenu", (event) => {
+    //     event.preventDefault();
+
+    //     if (!customMenu) {
+    //         console.error("Custom menu not found!");
+    //         return;
+    //     }
+
+    //     const { clientX: mouseX, clientY: mouseY } = event;
+
+    //     // Show menu to get width/height before positioning
+    //     customMenu.style.display = "block";
+    //     customMenu.style.opacity = "0"; // Hide it temporarily
+
+    //     const menuWidth = customMenu.offsetWidth;
+    //     const menuHeight = customMenu.offsetHeight;
+    //     const windowWidth = window.innerWidth;
+    //     const windowHeight = window.innerHeight;
+
+    //     let adjustedX = mouseX;
+    //     let adjustedY = mouseY;
+
+    //     if (mouseX + menuWidth > windowWidth) {
+    //         adjustedX = windowWidth - menuWidth - 10;
+    //     }
+    //     if (mouseY + menuHeight > windowHeight) {
+    //         adjustedY = windowHeight - menuHeight - 10;
+    //     }
+
+    //     customMenu.style.top = `${adjustedY}px`;
+    //     customMenu.style.left = `${adjustedX}px`;
+    //     customMenu.style.opacity = "1"; // Make it visible
+    // });
+
+    // // Hide menu when clicking anywhere
+    // document.addEventListener("click", () => {
+    //     if (customMenu) {
+    //         customMenu.style.display = "none";
+    //     }
+    // });
         
-        
+    // ----------------- END OF CUSTOM CONTEXT MENU JS -------------------
 
     
     // --------------- START OF CLOCK JS ---------------------
