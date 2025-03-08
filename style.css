@@ -2363,7 +2363,6 @@ div#chatContainer {
     z-index: 5000;
 }
 
-
 .panel-header {
     background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
     padding: 20px;
@@ -2389,10 +2388,12 @@ div#chatContainer {
 .search-container {
     padding: 15px;
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #searchBar {
-    width: 90%;
+    width: 100%;
     padding: 12px 15px 12px 40px;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
@@ -2400,6 +2401,7 @@ div#chatContainer {
     background-color: #f7fafc;
     transition: all 0.3s;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    box-sizing: border-box;
 }
 
 #searchBar:focus {
@@ -2450,8 +2452,11 @@ div#chatContainer {
 .music-list-container {
     max-height: 300px;
     overflow-y: auto;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
     padding: 10px 15px;
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .music-list {
@@ -2459,6 +2464,7 @@ div#chatContainer {
     border-radius: 8px;
     padding: 0;
     margin: 0;
+    width: 100%;
 }
 
 .music-list-item {
@@ -2471,6 +2477,8 @@ div#chatContainer {
     align-items: center;
     background-color: #f7fafc;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .music-list-item:hover {
@@ -2485,12 +2493,18 @@ div#chatContainer {
 
 #musicPanel .song-info {
     flex: 1;
+    min-width: 0; /* Allow text to shrink */
+    overflow: hidden; /* Prevent long text from overflowing */
+    text-overflow: ellipsis; /* Show ellipsis for overflowing text */
 }
 
 #musicPanel .song-title {
     font-weight: 600;
     color: #2d3748;
     margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .music-list-item.playing .song-title,
@@ -2501,6 +2515,9 @@ div#chatContainer {
 #musicPanel .song-artist {
     font-size: 12px;
     color: #718096;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .song-duration {
@@ -2512,6 +2529,7 @@ div#chatContainer {
 .preview-controls {
     display: flex;
     align-items: center;
+    min-width: fit-content; /* Prevent shrinking below content size */
 }
 
 .preview-button {
@@ -2528,6 +2546,7 @@ div#chatContainer {
     color: #4776E6;
     margin-left: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    flex-shrink: 0; /* Prevent button from shrinking */
 }
 
 .preview-button:hover {
@@ -2542,6 +2561,7 @@ div#chatContainer {
     border-radius: 2px;
     margin-left: 10px;
     overflow: hidden;
+    flex-shrink: 0; /* Prevent progress bar from shrinking */
 }
 
 .preview-bar {
@@ -2580,6 +2600,7 @@ div#chatContainer {
     align-items: center;
     justify-content: center;
     transition: color 0.2s;
+    flex-shrink: 0; /* Prevent button from shrinking */
 }
 
 .action-button:hover {
