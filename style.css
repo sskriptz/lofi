@@ -2347,8 +2347,9 @@ div#chatContainer {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: none;
-    transition: all 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease ;
     z-index: 5001;
 }
 
@@ -2487,9 +2488,10 @@ div#chatContainer {
 }
 
 .music-list-item.playing {
-    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    background: linear-gradient(135deg, #A3D8F4 0%, #D4A5F3 100%);
     color: white;
 }
+
 
 #musicPanel .song-info {
     flex: 1;
