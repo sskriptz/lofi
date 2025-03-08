@@ -36,6 +36,37 @@ body {
     box-sizing: border-box;
 }
 
+/* Custom Right-Click Menu */
+/* .custom-menu {
+    display: none;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    min-width: 180px;
+    overflow: hidden;
+}
+
+.custom-menu .menu-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background 0.3s ease-in-out;
+    text-align: left;
+}
+
+.custom-menu .menu-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.custom-menu .menu-item:last-child {
+    border-bottom: none;
+} */
+
 body > div[id$="Gif"],
 body > .audio-player {
   width: 100%;
@@ -1175,6 +1206,22 @@ main {
     transform: scale(1.05);
 }
 
+#info-icon {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+#info-icon:hover {
+    transform: scale(1.05);
+}
 
 .sidebar {
     height: 100%;
@@ -1723,6 +1770,24 @@ main {
 }
 
 .hmBtnTooltip.show {
+    opacity: 1;
+}
+
+
+.infoIconTooltip {
+    position: absolute;
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.infoIconTooltip.show {
     opacity: 1;
 }
 
