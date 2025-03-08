@@ -2843,7 +2843,7 @@ loadFriends = async function() {
     
         // Position tooltip to the right of the hmMenuBtn
         let rect = hmMenuBtn.getBoundingClientRect();
-        tooltip.style.left = rect.right + window.scrollX + 5 + "px"; // 5px gap to the right
+        tooltip.style.right = rect.right + window.scrollX + 5 + "px"; // 5px gap to the right
         tooltip.style.top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2) + "px"; // Centered vertically
     
         setTimeout(() => {
