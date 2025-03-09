@@ -1,3 +1,6 @@
+import songs from './songs.js';
+
+
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyAwUAqTV07AahyfD55owmyAcxDG3TP_KnI",
@@ -2121,32 +2124,6 @@ loadFriends = async function() {
     
     
     // Audio player code
-
-    const songs = [
-        // { title: "CARNIVAL", artist: "Kanye West, Ty Dolla $ign", src: "https://www.dropbox.com/scl/fi/jdm2pc5i0z4tssbtf6t2c/12-Carnival.mp3?rlkey=n9ncc8egcnwes2a9bw5660dky&st=cn0g5e0o&raw=1" },
-        // { title: "BURN", artist: "Kanye West, Ty Dolla $ign", src: "https://www.dropbox.com/scl/fi/kptzdit2rgx87d1uizdzb/09-Burn.mp3?rlkey=ukc7xnuxbvr1epg27ps2dg5be&st=py6tbav3&raw=1" },
-        // { title: "Magnolia", artist: "Playboi Carti", src: "https://www.dropbox.com/scl/fi/91dvrw5bzro2p89fddcyf/spotifydown.com-Magnolia-Playboi-Carti.mp3?rlkey=z6zq0vva6dimgy39ywilvtuwf&st=3l1tw5pz&raw=1" },
-        // { title: "IDGAF", artist: "BoyWithUke, blackbear", src: "https://www.dropbox.com/scl/fi/5c858z7y3ouz8nqem6jxd/spotifydown.com-IDGAF-with-blackbear-BoyWithUke.mp3?rlkey=1fa4hysag7ggge2u6sh5nyawh&st=m0l0ao9o&raw=1" },
-        // { title: "Save Your Tears", artist: "The Weeknd", src: "https://www.dropbox.com/scl/fi/20acf6hqe3zrbb4ywg9v4/spotifydown.com-Save-Your-Tears-The-Weeknd.mp3?rlkey=klhtvkr7f4wwuzwnui1a2bwzi&st=edx0mba0&raw=1" },
-        // { title: "Kerosene", artist: "Crystal Castles", src: "https://www.dropbox.com/scl/fi/pssm1vnhnf6yfbkzuz9yf/spotifydown.com-Kerosene-Crystal-Castles.mp3?rlkey=xzbkqsfjxhq8eyrv91nbchiv3&st=05674r11&raw=1"},
-        // { title: "3D OUTRO", artist: "LUCKI", src: "https://www.dropbox.com/scl/fi/gh1o71q4315gzhof9l45l/spotifydown.com-3D-Outro-LUCKI.mp3?rlkey=bfrc47lgyt4d1y6w7mc1pfw2q&st=fndbxgh7&raw=1"},
-        // { title: "Diamonds (feat. Gunna)", artist: "Young Thug, Gunna", src: "https://www.dropbox.com/scl/fi/q0sexnbnjgssrwy6xqack/spotifydown.com-Diamonds-feat.-Gunna-Young-Thug.mp3?rlkey=x7v1rwuc3j5tu12xt7u0riwps&st=bdwwpevw&raw=1" },
-        // { title: "ILoveUIHateU", artist: "Playboi Carti", src: "https://www.dropbox.com/scl/fi/t0cypq0lvqe0xiehfhai4/spotifydown.com-ILoveUIHateU-Playboi-Carti.mp3?rlkey=6utr3gxwy2ggdhb9rxghxtm3e&st=cn00wqkv&raw=1" },
-        // { title: "New N3on", artist: "Playboi Carti", src: "https://www.dropbox.com/scl/fi/wi1sae8fogv4bgdk5ei8y/spotifydown.com-New-N3on-Playboi-Carti.mp3?rlkey=0qkhbb16iy1iqxep7jzfa32o6&st=ehj7wx21&raw=1" },
-        // { title: "Our Time", artist: "Lil Tecca", src: "https://www.dropbox.com/scl/fi/adiktphs5yqeweepi3p29/spotifydown.com-Our-Time-Lil-Tecca.mp3?rlkey=h521ror9j3s5asc9ewbcx5diw&st=p9xkgdnj&raw=1" },
-        // { title: "Gang Baby", artist: "NLE Choppa", src: "https://www.dropbox.com/scl/fi/yqxibbvz1b4a4edv7ojr0/spotifydown.com-Gang-Baby-NLE-Choppa.mp3?rlkey=pd51n0sxphvyi2ets34bnddjt&st=8enciim4&raw=1" },
-
-        { title: "223s ~ lofi", artist: "Closed on Sunday", src: "https://www.dropbox.com/s/5af7w8zt7md2fac/spotidownloader.com%20-%20223s%20~%20lofi%20-%20Closed%20on%20Sunday.mp3?st=djhweg8i&raw=1" },
-        { title: "My Head Hurts", artist: "strxwberrymilk", src: "https://www.dropbox.com/s/ikcftb7mvkthcap/spotidownloader.com%20-%20My%20Head%20Hurts%20-%20strxwberrymilk.mp3?st=ydqrb6d0&raw=1" },
-        { title: "snowfall", artist: "Øneheart, reidenshi", src: "https://www.dropbox.com/s/d148hu4csuk8itr/spotidownloader.com%20-%20snowfall%20-%20%C3%98neheart.mp3?st=c0gdkay5&raw=1" },
-        { title: "Onion", artist: "Lukrembo", src: "https://www.dropbox.com/s/sz88kxu4nfhs8op/spotidownloader.com%20-%20Onion%20-%20Lukrembo.mp3?st=t7fw7j7m&raw=1" },
-        { title: "The Perfect Girl", artist: "Mareux, The Motion", src: "https://www.dropbox.com/s/1o8e4qtz7gqy7fm/spotidownloader.com%20-%20The%20Perfect%20Girl%20-%20The%20Motion%20Retrowave%20Remix%20-%20Mareux.mp3?st=h7lglels&raw=1" },
-        { title: "Resonance", artist: "Home", src: "https://www.dropbox.com/s/ituxeb5x0ycy5ia/spotidownloader.com%20-%20Resonance%20-%20Home.mp3?st=fvj4k3jf&raw=1" },
-        { title: "Horizons", artist: "Scott Buckley", src: "https://www.dropbox.com/s/sx0eyv4rn3tjtlo/spotidownloader.com%20-%20Horizons%20-%20Scott%20Buckley.mp3?st=j47w7n2u&raw=1" },
-        { title: "Aria Math", artist: "C418", src: "https://www.dropbox.com/s/71npzaqei68woi7/spotidownloader.com%20-%20Aria%20Math%20-%20C418.mp3?st=psq1h1bo&raw=1" },
-        { title: "Sahara", artist: "Hensonn", src: "https://www.dropbox.com/s/wuhctp0n48n2qw0/spotidownloader.com%20-%20Sahara%20-%20Hensonn.mp3?st=jr2996aw&raw=1" },
-        { title: "Memory Reboot - Slowed", artist: "VØJ, Narvent", src: "https://www.dropbox.com/s/a4d8877gjcn8wli/spotidownloader.com%20-%20Memory%20Reboot%20-%20Slowed%20-%20V%C3%98J.mp3?st=0kz25s2i&raw=1" },
-    ];
     
     let currentSongIndex = null;
     let isAutoplayEnabled = true;
@@ -2675,7 +2652,7 @@ loadFriends = async function() {
         applyCurrentFilter();
     }
 
-    function startPreviewProgressUpdate(previewBar) {
+    function startPreviewProgressUpdate() {
         // Clear any existing timers
         if (previewTimer) {
             clearInterval(previewTimer);
@@ -2688,8 +2665,27 @@ loadFriends = async function() {
             const elapsed = Date.now() - startTime;
             const progress = Math.min((elapsed / previewDuration) * 100, 100);
             
-            if (previewBar) {
-                previewBar.style.width = `${progress}%`;
+            // Find all progress bars for this song in all views
+            if (currentPreviewIndex !== -1) {
+                // Find in standard view
+                const mainViewBar = document.getElementById(`preview-bar-${currentPreviewIndex}`);
+                if (mainViewBar) {
+                    mainViewBar.style.width = `${progress}%`;
+                }
+                
+                // Get the song title
+                const currentSong = songs[currentPreviewIndex]?.title;
+                if (currentSong) {
+                    // Find progress bars in playlist view by song title attribute
+                    document.querySelectorAll(`.music-list-item[data-song-title="${currentSong}"] .preview-bar`).forEach(bar => {
+                        bar.style.width = `${progress}%`;
+                    });
+                    
+                    // For playlist views, we need to check by looking at data attributes
+                    document.querySelectorAll(`.music-list-item[data-index="${currentPreviewIndex}"] .preview-bar`).forEach(bar => {
+                        bar.style.width = `${progress}%`;
+                    });
+                }
             }
             
             // Stop preview after duration
@@ -2715,7 +2711,6 @@ loadFriends = async function() {
     function handlePreviewClick(e) {
         const index = parseInt(e.currentTarget.dataset.index);
         const song = songs[index];
-        const previewBar = document.getElementById(`preview-bar-${index}`);
         
         // If clicking the currently playing song, pause it
         if (currentPreviewIndex === index && !audioPreview.paused) {
@@ -2748,8 +2743,8 @@ loadFriends = async function() {
         // Update current preview index
         currentPreviewIndex = index;
         
-        // Start new preview - Modified to improve loading
-        startPreview(song, previewBar);
+        // Start new preview - now we'll collect all progress bars in the startPreview function
+        startPreview(song);
         
         // Update button to show pause icon
         const playButton = e.currentTarget;
@@ -2767,7 +2762,7 @@ loadFriends = async function() {
         addToRecentlyPlayed(song.title);
     }
 
-    function startPreview(song, previewBar) {
+    function startPreview(song) {
         // Set audio source
         audioPreview.src = song.src || "https://example.com/audio/demo.mp3"; // Fallback URL if needed
         
@@ -2791,13 +2786,13 @@ loadFriends = async function() {
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
                     // Playback started successfully
-                    startPreviewProgressUpdate(previewBar);
+                    startPreviewProgressUpdate();
                 }).catch(error => {
                     console.error("Playback error:", error);
                     // Try once more with a delay
                     setTimeout(() => {
                         audioPreview.play()
-                            .then(() => startPreviewProgressUpdate(previewBar))
+                            .then(() => startPreviewProgressUpdate())
                             .catch(err => console.error("Second attempt failed:", err));
                     }, 300);
                 });
@@ -2809,7 +2804,7 @@ loadFriends = async function() {
                 try {
                     audioPreview.currentTime = randomStart;
                     audioPreview.play();
-                    startPreviewProgressUpdate(previewBar);
+                    startPreviewProgressUpdate();
                 } catch (e) {
                     console.error("Error in canplaythrough:", e);
                     stopCurrentPreview();
@@ -2932,10 +2927,971 @@ loadFriends = async function() {
         }
     }
 
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            // Add active class to the clicked tab button
+            button.classList.add('active');
+
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+            // Show the corresponding tab content
+            const tabContent = document.getElementById(button.getAttribute('data-tab'));
+            if (tabContent) {
+                tabContent.style.display = 'block';
+            }
+        });
+    });
+
+    // Add this to your existing JavaScript file
+
+// Add event listener for the My Favorites button
+document.querySelector('.my-favorites-openBtn').addEventListener('click', function() {
+    showFavoritesList();
+});
+
+// Function to reattach event listeners after HTML restoration
+function reattachLibraryEventListeners() {
+    // Reattach event listeners for favorites button
+    const favoritesBtn = document.querySelector('.my-favorites-openBtn');
+    if (favoritesBtn) {
+        favoritesBtn.addEventListener('click', function() {
+            showFavoritesList();
+        });
+    }
+    
+    // Reattach event listeners for create playlist button
+    const createPlaylistBtn = document.querySelector('.create-playlist-btn');
+    if (createPlaylistBtn) {
+        createPlaylistBtn.addEventListener('click', function() {
+            showCreatePlaylistDialog();
+        });
+    }
+    
+    // Reattach playlist item click listeners
+    document.querySelectorAll('.playlist-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (!e.target.closest('.playlist-actions')) {
+                const playlistId = parseInt(this.dataset.playlistId);
+                openPlaylist(playlistId);
+            }
+        });
+    });
+    
+    // Reattach edit and delete button listeners
+    document.querySelectorAll('.edit-playlist').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const playlistId = parseInt(this.dataset.playlistId);
+            showEditPlaylistDialog(playlistId);
+        });
+    });
+    
+    document.querySelectorAll('.delete-playlist').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const playlistId = parseInt(this.dataset.playlistId);
+            showDeletePlaylistConfirmation(playlistId);
+        });
+    });
+}
+
+// Function to display the user's favorite songs (Spotify style)
+function showFavoritesList() {
+    const myLibraryContainer = document.querySelector('.my-library-container');
+    
+    // Store the original content to be restored
+    if (!myLibraryContainer.getAttribute('data-original-content')) {
+        myLibraryContainer.setAttribute('data-original-content', myLibraryContainer.innerHTML);
+    }
+    
+    // Clear the container
+    myLibraryContainer.innerHTML = '';
+    
+    // Create breadcrumb navigation
+    const breadcrumb = document.createElement('div');
+    breadcrumb.className = 'library-breadcrumb';
+    breadcrumb.innerHTML = `
+        <span class="breadcrumb-item" data-action="back-to-library">My Library</span>
+        <span class="breadcrumb-separator">></span>
+        <span class="breadcrumb-item active">My Favorites</span>
+    `;
+    myLibraryContainer.appendChild(breadcrumb);
+    
+    // Add back button functionality
+    breadcrumb.querySelector('[data-action="back-to-library"]').addEventListener('click', function() {
+        // Don't call updateMyLibraryTab() directly as it rebuilds everything
+        // Instead, restore the previous state if available, or rebuild if needed
+        if (myLibraryContainer.getAttribute('data-original-content')) {
+            myLibraryContainer.innerHTML = myLibraryContainer.getAttribute('data-original-content');
+            // Reattach event listeners after restoring HTML
+            reattachLibraryEventListeners();
+        } else {
+            updateMyLibraryTab();
+        }
+    });
+    
+    // Create favorites header
+    const favoritesHeader = document.createElement('div');
+    favoritesHeader.className = 'favorites-header';
+    favoritesHeader.innerHTML = `
+        <h2>My Favorite Songs</h2>
+        <div class="favorites-stats">${favorites.length} songs</div>
+    `;
+    myLibraryContainer.appendChild(favoritesHeader);
+    
+    // Create list container
+    const favoritesListContainer = document.createElement('div');
+    favoritesListContainer.className = 'favorites-content';
+    
+    // Create the actual list
+    const favoritesListEl = document.createElement('ul');
+    favoritesListEl.className = 'music-list favorites-list';
+    
+    // Filter songs to only include favorites
+    const favoriteSongs = songs.filter(song => favorites.includes(song.title));
+    
+    // Check if there are any favorites
+    if (favoriteSongs.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'empty-favorites';
+        emptyMessage.innerHTML = `
+            <div class="empty-icon">💔</div>
+            <p>You haven't added any favorites yet</p>
+            <p>Go to Discover tab and click ♡ on songs you like</p>
+        `;
+        favoritesListContainer.appendChild(emptyMessage);
+    } else {
+        // Add each favorite song to the list
+        favoriteSongs.forEach((song, index) => {
+            const listItem = document.createElement('li');
+            listItem.className = 'music-list-item';
+            listItem.dataset.index = songs.findIndex(s => s.title === song.title); // Original index in full songs array
+            listItem.dataset.songTitle = song.title;
+            
+            // Check if this song is currently playing
+            const songIndex = songs.findIndex(s => s.title === song.title);
+            const isPlaying = songIndex === currentPreviewIndex && !audioPreview.paused;
+            
+            if (isPlaying) {
+                listItem.classList.add('playing');
+            }
+            
+            listItem.innerHTML = `
+                <div class="song-info">
+                    <div class="song-title">${song.title}</div>
+                    <div class="song-artist">${song.artist}</div>
+                </div>
+                <div class="preview-controls">
+                    <div class="preview-progress">
+                        <div class="preview-bar" id="preview-bar-fav-${index}"></div>
+                    </div>
+                    <button class="preview-button tooltip" data-tooltip="${isPlaying ? 'Pause' : 'Preview'}" data-index="${songIndex}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            ${isPlaying ? 
+                                `<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>` : 
+                                `<polygon points="5 3 19 12 5 21 5 3"></polygon>`
+                            }
+                        </svg>
+                    </button>
+                    <button class="action-button tooltip" data-tooltip="Remove from favorites" data-action="favorite" data-song="${song.title}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            favoritesListEl.appendChild(listItem);
+        });
+    }
+    
+    favoritesListContainer.appendChild(favoritesListEl);
+    myLibraryContainer.appendChild(favoritesListContainer);
+    
+    // Add event listeners to preview buttons
+    const previewButtons = myLibraryContainer.querySelectorAll('.preview-button');
+    previewButtons.forEach(button => {
+        button.addEventListener('click', handlePreviewClick);
+    });
+    
+    // Add event listeners to favorite buttons
+    const favoriteButtons = myLibraryContainer.querySelectorAll('[data-action="favorite"]');
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            handleFavoriteClick(e);
+            // After removing from favorites, check if we need to remove this item from the list
+            setTimeout(() => {
+                if (!favorites.includes(e.currentTarget.dataset.song)) {
+                    const itemToRemove = e.currentTarget.closest('.music-list-item');
+                    if (itemToRemove) {
+                        itemToRemove.style.transition = 'opacity 0.3s, transform 0.3s';
+                        itemToRemove.style.opacity = '0';
+                        itemToRemove.style.transform = 'translateX(20px)';
+                        
+                        setTimeout(() => {
+                            itemToRemove.remove();
+                            // If that was the last item, show empty message
+                            if (favoritesListEl.children.length === 0) {
+                                // Update the favorites stats to show 0 songs
+                                document.querySelector('.favorites-stats').textContent = '0 songs';
+                                
+                                // Show empty state
+                                const emptyMessage = document.createElement('div');
+                                emptyMessage.className = 'empty-favorites';
+                                emptyMessage.innerHTML = `
+                                    <div class="empty-icon">💔</div>
+                                    <p>You haven't added any favorites yet</p>
+                                    <p>Go to Discover tab and click ♡ on songs you like</p>
+                                `;
+                                favoritesListContainer.innerHTML = '';
+                                favoritesListContainer.appendChild(emptyMessage);
+                            } else {
+                                // Update the favorites stats count
+                                document.querySelector('.favorites-stats').textContent = 
+                                    `${favoritesListEl.children.length} songs`;
+                            }
+                        }, 300);
+                    }
+                }
+            }, 100);
+        });
+    });
+}
+
+
+
+// Initialize playlists array and current selected playlist
+let userPlaylists = [];
+let currentPlaylist = null;
+
+// Function to initialize playlists from Firebase or local storage
+async function initializePlaylists() {
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    try {
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+        
+        if (userData && userData.playlists) {
+            userPlaylists = userData.playlists;
+        } else {
+            // Default empty playlists array
+            userPlaylists = [];
+            // Save to Firebase
+            await updateUserData('playlists', userPlaylists);
+        }
+    } catch (error) {
+        console.error("Error fetching playlists:", error);
+        userPlaylists = [];
+    }
+    
+    // Update the My Library tab to show playlists section
+    updatePlaylistsSection();
+}
+
+// Update the My Library tab to include playlists
+function updateMyLibraryTab() {
+    const myLibraryContainer = document.querySelector('.my-library-container');
+    
+    // Clear existing content
+    myLibraryContainer.innerHTML = '';
+    
+    // Create sections container
+    const sectionsContainer = document.createElement('div');
+    sectionsContainer.className = 'library-sections';
+    
+    // Add Favorites section
+    const favoritesSection = document.createElement('div');
+    favoritesSection.className = 'library-section my-favorites-ml-container';
+    favoritesSection.innerHTML = `
+        <div class="my-favorites-openBtn">♡</div>
+        <h4>My Favorites</h4>
+    `;
+    sectionsContainer.appendChild(favoritesSection);
+    
+    // Add Playlists section
+    const playlistsSection = document.createElement('div');
+    playlistsSection.className = 'library-section playlists-section';
+    playlistsSection.innerHTML = `
+        <div class="playlist-section-header">
+            <button class="create-playlist-btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/3303/3303893.png">
+            </button>
+        </div>
+        <div class="playlists-container"></div>
+    `;
+    sectionsContainer.appendChild(playlistsSection);
+    
+    myLibraryContainer.appendChild(sectionsContainer);
+    
+    // Attach event listeners
+    document.querySelector('.my-favorites-openBtn').addEventListener('click', function() {
+        showFavoritesList();
+    });
+    
+    document.querySelector('.create-playlist-btn').addEventListener('click', function() {
+        showCreatePlaylistDialog();
+    });
+    
+    // Update playlists section
+    updatePlaylistsSection();
+}
+
+// Update the playlists section with current playlists
+function updatePlaylistsSection() {
+    const playlistsContainer = document.querySelector('.playlists-container');
+    if (!playlistsContainer) return;
+    
+    playlistsContainer.innerHTML = '';
+    
+    if (userPlaylists.length === 0) {
+        // Show empty state
+        const emptyPlaylists = document.createElement('div');
+        emptyPlaylists.className = 'empty-playlists';
+        emptyPlaylists.innerHTML = `
+            <p>No playlists yet. Create your first playlist!</p>
+        `;
+        playlistsContainer.appendChild(emptyPlaylists);
+        return;
+    }
+    
+    // Create playlist list
+    const playlistList = document.createElement('ul');
+    playlistList.className = 'playlists-list';
+    
+    userPlaylists.forEach((playlist, index) => {
+        const playlistItem = document.createElement('li');
+        playlistItem.className = 'playlist-item';
+        playlistItem.dataset.playlistId = index;
+        
+        const songCount = playlist.songs.length;
+        
+        playlistItem.innerHTML = `
+            <div class="playlist-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+            </div>
+            <div class="playlist-info">
+                <div class="playlist-name">${playlist.name}</div>
+                <div class="playlist-count">${songCount} ${songCount === 1 ? 'song' : 'songs'}</div>
+            </div>
+            <div class="playlist-actions">
+                <button class="playlist-action-btn edit-playlist" data-playlist-id="${index}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <button class="playlist-action-btn delete-playlist" data-playlist-id="${index}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        playlistList.appendChild(playlistItem);
+    });
+    
+    playlistsContainer.appendChild(playlistList);
+    
+    // Attach event listeners to playlist items
+    document.querySelectorAll('.playlist-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Only open playlist if not clicking on action buttons
+            if (!e.target.closest('.playlist-actions')) {
+                const playlistId = parseInt(this.dataset.playlistId);
+                openPlaylist(playlistId);
+            }
+        });
+    });
+    
+    // Attach event listeners to edit and delete buttons
+    document.querySelectorAll('.edit-playlist').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const playlistId = parseInt(this.dataset.playlistId);
+            showEditPlaylistDialog(playlistId);
+        });
+    });
+    
+    document.querySelectorAll('.delete-playlist').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const playlistId = parseInt(this.dataset.playlistId);
+            showDeletePlaylistConfirmation(playlistId);
+        });
+    });
+}
+
+// Show create playlist dialog
+function showCreatePlaylistDialog() {
+    // Create modal overlay
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    modalContent.innerHTML = `
+        <div class="modal-header">
+            <h3>Create New Playlist</h3>
+            <button class="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="playlist-name">Playlist Name</label>
+                <input type="text" id="playlist-name" placeholder="My Awesome Playlist">
+            </div>
+            <div class="form-group">
+                <label for="playlist-description">Description (optional)</label>
+                <textarea id="playlist-description" placeholder="Describe your playlist..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-cancel">Cancel</button>
+            <button class="modal-create">Create Playlist</button>
+        </div>
+    `;
+    
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+    
+    // Focus the name input
+    setTimeout(() => {
+        document.getElementById('playlist-name').focus();
+    }, 100);
+    
+    // Event listeners
+    modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    modalOverlay.querySelector('.modal-cancel').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    modalOverlay.querySelector('.modal-create').addEventListener('click', async () => {
+        const name = document.getElementById('playlist-name').value.trim();
+        const description = document.getElementById('playlist-description').value.trim();
+        
+        if (!name) {
+            alert('Please enter a playlist name');
+            return;
+        }
+        
+        // Create new playlist
+        const newPlaylist = {
+            name: name,
+            description: description,
+            songs: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        
+        userPlaylists.push(newPlaylist);
+        
+        // Save to Firebase
+        await updateUserData('playlists', userPlaylists);
+        
+        // Update UI
+        updatePlaylistsSection();
+        
+        // Remove modal
+        modalOverlay.remove();
+        
+        // Open the new playlist
+        openPlaylist(userPlaylists.length - 1);
+    });
+}
+
+// Show edit playlist dialog
+function showEditPlaylistDialog(playlistId) {
+    const playlist = userPlaylists[playlistId];
+    if (!playlist) return;
+    
+    // Create modal overlay
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    modalContent.innerHTML = `
+        <div class="modal-header">
+            <h3>Edit Playlist</h3>
+            <button class="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="playlist-name">Playlist Name</label>
+                <input type="text" id="playlist-name" value="${playlist.name}" placeholder="My Awesome Playlist">
+            </div>
+            <div class="form-group">
+                <label for="playlist-description">Description (optional)</label>
+                <textarea id="playlist-description" placeholder="Describe your playlist...">${playlist.description || ''}</textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-cancel">Cancel</button>
+            <button class="modal-save">Save Changes</button>
+        </div>
+    `;
+    
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+    
+    // Focus the name input
+    setTimeout(() => {
+        document.getElementById('playlist-name').focus();
+    }, 100);
+    
+    // Event listeners
+    modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    modalOverlay.querySelector('.modal-cancel').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    modalOverlay.querySelector('.modal-save').addEventListener('click', async () => {
+        const name = document.getElementById('playlist-name').value.trim();
+        const description = document.getElementById('playlist-description').value.trim();
+        
+        if (!name) {
+            alert('Please enter a playlist name');
+            return;
+        }
+        
+        // Update playlist
+        userPlaylists[playlistId].name = name;
+        userPlaylists[playlistId].description = description;
+        userPlaylists[playlistId].updatedAt = new Date().toISOString();
+        
+        // Save to Firebase
+        await updateUserData('playlists', userPlaylists);
+        
+        // Update UI
+        updatePlaylistsSection();
+        
+        // If currently viewing this playlist, update the view
+        if (currentPlaylist === playlistId) {
+            openPlaylist(playlistId);
+        }
+        
+        // Remove modal
+        modalOverlay.remove();
+    });
+}
+
+// Show delete playlist confirmation
+function showDeletePlaylistConfirmation(playlistId) {
+    const playlist = userPlaylists[playlistId];
+    if (!playlist) return;
+    
+    // Create modal overlay
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    modalContent.innerHTML = `
+        <div class="modal-header">
+            <h3>Delete Playlist</h3>
+            <button class="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete "${playlist.name}"?</p>
+            <p>This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-cancel">Cancel</button>
+            <button class="modal-delete">Delete Playlist</button>
+        </div>
+    `;
+    
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+    
+    // Event listeners
+    modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    modalOverlay.querySelector('.modal-cancel').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    modalOverlay.querySelector('.modal-delete').addEventListener('click', async () => {
+        // Remove playlist
+        userPlaylists.splice(playlistId, 1);
+        
+        // Save to Firebase
+        await updateUserData('playlists', userPlaylists);
+        
+        // Update UI
+        updatePlaylistsSection();
+        
+        // If currently viewing this playlist, go back to library
+        if (currentPlaylist === playlistId) {
+            updateMyLibraryTab();
+        }
+        
+        // Remove modal
+        modalOverlay.remove();
+    });
+}
+
+// Open a playlist to view/play songs
+function openPlaylist(playlistId) {
+    const playlist = userPlaylists[playlistId];
+    if (!playlist) return;
+    
+    currentPlaylist = playlistId;
+    
+    // Get the my-library container
+    const myLibraryContainer = document.querySelector('.my-library-container');
+    
+    // Store the original content to be restored
+    if (!myLibraryContainer.getAttribute('data-original-content')) {
+        myLibraryContainer.setAttribute('data-original-content', myLibraryContainer.innerHTML);
+    }
+    
+    // Clear everything in the my-library container
+    myLibraryContainer.innerHTML = '';
+    
+    // Create breadcrumb navigation
+    const breadcrumb = document.createElement('div');
+    breadcrumb.className = 'library-breadcrumb';
+    breadcrumb.innerHTML = `
+        <span class="breadcrumb-item" data-action="back-to-library">My Library</span>
+        <span class="breadcrumb-separator">></span>
+        <span class="breadcrumb-item active">${playlist.name}</span>
+    `;
+    myLibraryContainer.appendChild(breadcrumb);
+    
+    // Add back button functionality
+    breadcrumb.querySelector('[data-action="back-to-library"]').addEventListener('click', function() {
+        if (myLibraryContainer.getAttribute('data-original-content')) {
+            myLibraryContainer.innerHTML = myLibraryContainer.getAttribute('data-original-content');
+            // Reattach event listeners after restoring HTML
+            reattachLibraryEventListeners();
+        } else {
+            updateMyLibraryTab();
+        }
+    });
+    
+    // Create playlist header
+    const playlistHeader = document.createElement('div');
+    playlistHeader.className = 'playlist-view-header';
+    
+    playlistHeader.innerHTML = `
+        <div class="playlist-view-info">
+            <div class="playlist-view-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+            </div>
+            <div>
+                <h2>${playlist.name}</h2>
+                ${playlist.description ? `<p class="playlist-description">${playlist.description}</p>` : ''}
+                <div class="playlist-stats">${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}</div>
+            </div>
+        </div>
+        <div class="playlist-controls">
+            <button class="add-to-playlist-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Add Songs
+            </button>
+        </div>
+    `;
+    
+    myLibraryContainer.appendChild(playlistHeader);
+    
+    // Create songs container
+    const songsContainer = document.createElement('div');
+    songsContainer.className = 'playlist-songs-container';
+    
+    // Check if playlist has songs
+    if (playlist.songs.length === 0) {
+        // Empty state
+        songsContainer.innerHTML = `
+            <div class="empty-playlist">
+                <div class="empty-icon">🎵</div>
+                <p>This playlist is empty</p>
+                <p>Click "Add Songs" to start building your playlist</p>
+            </div>
+        `;
+    } else {
+        // Create list of songs
+        const songsList = document.createElement('ul');
+        songsList.className = 'music-list playlist-songs-list';
+        
+        // Get the songs that are in this playlist
+        const playlistSongs = playlist.songs.map(songTitle => {
+            return songs.find(song => song.title === songTitle);
+        }).filter(song => song); // Filter out any undefined songs (in case songs were removed from the library)
+        
+        playlistSongs.forEach((song, index) => {
+            const songIndex = songs.findIndex(s => s.title === song.title);
+            const isPlaying = songIndex === currentPreviewIndex && !audioPreview.paused;
+            
+            const listItem = document.createElement('li');
+            listItem.className = 'music-list-item';
+            listItem.dataset.index = songIndex;
+            listItem.dataset.songTitle = song.title;
+            
+            if (isPlaying) {
+                listItem.classList.add('playing');
+            }
+            
+            listItem.innerHTML = `
+                <div class="song-info">
+                    <div class="song-number">${index + 1}</div>
+                    <div class="song-details">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">${song.artist}</div>
+                    </div>
+                </div>
+                <div class="preview-controls">
+                    <div class="preview-progress">
+                        <div class="preview-bar" id="preview-bar-playlist-${index}"></div>
+                    </div>
+                    <button class="preview-button tooltip" data-tooltip="${isPlaying ? 'Pause' : 'Preview'}" data-index="${songIndex}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            ${isPlaying ? 
+                                `<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>` : 
+                                `<polygon points="5 3 19 12 5 21 5 3"></polygon>`
+                            }
+                        </svg>
+                    </button>
+                    <button class="action-button tooltip" data-tooltip="Remove from playlist" data-action="remove-from-playlist" data-song="${song.title}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            songsList.appendChild(listItem);
+        });
+        
+        songsContainer.appendChild(songsList);
+    }
+    
+    myLibraryContainer.appendChild(songsContainer);
+    
+    // Add event listeners
+    
+    // Add Songs button
+    const addToPlaylistBtn = myLibraryContainer.querySelector('.add-to-playlist-btn');
+    if (addToPlaylistBtn) {
+        addToPlaylistBtn.addEventListener('click', function() {
+            showAddSongsToPlaylistDialog(playlistId);
+        });
+    }
+    
+    // Preview buttons
+    const previewButtons = myLibraryContainer.querySelectorAll('.preview-button');
+    previewButtons.forEach(button => {
+        button.addEventListener('click', handlePreviewClick);
+    });
+    
+    // Remove from playlist buttons
+    const removeButtons = myLibraryContainer.querySelectorAll('[data-action="remove-from-playlist"]');
+    removeButtons.forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.stopPropagation();
+            const songTitle = this.dataset.song;
+            
+            // Remove song from playlist
+            const songIndex = userPlaylists[playlistId].songs.indexOf(songTitle);
+            if (songIndex !== -1) {
+                userPlaylists[playlistId].songs.splice(songIndex, 1);
+                
+                // Update updatedAt timestamp
+                userPlaylists[playlistId].updatedAt = new Date().toISOString();
+                
+                // Save to Firebase
+                await updateUserData('playlists', userPlaylists);
+                
+                // Animate removal
+                const itemToRemove = this.closest('.music-list-item');
+                if (itemToRemove) {
+                    itemToRemove.style.transition = 'opacity 0.3s, transform 0.3s';
+                    itemToRemove.style.opacity = '0';
+                    itemToRemove.style.transform = 'translateX(20px)';
+                    
+                    setTimeout(() => {
+                        // Refresh playlist view
+                        openPlaylist(playlistId);
+                    }, 300);
+                }
+            }
+        });
+    });
+}
+
+// Show dialog to add songs to a playlist
+function showAddSongsToPlaylistDialog(playlistId) {
+    const playlist = userPlaylists[playlistId];
+    if (!playlist) return;
+    
+    // Create modal overlay
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content add-songs-modal';
+    
+    // Get songs that are not already in the playlist
+    const availableSongs = songs.filter(song => !playlist.songs.includes(song.title));
+    
+    modalContent.innerHTML = `
+        <div class="modal-header">
+            <h3>Add Songs to "${playlist.name}"</h3>
+            <button class="modal-close">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="search-container">
+                <input type="text" id="add-songs-search" placeholder="Search songs...">
+                <div class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+            </div>
+            <div class="add-songs-list-container">
+                ${availableSongs.length === 0 ? 
+                    `<div class="empty-results">
+                        <div class="empty-icon">🎵</div>
+                        <div>No songs available to add</div>
+                    </div>` :
+                    `<ul class="add-songs-list">
+                        ${availableSongs.map(song => `
+                            <li class="add-song-item" data-song="${song.title}">
+                                <div class="song-info">
+                                    <div class="song-title">${song.title}</div>
+                                    <div class="song-artist">${song.artist}</div>
+                                </div>
+                                <div class="add-song-checkbox">
+                                    <input type="checkbox" id="song-${song.title.replace(/\s+/g, '-')}" class="song-checkbox">
+                                    <label for="song-${song.title.replace(/\s+/g, '-')}"></label>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>`
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-cancel">Cancel</button>
+            <button class="modal-add-selected">Add Selected</button>
+        </div>
+    `;
+    
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+    
+    // Event listeners
+    modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    modalOverlay.querySelector('.modal-cancel').addEventListener('click', () => {
+        modalOverlay.remove();
+    });
+    
+    // Search functionality
+    const searchInput = modalOverlay.querySelector('#add-songs-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const songItems = modalOverlay.querySelectorAll('.add-song-item');
+            
+            songItems.forEach(item => {
+                const songTitle = item.querySelector('.song-title').textContent.toLowerCase();
+                const songArtist = item.querySelector('.song-artist').textContent.toLowerCase();
+                
+                if (songTitle.includes(searchTerm) || songArtist.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Add selected songs
+    modalOverlay.querySelector('.modal-add-selected').addEventListener('click', async () => {
+        const selectedSongs = [];
+        
+        modalOverlay.querySelectorAll('.song-checkbox:checked').forEach(checkbox => {
+            const songItem = checkbox.closest('.add-song-item');
+            if (songItem) {
+                selectedSongs.push(songItem.dataset.song);
+            }
+        });
+        
+        if (selectedSongs.length === 0) {
+            alert('Please select at least one song to add');
+            return;
+        }
+        
+        // Add songs to playlist
+        userPlaylists[playlistId].songs = [...userPlaylists[playlistId].songs, ...selectedSongs];
+        
+        // Update updatedAt timestamp
+        userPlaylists[playlistId].updatedAt = new Date().toISOString();
+        
+        // Save to Firebase
+        await updateUserData('playlists', userPlaylists);
+        
+        // Refresh playlist view
+        openPlaylist(playlistId);
+        
+        // Remove modal
+        modalOverlay.remove();
+    });
+    
+    // Make song items clickable to toggle checkboxes
+    const songItems = modalOverlay.querySelectorAll('.add-song-item');
+    songItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Don't trigger if clicking directly on the checkbox
+            if (e.target.type !== 'checkbox') {
+                const checkbox = this.querySelector('.song-checkbox');
+                checkbox.checked = !checkbox.checked;
+            }
+        });
+    });
+}
+
+
+    
     // Check if user is authenticated
     auth.onAuthStateChanged(user => {
         if (user) {
             initializeMusicList();
+            initializePlaylists();
+            updateMyLibraryTab();
         } else {
             // Handle not logged in state - could load defaults or show login prompt
             console.log("User not logged in");
