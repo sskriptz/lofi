@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-app-compat.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-auth-compat.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-firestore-compat.min.js"></script>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/L57zM3xW/headphones.png">
 
@@ -184,23 +184,33 @@
 
 
     <!-- Modern Music Panel HTML Structure -->
-    <div id="musicPanel">
-        <!-- Panel Header -->
-        <div class="panel-header">
-            <div class="panel-title">Find New Tracks</div>
-            <div class="now-playing">
-                <span id="currentSongTitle">Select a track to preview</span>
-            </div>
-            <div class="equalizer" id="equalizer">
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-            </div>
+<div id="musicPanel">
+    <!-- Panel Header -->
+    <div class="panel-header">
+        <div class="panel-title">TCZ ~ Music Library 🎵</div>
+        <div class="now-playing">
+            <span id="currentSongTitle">Select a track to preview</span>
         </div>
+        <div class="equalizer" id="equalizer">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+        </div>
+    </div>
 
-        <!-- Search Bar -->
+    <!-- Tab Container -->
+    <div class="tab-container">
+        <button class="tab-button active" data-tab="discover">Discover ✨</button>
+        <button class="tab-button" data-tab="library">Artists 🧑‍🎤</button>
+        <button class="tab-button" data-tab="my-library">My Library 📚</button>
+        <button class="tab-button" data-tab="settings">Settings ⚙️</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="discover">
+            <!-- Search Bar -->
         <div class="search-container">
             <input type="text" id="searchBar" placeholder="Search music...">
             <div class="search-icon">
@@ -224,32 +234,50 @@
                 <!-- Songs will be dynamically populated here by JavaScript -->
             </ul>
         </div>
+    </div>
+    
+    <div class="tab-content" id="library" style="display: none;">
+        <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
+    </div>
 
-        <!-- Player Footer -->
-        <div class="player-footer">
-            <div class="now-preview">Preview: 15 seconds</div>
-            <!-- <div class="action-buttons">
-                <button class="action-button tooltip" data-tooltip="Share">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="18" cy="5" r="3"></circle>
-                        <circle cx="6" cy="12" r="3"></circle>
-                        <circle cx="18" cy="19" r="3"></circle>
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                    </svg>
-                </button>
-                <button class="action-button tooltip" data-tooltip="More options">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="1"></circle>
-                        <circle cx="19" cy="12" r="1"></circle>
-                        <circle cx="5" cy="12" r="1"></circle>
-                    </svg>
-                </button>
-            </div> -->
+    <div class="tab-content" id="my-library" style="display: none;">
+        <div class="my-library-container">
+            <div class="my-favorites-ml-container">
+                <div class="my-favorites-openBtn">♡</div>
+                <h4>My Favorites</h4>
+            </div>
         </div>
     </div>
 
-    <div id="musicPanelOverlay"></div>
+    <div class="tab-content" id="settings" style="display: none;">
+        <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
+    </div>
+
+    <!-- Player Footer -->
+    <div class="player-footer">
+        <div class="now-preview">Preview: 15 seconds</div>
+        <div class="action-buttons">
+            <button class="action-button tooltip" data-tooltip="Share">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            </button>
+            <button class="action-button tooltip" data-tooltip="More options">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="19" cy="12" r="1"></circle>
+                    <circle cx="5" cy="12" r="1"></circle>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="musicPanelOverlay"></div>
 
 
     <main id="main-legacy">
