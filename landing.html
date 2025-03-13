@@ -58,6 +58,7 @@
         <a href="javascript:void(0)" class="closeBtn" id="closeBtn">×</a>
         <a id="profile-sp-btn">Profile 👤</a>
         <a href="#" id="friends-sp-btn">Friends 👥</a>
+        <a href="#" id="community-sp-btn">Community 🌎</a>
         <a href="#" id="games-sp-btn">Games 🎮</a>
         <a href="#" id="music-sp-btn">Music 🎵</a>
         <a href="#" id="appearance-sp-btn">Appearance 🎨</a>
@@ -184,100 +185,238 @@
 
 
     <!-- Modern Music Panel HTML Structure -->
-<div id="musicPanel">
-    <!-- Panel Header -->
-    <div class="panel-header">
-        <div class="panel-title">TCZ ~ Music Library 🎵</div>
-        <div class="now-playing">
-            <span id="currentSongTitle">Select a track to preview</span>
-        </div>
-        <div class="equalizer" id="equalizer">
-            <div class="eq-bar"></div>
-            <div class="eq-bar"></div>
-            <div class="eq-bar"></div>
-            <div class="eq-bar"></div>
-            <div class="eq-bar"></div>
-        </div>
-    </div>
-
-    <!-- Tab Container -->
-    <div class="tab-container">
-        <button class="tab-button active" data-tab="discover">Discover ✨</button>
-        <button class="tab-button" data-tab="library">Artists 🧑‍🎤</button>
-        <button class="tab-button" data-tab="my-library">My Library 📚</button>
-        <button class="tab-button" data-tab="settings">Settings ⚙️</button>
-    </div>
-
-    <!-- Tab Content -->
-    <div class="tab-content" id="discover">
-            <!-- Search Bar -->
-        <div class="search-container">
-            <input type="text" id="searchBar" placeholder="Search music...">
-            <div class="search-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
+    <div id="musicPanel">
+        <!-- Panel Header -->
+        <div class="panel-header">
+            <div class="panel-title">TCZ ~ Music Library 🎵</div>
+            <div class="now-playing">
+                <span id="currentSongTitle">Select a track to preview</span>
+            </div>
+            <div class="equalizer" id="equalizer">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
             </div>
         </div>
 
-        <!-- Filter Tabs -->
-        <div class="filter-tabs">
-            <button class="filter-tab active" data-filter="all">All</button>
-            <button class="filter-tab" data-filter="recent">Recent</button>
-            <button class="filter-tab" data-filter="favorites">Favorites</button>
+        <!-- Tab Container -->
+        <div class="tab-container">
+            <button class="tab-button active" data-tab="discover">Discover ✨</button>
+            <button class="tab-button" data-tab="library">Artists 🧑‍🎤</button>
+            <button class="tab-button" data-tab="my-library">My Library 📚</button>
+            <button class="tab-button" data-tab="settings">Settings ⚙️</button>
         </div>
 
-        <!-- Music List -->
-        <div class="music-list-container">
-            <ul class="music-list" id="musicList">
-                <!-- Songs will be dynamically populated here by JavaScript -->
-            </ul>
+        <!-- Tab Content -->
+        <div class="tab-content" id="discover">
+                <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" id="searchBar" placeholder="Search music...">
+                <div class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All</button>
+                <button class="filter-tab" data-filter="recent">Recent</button>
+                <button class="filter-tab" data-filter="favorites">Favorites</button>
+            </div>
+
+            <!-- Music List -->
+            <div class="music-list-container">
+                <ul class="music-list" id="musicList">
+                    <!-- Songs will be dynamically populated here by JavaScript -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="library" style="display: none;">
+            <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
+        </div>
+
+        <div class="tab-content" id="my-library" style="display: none;">
+            <div class="my-library-container">
+                <div class="my-favorites-ml-container">
+                    <div class="my-favorites-openBtn">♡</div>
+                    <h4>My Favorites</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="settings" style="display: none;">
+            <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
+        </div>
+
+        <!-- Player Footer -->
+        <div class="player-footer">
+            <div class="now-preview">Preview: 15 seconds</div>
+            <div class="action-buttons">
+                <button class="action-button tooltip" data-tooltip="Share">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                </button>
+                <button class="action-button tooltip" data-tooltip="More options">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
+
+    <div id="musicPanelOverlay"></div>
+
+
+    <div id="appearancePanel" class="settings-panel">
+        <div class="settings-header">
+            <h2>Appearance</h2>
+            <p>Customize the look and feel of the website</p>
+            <img id="appearance-panel-close" src="https://static.thenounproject.com/png/1982478-200.png" alt="Close">
+        </div>    
+        
+        <div class="settings-section">
+            <h3>Theme</h3>
+            <div class="theme-selector">
+                <div class="theme-option active" data-theme="default">
+                    <div class="theme-preview default-theme"></div>
+                    <span>Default</span>
+                </div>
+                <div class="theme-option" data-theme="dark">
+                    <div class="theme-preview dark-theme"></div>
+                    <span>Dark</span>
+                </div>
+                <div class="theme-option" data-theme="light">
+                    <div class="theme-preview light-theme"></div>
+                    <span>Light</span>
+                </div>
+                <div class="theme-option" data-theme="retro">
+                    <div class="theme-preview retro-theme"></div>
+                    <span>Retro</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Accent Color</h3>
+            <div class="color-picker-container">
+                <div class="color-option active" data-color="#6366f1" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#f43f5e" style="background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#10b981" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#0ea5e9" style="background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#f59e0b" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option custom-color" data-color="custom">
+                    <input type="color" id="customColorInput" value="#6366f1">
+                    <span>Custom</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Background</h3>
+            <div class="background-selector">
+                <div class="background-option active" data-bg="none">
+                    <div class="bg-preview bg-none"></div>
+                    <span>None</span>
+                </div>
+                <div class="background-option" data-bg="waves">
+                    <div class="bg-preview bg-waves"></div>
+                    <span>Waves</span>
+                </div>
+                <div class="background-option" data-bg="particles">
+                    <div class="bg-preview bg-particles"></div>
+                    <span>Particles</span>
+                </div>
+                <div class="background-option" data-bg="gradient">
+                    <div class="bg-preview bg-gradient"></div>
+                    <span>Gradient</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Player Style</h3>
+            <div class="player-style-selector">
+                <div class="style-option active" data-style="modern">
+                    <div class="style-preview style-modern"></div>
+                    <span>Modern</span>
+                </div>
+                <div class="style-option" data-style="classic">
+                    <div class="style-preview style-classic"></div>
+                    <span>Classic</span>
+                </div>
+                <div class="style-option" data-style="minimal">
+                    <div class="style-preview style-minimal"></div>
+                    <span>Minimal</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Font</h3>
+            <div class="font-selector">
+                <select id="fontSelector" class="settings-select">
+                    <option value="system">System Default</option>
+                    <option value="poppins">Poppins</option>
+                    <option value="roboto">Roboto</option>
+                    <option value="montserrat">Montserrat</option>
+                    <option value="opensans">Open Sans</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>UI Size</h3>
+            <div class="size-slider-container">
+                <span class="size-label">Small</span>
+                <input type="range" id="uiSizeSlider" min="80" max="120" value="100" class="slider">
+                <span class="size-label">Large</span>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Animations</h3>
+            <div class="toggle-container">
+                <span>Enable animations</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="animationsToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="settings-actions">
+            <button id="resetAppearanceBtn" class="secondary-btn">Reset to Default</button>
+            <button id="saveAppearanceBtn" class="primary-btn">Save Changes</button>
+        </div>
     
-    <div class="tab-content" id="library" style="display: none;">
-        <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
     </div>
 
-    <div class="tab-content" id="my-library" style="display: none;">
-        <div class="my-library-container">
-            <div class="my-favorites-ml-container">
-                <div class="my-favorites-openBtn">♡</div>
-                <h4>My Favorites</h4>
-            </div>
-        </div>
-    </div>
+    <div class="appearance-panel-overlay" id="appearancePanelOverlay"></div>
 
-    <div class="tab-content" id="settings" style="display: none;">
-        <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
-    </div>
-
-    <!-- Player Footer -->
-    <div class="player-footer">
-        <div class="now-preview">Preview: 15 seconds</div>
-        <div class="action-buttons">
-            <button class="action-button tooltip" data-tooltip="Share">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="18" cy="5" r="3"></circle>
-                    <circle cx="6" cy="12" r="3"></circle>
-                    <circle cx="18" cy="19" r="3"></circle>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                </svg>
-            </button>
-            <button class="action-button tooltip" data-tooltip="More options">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="1"></circle>
-                    <circle cx="19" cy="12" r="1"></circle>
-                    <circle cx="5" cy="12" r="1"></circle>
-                </svg>
-            </button>
-        </div>
-    </div>
-</div>
-
-<div id="musicPanelOverlay"></div>
 
 
     <main id="main-legacy">
@@ -359,7 +498,7 @@
 
                 <div class="wallpaperContainer">
                     <h2 id="wallpaperTitleText">wallpaper</h2>
-
+                
                     <div class="picNbuttonContainer">
                         <div class="wallpaperImagePreviews">
                             <img src="https://i.postimg.cc/3R1Bzp5M/bg1.png" id="bg1Preview" alt="Sunset over a pixelated city">
@@ -367,15 +506,16 @@
                             <img src="https://i.postimg.cc/MGqxD2zs/Screenshot-2024-12-22-8-37-59-PM.png" id="bg3Preview" alt="Rainy Anime City">
                             <img src="https://i.postimg.cc/vZx0Dc99/bg4.png" id="bg4Preview" alt="Mountainous landscape with a house on a cliff">
                         </div>
-
+                
                         <div class="wallpaperButtonsContainer">
                             <button id="wallpaperBg1Btn" class="wallpaperButton" onclick="background1Transition()">Chosen</button>
                             <button id="wallpaperBg2Btn" class="wallpaperButton" onclick="background2Transition()">Choose</button>
                             <button id="wallpaperBg3Btn" class="wallpaperButton" onclick="background3Transition()">Choose</button>
-                            <button id="wallpaperBg4Btn" class="wallpaperButton">Choose</button>
+                            <button id="wallpaperBg4Btn" class="wallpaperButton" onclick="background4Transition()">Choose</button>
                         </div>
                     </div>
                 </div>
+                
             </div>
 
             <div class="column2">
