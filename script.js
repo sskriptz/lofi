@@ -1,4 +1,5 @@
 import songs from './songs.js';
+import { initThemeManager, initFirebaseServices, loadUserTheme } from './themes/themeManager.js';
 
 
 // Initialize Firebase
@@ -4559,182 +4560,21 @@ loadFriends = async function() {
 
     // Apperance Panel Theme Selection
     
-    // Theme elements
-    const themeOptions = document.querySelectorAll('.theme-option');
-    const saveBtn = document.getElementById('saveAppearanceBtn');
-    const resetBtn = document.getElementById('resetAppearanceBtn');
-    const appearancePanel = document.getElementById('appearancePanel');
-    
-    // Track changes to detect if saving is needed
-    let hasChanges = false;
-    let currentTheme = 'default';
-    let isInitialLoad = true;
-    
-    // Function to detect system theme preference
-    function getSystemThemePreference() {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-        }
-        return 'default';
-    }
-    
-    // Function to apply theme
-    function applyTheme(theme) {
-        // Remove active class from all theme options
-        themeOptions.forEach(option => {
-        option.classList.remove('active');
-        });
-        
-        // Add active class to selected theme
-        const selectedOption = document.querySelector(`.theme-option[data-theme="${theme}"]`);
-        if (selectedOption) {
-        selectedOption.classList.add('active');
-        }
-        
-        // Apply theme styles
-        switch(theme) {
-        case 'default':
-            // Use system preference for default theme
-            const systemTheme = getSystemThemePreference();
-            appearancePanel.style.backgroundColor = systemTheme === 'dark' ? '#1e293b' : '#ffffff';
-            document.body.style.backgroundColor = systemTheme === 'dark' ? '#0f172a' : '#f8fafc';
-            break;
-        case 'dark':
-            appearancePanel.style.backgroundColor = '#1e293b';
-            document.body.style.backgroundColor = '#0f172a';
-            break;
-        case 'light':
-            appearancePanel.style.backgroundColor = '#ffffff';
-            document.body.style.backgroundColor = '#f8fafc';
-            break;
-        case 'retro':
-            appearancePanel.style.backgroundColor = '#f7f3e3';
-            document.body.style.backgroundColor = '#f43f5e';
-            break;
-        }
-        
-        currentTheme = theme;
-        
-        // Only mark as changed if this isn't the initial load
-        if (!isInitialLoad) {
-        hasChanges = true;
-        updateSaveButtonState();
-        }
-    }
-    
-    // Function to update save button state
-    function updateSaveButtonState() {
-        if (hasChanges) {
-            saveBtn.disabled = false;
-            saveBtn.classList.add('active');
-        } else {
-            saveBtn.disabled = true;
-            saveBtn.classList.remove('active');
-        }
-    }
-    
-    // Load user theme from Firebase
-    async function loadUserTheme() {
-        const user = auth.currentUser;
-        if (user) {
-            try {
-                const docRef = await db.collection('users').doc(user.uid).get();
-                
-                if (docRef.exists && docRef.data().theme) {
-                    applyTheme(docRef.data().theme);
-                } else {
-                // If no saved theme, use system default
-                    applyTheme('default');
-                }
-            } catch (error) {
-                console.error("Error loading theme:", error);
-                applyTheme('default');
-            }
-            } else {
-                // No user is signed in, use default theme
-                applyTheme('default');
-            }
-        
-        isInitialLoad = false;
-        hasChanges = false;
-        updateSaveButtonState();
-    }
-    
-    // Save user theme to Firebase
-    async function saveUserTheme() {
-        const user = auth.currentUser;
-        if (user) {
-        try {
-            // Update the user's theme preference in Firestore
-            await db.collection('users').doc(user.uid).update({
-                theme: currentTheme
-            });
-            
-            console.log("Theme saved successfully");
-            hasChanges = false;
-            updateSaveButtonState();
-        } catch (error) {
-            // If the user document doesn't exist yet, create it
-            if (error.code === 'not-found') {
-            try {
-                await db.collection('users').doc(user.uid).set({
-                    theme: currentTheme
-                });
+    initFirebaseServices(auth, db);
+initThemeManager();
 
-                console.log("Theme saved successfully (new user document created)");
-                hasChanges = false;
-                updateSaveButtonState();
-            } catch (secondError) {
-                console.error("Error creating new user document:", secondError);
-            }
-            } else {
-                console.error("Error saving theme:", error);
-            }
-        }
-        } else {
-            console.warn("Cannot save theme: No user is signed in");
-        }
-    }
-    
-    // Add event listeners to theme options
-    themeOptions.forEach(option => {
-        option.addEventListener('click', () => {
-            const theme = option.getAttribute('data-theme');
-            applyTheme(theme);
-        });
-    });
-    
-    // Save button event listener
-    saveBtn.addEventListener('click', async () => {
-        if (hasChanges) {
-            await saveUserTheme();
-            alert("Theme changed successfully!");
-
-            // Close the appearance panel
-            settingsPanel.style.opacity = "0";
-            settingsPanel.style.pointerEvents = "none";
-            document.getElementById('appearancePanelOverlay').style.display = "none";
-        }
-    });
-    
-    // Reset button event listener
-    resetBtn.addEventListener('click', () => {
-        applyTheme('default');
-        hasChanges = true;
-        updateSaveButtonState();
-    });
-    
-    // Initialize auth state listener
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            loadUserTheme();
-        } else {
-            applyTheme('default');
-            isInitialLoad = false;
-            hasChanges = false;
-            updateSaveButtonState();
-        }
-    });
+// If you already have an auth state listener set up, you can add this in it:
+auth.onAuthStateChanged(user => {
+  // Your existing auth state change code
+  // ...
+  
+  // Add this to handle theme loading:
+  if (user) {
+    loadUserTheme();
+  } else {
+    applyTheme('default');
+  }
+});
 
     // ----------------- END OF APPEARANCE PANEL JS -------------------
 
