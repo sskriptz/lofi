@@ -1095,14 +1095,14 @@ main {
     justify-content: center;
 }
 
-#user-info {
+#userInfo {
     display: flex;
     align-items: center;
     width: 100%;
     justify-content: center;
 }
 
-#user-info img {
+#userInfo img {
     width: 35px;
     height: 35px;
     border-radius: 50%;
@@ -1110,13 +1110,13 @@ main {
     /* margin-left: 10px; */
 }
 
-#user-info p {
+#userInfo p {
     margin: 0;
     color: black;
     font-size: 20px;
 }
 
-#user-info p:hover {
+#userInfo p:hover {
     cursor: pointer;
     text-decoration: underline;
 }
@@ -4109,3 +4109,4 @@ input:checked + .toggle-slider:before {
     background-color: #f8fafc;
     border-color: #cbd5e1;
 }
+
