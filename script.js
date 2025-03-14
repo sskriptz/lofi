@@ -157,7 +157,7 @@ const firebaseConfig = {
   
   
           // Update user info display
-          const userInfo = document.getElementById('user-info');
+          const userInfo = document.getElementById('userInfo');
           userInfo.innerHTML = `
               <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
                    alt="Profile" 
@@ -378,7 +378,7 @@ const firebaseConfig = {
 
 
     function updateAllProfilePictures(imageUrl) {
-        const userInfo = document.getElementById('user-info');
+        const userInfo = document.getElementById('userInfo');
         if (userInfo) {
             const imgElement = userInfo.querySelector('img');
             if (imgElement) {
@@ -4352,7 +4352,7 @@ loadFriends = async function() {
     });
 
     
-    document.getElementById("user-info").addEventListener("click", (event) => {
+    document.getElementById("userInfo").addEventListener("click", (event) => {
         if (event.target.tagName === "P") {
             profilePanelOverlay.style.opacity = "1";
             profilePanelOverlay.style.pointerEvents = "auto";
