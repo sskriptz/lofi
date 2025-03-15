@@ -23,7 +23,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    height: 100vh;
+    height: 101vh;
     width: 100vw;
     /* cursor: url('https://i.ibb.co/60tk0khC/image-removebg-preview-1-1-optimized.png'), auto; */
     transition: background-image 0.5s ease-in-out, opacity 1s ease-in-out;
@@ -67,10 +67,6 @@ body {
     border-bottom: none;
 } */
 
-body > div[id$="Gif"],
-body > .audio-player {
-  width: 100%;
-}
 
 main {
     display: flex;
@@ -92,6 +88,8 @@ main {
     flex-direction: row;
     justify-content: center;
     gap: 3%;
+    box-sizing: border-box;
+    overflow-y: visible;
 }
 
 .column2 {
@@ -121,6 +119,23 @@ main {
     flex-direction: column;
     overflow: visible;
     flex-basis: 55%;
+    align-items: stretch;
+}
+
+.column1 > * {
+    flex-grow: 1;
+}
+
+.column1 .column2 {
+    flex-grow: 1;
+    flex-basis: 0;
+    box-sizing: border-box;
+}
+
+.c1-r1-container,
+.row2container,
+.wallpaperContainer > * {
+    box-sizing: border-box;
 }
 
 /* Base Styles */
@@ -494,9 +509,11 @@ main {
     margin-top: var(--verticalGap);
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     border-radius: 15px;
     padding: 10px;
+    height: 200px;
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
     box-shadow: 5px 10px #000000;
@@ -517,9 +534,9 @@ main {
 .wallpaperImagePreviews {
     display: flex;
     gap: 1.5vw;
-    margin-bottom: 2.5vh;
+    margin-bottom: 10px ;
     align-items: center;
-    margin-top: 2vh;
+    margin-top: 10px;
 }
 
 .wallpaperImagePreviews img {
@@ -533,16 +550,20 @@ main {
 .wallpaperButtonsContainer {
     display: flex;
     justify-content: center;
-    gap: 1.3vw;
-    padding-bottom: 1vh;
+    gap: 2vw;
+    padding-bottom: 0;
 }
 
 .wallpaperButton {
     border: none;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     font-size: calc(0.6vw + 0.6vh);
-    padding: 0.8vw 1vw;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
     font-weight: 600;
     transition: background-color 0.3s ease-in-out;
 }
@@ -561,8 +582,8 @@ main {
     font-family: "IBM Plex Mono", monospace;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 1vh;
-    margin-top: 2vh;
+    margin-bottom: 10px;
+    margin-top: 0px;
 }
 
 
@@ -912,7 +933,6 @@ main {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-top: 10px;
 }
 
 .playlist-controls button {
@@ -945,7 +965,7 @@ main {
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(3px);
-    box-shadow: 5px 10px #000000;
+    box-shadow: 5px 8px #000000;
     height: 10vh;
     width: 100%;
 
@@ -1174,7 +1194,7 @@ main {
     position: absolute;
     width: 30px;
     height: 30px;
-    top: 10px;
+    top: 15px;
     left: 10px;
     padding: 5px;
     border-radius: 10px;
