@@ -3918,7 +3918,7 @@ loadFriends = async function() {
     
     // To Do List
 
-    const todoList = document.getElementById('todo-list');
+    const todoList = document.getElementById('todoList');
     const saveButton = document.getElementById('save-btn');
     const addButton = document.getElementById('add-btn');
     const removeButton = document.getElementById('remove-btn');
@@ -3951,6 +3951,7 @@ loadFriends = async function() {
     function createTodoItem(title = 'New Task', time = '12:00') {
         const todoItem = document.createElement('div');
         todoItem.className = 'todo-item';
+        todoItem.id = "todoItem";
         todoItem.draggable = true;
     
         todoItem.innerHTML = `
@@ -4305,7 +4306,7 @@ loadFriends = async function() {
     // ---------------- TOOLTIPS START ---------------------
 
 
-    let mainScreenProfileCustomizationBtn = document.getElementById("profileEdit-icon");
+    let mainScreenProfileCustomizationBtn = document.getElementById("profileEditIcon");
 
     mainScreenProfileCustomizationBtn.addEventListener('mouseenter', () => {
         let tooltipText = mainScreenProfileCustomizationBtn.getAttribute("data-tooltip");
@@ -4366,7 +4367,7 @@ loadFriends = async function() {
     });
 
 
-    let mainScreenProfileSettingsBtn = document.getElementById("profileSettings-icon");
+    let mainScreenProfileSettingsBtn = document.getElementById("profileSettingsIcon");
 
     mainScreenProfileSettingsBtn.addEventListener('mouseenter', () => {
         let tooltipText = mainScreenProfileSettingsBtn.getAttribute("data-tooltip");
@@ -4561,20 +4562,16 @@ loadFriends = async function() {
     // Apperance Panel Theme Selection
     
     initFirebaseServices(auth, db);
-initThemeManager();
+    initThemeManager();
 
-// If you already have an auth state listener set up, you can add this in it:
-auth.onAuthStateChanged(user => {
-  // Your existing auth state change code
-  // ...
-  
-  // Add this to handle theme loading:
-  if (user) {
-    loadUserTheme();
-  } else {
-    applyTheme('default');
-  }
-});
+    auth.onAuthStateChanged(user => {
+    
+    if (user) {
+        loadUserTheme();
+    } else {
+        applyTheme('dark');
+    }
+    });
 
     // ----------------- END OF APPEARANCE PANEL JS -------------------
 
