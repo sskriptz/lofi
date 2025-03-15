@@ -291,10 +291,6 @@
         <div class="settings-section">
             <h3>Theme</h3>
             <div class="theme-selector">
-                <div class="theme-option active" data-theme="default">
-                    <div class="theme-preview default-theme"></div>
-                    <span>Default</span>
-                </div>
                 <div class="theme-option" data-theme="dark">
                     <div class="theme-preview dark-theme"></div>
                     <span>Dark</span>
@@ -423,7 +419,7 @@
         <div class="main-items">
             <div class="column1">
                 <div class="c1-r1-container">
-                    <div class="timeContainer1">
+                    <div class="timeContainer1" id="timeContainer1">
                         <div class="timeContainer2">
                             <div class="hrs_container">
                                 <h1 class="timeNumber" id="hrs">00</h1>
@@ -532,18 +528,18 @@
                     </div>
 
                     <div class="profileEdit-button-container" id="profileEditBtnContainer">
-                        <img src="https://i.ibb.co/mrPx856Q/8188338-removebg-preview.png" alt="Profile Edit Icon" class="profileEdit-icon" id="profileEdit-icon" width="50px" height="50px" data-tooltip="Customize Profile">
+                        <img src="https://i.ibb.co/mrPx856Q/8188338-removebg-preview.png" alt="Profile Edit Icon" class="profileEdit-icon" id="profileEditIcon" width="50px" height="50px" data-tooltip="Customize Profile">
                     </div>
                     
 
                     <div class="profileSettings-button-container" id="profileSettingsBtnContainer">
-                        <img src="https://cdn-icons-png.flaticon.com/512/7542/7542190.png" alt="Profile Setting Icon" class="profileSettings-icon" id="profileSettings-icon" width="42px" height="42px" data-tooltip="Profile Settings">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7542/7542190.png" alt="Profile Setting Icon" class="profileSettings-icon" id="profileSettingsIcon" width="42px" height="42px" data-tooltip="Profile Settings">
                     </div>
                 </div>
                 
                 <div class="tdContainer" id="tdContainer">
                     <div class="tdHeader" id="tdHeader">to-do list</div>
-                    <div class="tdPanel" id="todo-list"></div>
+                    <div class="tdPanel" id="todoList"></div>
                     <div class="tdButtons">
                         <button class="btn btn-add" id="add-btn">Add Task</button>
                         <button class="btn btn-remove" id="remove-btn">Delete</button>
@@ -552,7 +548,7 @@
                     </div>
                 </div>
 
-                <div class="gsContainer">
+                <div class="gsContainer" id="gsContainer">
                     <div class="gsItemsContainer">
                         <h2 class="gsTitle">Genre Select</h2>
                         <select id="genre-dropdown" class="genre-dropdown">
@@ -592,7 +588,7 @@
                     </div>
             
                     <div class="volume-control">
-                        <label for="volume-slider">Volume</label>
+                        <label for="volume-slider" id="volumeTag">Volume</label>
                         <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
                     </div>
                 </div>
