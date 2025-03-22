@@ -7,8 +7,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-app-compat.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-auth-compat.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-firestore-compat.min.js"></script>
-    <script type="module" src="script.js"></script>
+
     <link rel="stylesheet" href="style.css">
+
     <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/L57zM3xW/headphones.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,6 +23,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -57,19 +59,19 @@
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closeBtn" id="closeBtn">×</a>
         <a id="profile-sp-btn">Profile 👤</a>
-        <a href="#" id="friends-sp-btn">Friends 👥</a>
-        <a href="#" id="community-sp-btn">Community 🌎</a>
-        <a href="#" id="games-sp-btn">Games 🎮</a>
-        <a href="#" id="music-sp-btn">Music 🎵</a>
-        <a href="#" id="appearance-sp-btn">Appearance 🎨</a>
-        <a href="#" id="settings-sp-btn">Settings ⚙️</a>
+        <a href="javascript:void()" id="friends-sp-btn">Friends 👥</a>
+        <a href="javascript:void()" id="community-sp-btn">Community 🌎</a>
+        <a href="javascript:void()" id="fun-sp-btn">Fun Stuff 🎮</a>
+        <a href="javascript:void()" id="music-sp-btn">Music 🎵</a>
+        <a href="javascript:void()" id="appearance-sp-btn">Appearance 🎨</a>
+        <a href="javascript:void()" id="settings-sp-btn">Settings ⚙️</a>
         <hr id="sidePanelHr1">
-        <a href="#" id="fm-sp-btn">Focus Mode 🎯</a>
+        <a href="javascript:void()" id="fm-sp-btn">Focus Mode 🎯</a>
         <hr id="sidePanelHr2">
-        <a href="#" id="sign-out-sp-btn">Sign Out</a>
+        <a href="javascript:void()" id="sign-out-sp-btn">Sign Out</a>
         <hr id="sidePanelHr3">
         <a href="./external/about.html" target="_blank" id="about-sp-btn">About</a>
-        <a href="#" id="contact-sp-btn">Contact Us</a>
+        <a href="javascript:void()" id="contact-sp-btn">Contact Us</a>
     </div>
 
     <div id="sidePanelOverlay"></div>
@@ -307,31 +309,6 @@
         </div>
         
         <div class="settings-section">
-            <h3>Accent Color</h3>
-            <div class="color-picker-container">
-                <div class="color-option active" data-color="#6366f1" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option" data-color="#f43f5e" style="background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option" data-color="#10b981" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option" data-color="#0ea5e9" style="background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option" data-color="#f59e0b" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option custom-color" data-color="custom">
-                    <input type="color" id="customColorInput" value="#6366f1">
-                    <span>Custom</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="settings-section">
             <h3>Background</h3>
             <div class="background-selector">
                 <div class="background-option active" data-bg="none">
@@ -354,24 +331,6 @@
         </div>
         
         <div class="settings-section">
-            <h3>Player Style</h3>
-            <div class="player-style-selector">
-                <div class="style-option active" data-style="modern">
-                    <div class="style-preview style-modern"></div>
-                    <span>Modern</span>
-                </div>
-                <div class="style-option" data-style="classic">
-                    <div class="style-preview style-classic"></div>
-                    <span>Classic</span>
-                </div>
-                <div class="style-option" data-style="minimal">
-                    <div class="style-preview style-minimal"></div>
-                    <span>Minimal</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="settings-section">
             <h3>Font</h3>
             <div class="font-selector">
                 <select id="fontSelector" class="settings-select">
@@ -381,26 +340,6 @@
                     <option value="montserrat">Montserrat</option>
                     <option value="opensans">Open Sans</option>
                 </select>
-            </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>UI Size</h3>
-            <div class="size-slider-container">
-                <span class="size-label">Small</span>
-                <input type="range" id="uiSizeSlider" min="80" max="120" value="100" class="slider">
-                <span class="size-label">Large</span>
-            </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>Animations</h3>
-            <div class="toggle-container">
-                <span>Enable animations</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="animationsToggle" checked>
-                    <span class="toggle-slider"></span>
-                </label>
             </div>
         </div>
         
@@ -472,8 +411,8 @@
                         </div>
 
                         <div class="particleButtonsContainer">
-                            <button id="particlesButtonRain" onclick="enableParticles()">Enable</button>
-                            <button id="particlesButtonSnow" onclick="enableParticles()">Enable</button>
+                            <button id="particlesButtonRain">Enable</button>
+                            <button id="particlesButtonSnow">Enable</button>
                         </div>
                     </div>
 
@@ -486,8 +425,8 @@
                         </div>
 
                         <div class="weatherButtonsContainer">
-                            <button id="weatherButtonsStorm" onclick="enableStorm()">Enable</button>
-                            <button id="weatherButtonsBlizzard" onclick="enableBlizzard()">Enable</button>
+                            <button id="weatherButtonsStorm">Enable</button>
+                            <button id="weatherButtonsBlizzard">Enable</button>
                         </div>
                     </div>
                 </div>
@@ -504,10 +443,10 @@
                         </div>
                 
                         <div class="wallpaperButtonsContainer">
-                            <button id="wallpaperBg1Btn" class="wallpaperButton" onclick="background1Transition()">Chosen</button>
-                            <button id="wallpaperBg2Btn" class="wallpaperButton" onclick="background2Transition()">Choose</button>
-                            <button id="wallpaperBg3Btn" class="wallpaperButton" onclick="background3Transition()">Choose</button>
-                            <button id="wallpaperBg4Btn" class="wallpaperButton" onclick="background4Transition()">Choose</button>
+                            <button id="wallpaperBg1Btn" class="wallpaperButton">Chosen</button>
+                            <button id="wallpaperBg2Btn" class="wallpaperButton">Choose</button>
+                            <button id="wallpaperBg3Btn" class="wallpaperButton">Choose</button>
+                            <button id="wallpaperBg4Btn" class="wallpaperButton">Choose</button>
                         </div>
                     </div>
                 </div>
@@ -523,7 +462,7 @@
                         </div>
                     
                         <div class="signOut-button-container">
-                            <button id="sign-out-btn" onclick="signOut()">Sign Out</button>
+                            <button id="sign-out-btn">Sign Out</button>
                         </div>
                     </div>
 
@@ -614,16 +553,16 @@
     <div id="friendsWholeContainer">
         <div id="socialContainer">
             <div id="spMainSection" class="spMainSection clearfix">
-                <button style="float: right;" onclick="socialPanelClose()">✖</button>
+                <button id="socialPanelCloseBtn" style="float: right;" onclick="socialPanelClose()">✖</button>
 
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;" id="spUserInfoContainer">
                     <img id="userProfilePic" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="Profile Picture">
                     <h2 id="userUsername"></h2>
                 </div>
                 
-                <div class="search-section">
-                    <h3 class="section-title">Search Users</h3>
-                    <input type="text" id="searchInput" placeholder="Search by username">
+                <div class="search-section" id="socialPanelSearchSection">
+                    <h3 class="section-title" id="socialPanelSearchTitle">Search Users</h3>
+                    <input type="text" id="searchInputFriends" placeholder="Search by username">
                     <!-- <h4 id="usernameSearchResults"></h4> -->
                     <div id="searchResults"></div>
                 </div>
@@ -632,8 +571,8 @@
 
                 <div id="notifications-and-friends-container">
                     <div class="fr-notifications-section">
-                        <h3 class="fr-section-title">Friend Requests</h3>
-                        <div id="fr-notifications"></div>
+                        <h3 class="fr-section-title" id="frSectionTitle">Friend Requests</h3>
+                        <div id="frNotifications"></div>
                     </div>
 
                     <div class="friends-list">
@@ -650,7 +589,7 @@
                 <button id="chatPanelClose" onclick="chatPanelClose()">✖</button>
             </div>
             <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input">
+            <div class="chat-input" id="chatInput">
                 <form id="messageForm" onsubmit="sendMessage(event)">
                     <input type="text" id="messageInput" placeholder="Type a message...">
                     <button type="submit">Send</button>
@@ -661,5 +600,16 @@
 
     <div id="socialPanelOverlay"></div>
 
+    <!-- Import modularized JavaScript files -->
+    <script type="module">
+        // Import the main module that will bootstrap the application
+        import { signInWithGoogle, setUsername, signOut } from './firebase/auth-handler.js';
+        import { sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend } from './friending/friends-manager.js';
+        import { openChat } from './friending/messaging.js';
+        
+        // Make functions available globally for inline event handlers
+        window.authHandler = { signInWithGoogle, setUsername, signOut };
+    </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
