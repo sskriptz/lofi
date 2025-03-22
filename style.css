@@ -28,7 +28,7 @@ body {
     /* cursor: url('https://i.ibb.co/60tk0khC/image-removebg-preview-1-1-optimized.png'), auto; */
     transition: background-image 0.5s ease-in-out, opacity 1s ease-in-out;
     font-family: "Inconsolata", monospace;
-    opacity: 0;
+    /* opacity: 0; */
     overflow: visible;
     backdrop-filter: blur(7px);
     margin: 0;
@@ -1130,7 +1130,7 @@ main {
     /* margin-left: 10px; */
 }
 
-#userInfo p {
+#homepageUserDisplayName {
     margin: 0;
     color: black;
     font-size: 20px;
@@ -1877,7 +1877,7 @@ div#spMainSection {
     box-sizing: border-box;
 }
 
-#friendsWholeContainer input[type="text"] {
+#searchInputFriends {
     width: 100%;
     padding: 14px 18px;
     border: none;
@@ -1977,11 +1977,11 @@ div#spMainSection {
     gap: 3%;
 }
 
-.fr-notifications-section {
+.frNotifications-section {
     margin-bottom: 1vh;
 }
 
-#fr-notifications {
+#frNotifications {
     border-radius: 12px;
     max-height: 20vh;
     overflow-y: auto;
@@ -2123,9 +2123,8 @@ div#chatContainer {
     overflow-y: scroll;
     flex: 1;
     background-color: #f5f7fa;
-    /* Add bottom padding to prevent message cutoff */
-    max-height: 45vh;
     min-height: 40vh;
+    max-height: 53vh;
 }
 
 #messageForm button {
@@ -4129,4 +4128,3 @@ input:checked + .toggle-slider:before {
     background-color: #f8fafc;
     border-color: #cbd5e1;
 }
-
