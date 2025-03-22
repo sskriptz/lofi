@@ -8,75 +8,136 @@ export function applyRetroTheme() {
     const textColor = '#453030'; // Rich brown for text
     const secondaryTextColor = '#6d5e5e'; // Lighter brown for secondary text
     
-    // Apply base styling
-    appearancePanel.style.backgroundColor = baseBackground;
+    // Get all the DOM elements first
+    const appearancePanel = document.getElementById('appearancePanel');
+    const timeContainer1 = document.getElementById('timeContainer1');
+    const particleContainer = document.getElementById('particleContainer');
+    const particlesButtonRain = document.getElementById('particlesButtonRain');
+    const particlesButtonSnow = document.getElementById('particlesButtonSnow');
+    const weatherContainer = document.getElementById('weatherContainer');
+    const weatherButtonsStorm = document.getElementById('weatherButtonsStorm');
+    const weatherButtonsBlizzard = document.getElementById('weatherButtonsBlizzard');
+    const wallpaperContainer = document.getElementById('wallpaperContainer');
+    const wallpaperBg1Btn = document.getElementById('wallpaperBg1Btn');
+    const wallpaperBg2Btn = document.getElementById('wallpaperBg2Btn');
+    const wallpaperBg3Btn = document.getElementById('wallpaperBg3Btn');
+    const wallpaperBg4Btn = document.getElementById('wallpaperBg4Btn');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const volumeTag = document.getElementById('volumeTag');
+    const profileContainer = document.getElementById('profileContainer');
+    const profileEditBtnContainer = document.getElementById('profileEditBtnContainer');
+    const profileEditIcon = document.getElementById('profileEditIcon');
+    const profileSettingsBtnContainer = document.getElementById('profileSettingsBtnContainer');
+    const profileSettingsIcon = document.getElementById('profileSettingsIcon');
+    const tdContainer = document.getElementById('tdContainer');
+    const tdHeader = document.getElementById('tdHeader');
+    const todoList = document.getElementById('todoList');
+    const gsContainer = document.getElementById('gsContainer');
+    
+    // Apply base styling - Add null checks before accessing properties
+    if (appearancePanel) appearancePanel.style.backgroundColor = baseBackground;
     
     // Time container with a smoother gradient
-    timeContainer1.style.background = `linear-gradient(90deg, ${accentColor2}, #e7b355, ${accentColor1})`;
-    timeContainer1.style.color = textColor;
+    if (timeContainer1) timeContainer1.style.background = `linear-gradient(90deg, ${accentColor2}, #e7b355, ${accentColor1})`;
+    if (timeContainer1) timeContainer1.style.color = textColor;
 
     // Particle container
-    particleContainer.style.backgroundColor = baseBackground;
-    particleContainer.style.color = textColor;
-    particlesButtonRain.style.backgroundColor = accentColor1;
-    particlesButtonRain.style.color = textColor;
-    particlesButtonSnow.style.backgroundColor = accentColor1;
-    particlesButtonSnow.style.color = textColor;
+    if (particleContainer) particleContainer.style.backgroundColor = baseBackground;
+    if (particleContainer) particleContainer.style.color = textColor;
+    if (particlesButtonRain) particlesButtonRain.style.backgroundColor = accentColor1;
+    if (particlesButtonRain) particlesButtonRain.style.color = textColor;
+    if (particlesButtonSnow) particlesButtonSnow.style.backgroundColor = accentColor1;
+    if (particlesButtonSnow) particlesButtonSnow.style.color = textColor;
 
     // Weather container
-    weatherContainer.style.backgroundColor = baseBackground;
-    weatherContainer.style.color = textColor;
-    weatherContainer.style.borderColor = accentColor1;
-    weatherButtonsStorm.style.backgroundColor = accentColor4;
-    weatherButtonsStorm.style.color = textColor;
-    weatherButtonsBlizzard.style.backgroundColor = accentColor4;
-    weatherButtonsBlizzard.style.color = textColor;
+    if (weatherContainer) {
+        weatherContainer.style.backgroundColor = baseBackground;
+        weatherContainer.style.color = textColor;
+        weatherContainer.style.borderColor = accentColor1;
+    }
+    if (weatherButtonsStorm) {
+        weatherButtonsStorm.style.backgroundColor = accentColor4;
+        weatherButtonsStorm.style.color = textColor;
+    }
+    if (weatherButtonsBlizzard) {
+        weatherButtonsBlizzard.style.backgroundColor = accentColor4;
+        weatherButtonsBlizzard.style.color = textColor;
+    }
 
     // Wallpaper container
-    wallpaperContainer.style.backgroundColor = baseBackground;
-    wallpaperContainer.style.color = textColor;
-    wallpaperBg1Btn.style.backgroundColor = accentColor3;
-    wallpaperBg1Btn.style.color = textColor;
-    wallpaperBg2Btn.style.backgroundColor = accentColor3;
-    wallpaperBg2Btn.style.color = textColor;
-    wallpaperBg3Btn.style.backgroundColor = accentColor3;
-    wallpaperBg3Btn.style.color = textColor;
-    wallpaperBg4Btn.style.backgroundColor = accentColor3;
-    wallpaperBg4Btn.style.color = textColor;
+    if (wallpaperContainer) {
+        wallpaperContainer.style.backgroundColor = baseBackground;
+        wallpaperContainer.style.color = textColor;
+    }
+    if (wallpaperBg1Btn) {
+        wallpaperBg1Btn.style.backgroundColor = accentColor3;
+        wallpaperBg1Btn.style.color = textColor;
+    }
+    if (wallpaperBg2Btn) {
+        wallpaperBg2Btn.style.backgroundColor = accentColor3;
+        wallpaperBg2Btn.style.color = textColor;
+    }
+    if (wallpaperBg3Btn) {
+        wallpaperBg3Btn.style.backgroundColor = accentColor3;
+        wallpaperBg3Btn.style.color = textColor;
+    }
+    if (wallpaperBg4Btn) {
+        wallpaperBg4Btn.style.backgroundColor = accentColor3;
+        wallpaperBg4Btn.style.color = textColor;
+    }
 
     // Audio player
-    audioPlayer.style.backgroundColor = baseBackground;
-    document.getElementById("song-title").style.color = textColor;
-    document.getElementById("song-artist").style.color = secondaryTextColor;
-    document.getElementById("current-time").style.color = textColor;
-    document.getElementById("total-duration").style.color = textColor;
-    volumeTag.style.color = textColor;
+    if (audioPlayer) audioPlayer.style.backgroundColor = baseBackground;
+    
+    const songTitle = document.getElementById("song-title");
+    const songArtist = document.getElementById("song-artist");
+    const currentTime = document.getElementById("current-time");
+    const totalDuration = document.getElementById("total-duration");
+    const playlistDropdown = document.getElementById("playlist-dropdown");
+    const autoplayButton = document.getElementById("autoplay-button");
+    
+    if (songTitle) songTitle.style.color = textColor;
+    if (songArtist) songArtist.style.color = secondaryTextColor;
+    if (currentTime) currentTime.style.color = textColor;
+    if (totalDuration) totalDuration.style.color = textColor;
+    if (volumeTag) volumeTag.style.color = textColor;
 
-    document.getElementById("playlist-dropdown").style.backgroundColor = "white";
-    document.getElementById("playlist-dropdown").style.color = "black";
+    if (playlistDropdown) {
+        playlistDropdown.style.backgroundColor = "white";
+        playlistDropdown.style.color = "black";
+    }
 
-    document.getElementById("autoplay-button").style.backgroundColor = "white";
-    document.getElementById("autoplay-button").style.color = "black";
+    if (autoplayButton) {
+        autoplayButton.style.backgroundColor = "white";
+        autoplayButton.style.color = "black";
+    }
 
     // Profile container
-    profileContainer.style.backgroundColor = baseBackground;
+    if (profileContainer) profileContainer.style.backgroundColor = baseBackground;
+    
     const userInfoDiv = document.getElementById('userInfo');
-    const pTag = userInfoDiv.children[1];
-    pTag.style.color = textColor;
+    if (userInfoDiv && userInfoDiv.children && userInfoDiv.children.length > 1) {
+        const pTag = userInfoDiv.children[1];
+        pTag.style.color = textColor;
+    }
 
-    profileEditBtnContainer.style.backgroundColor = baseBackground;
-    profileEditIcon.style.filter = "invert(20%) sepia(10%) saturate(1500%) hue-rotate(330deg)";
+    if (profileEditBtnContainer) profileEditBtnContainer.style.backgroundColor = baseBackground;
+    if (profileEditIcon) profileEditIcon.style.filter = "invert(20%) sepia(10%) saturate(1500%) hue-rotate(330deg)";
 
-    profileSettingsBtnContainer.style.backgroundColor = baseBackground;
-    profileSettingsIcon.style.filter = "invert(20%) sepia(10%) saturate(1500%) hue-rotate(330deg)";
+    if (profileSettingsBtnContainer) profileSettingsBtnContainer.style.backgroundColor = baseBackground;
+    if (profileSettingsIcon) profileSettingsIcon.style.filter = "invert(20%) sepia(10%) saturate(1500%) hue-rotate(330deg)";
 
     // To-do container
-    tdContainer.style.backgroundColor = baseBackground;
-    tdHeader.style.color = textColor;
-    todoList.style.backgroundColor = accentColor1 + '40'; // Adding transparency
-    todoList.style.border = `1px solid ${accentColor1}`;
+    if (tdContainer) tdContainer.style.backgroundColor = baseBackground;
+    if (tdHeader) tdHeader.style.color = textColor;
+    if (todoList) {
+        todoList.style.backgroundColor = accentColor1 + '40'; // Adding transparency
+        todoList.style.border = `1px solid ${accentColor1}`;
+    }
 
     // GS container
-    gsContainer.style.backgroundColor = baseBackground;
-    gsContainer.style.color = textColor;
+    if (gsContainer) {
+        gsContainer.style.backgroundColor = baseBackground;
+        gsContainer.style.color = textColor;
+    }
 }
