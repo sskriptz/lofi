@@ -1,6 +1,10 @@
 import { applyDarkTheme } from './themeDark.js';
 import { applyLightTheme } from './themeLight.js';
 import { applyRetroTheme } from './themeRetro.js';
+import { getAuth, getFirestore } from '../firebase/firebase-config.js';
+
+let firebaseAuth;
+let firebaseDb;
 
 // Theme elements
 const themeOptions = document.querySelectorAll('.theme-option');
@@ -15,8 +19,6 @@ let selectedTheme = 'dark'; // Changed default to 'dark'
 let originalTheme = 'dark'; // Changed default to 'dark'
 let isInitialLoad = true;
 
-let firebaseAuth;
-let firebaseDb;
 
 export function initFirebaseServices(auth, db) {
   console.log("Initializing Firebase services in theme manager");
@@ -83,9 +85,10 @@ function updateSaveButtonState() {
 }
 
 export async function loadUserTheme() {
+  // Use the Firebase services that were initialized with initFirebaseServices
   if (!firebaseAuth || !firebaseDb) {
     console.error("Firebase services not initialized");
-    applyTheme('dark'); // Changed default to 'dark'
+    applyTheme('dark');
     originalTheme = 'dark';
     selectTheme('dark');
     return;
