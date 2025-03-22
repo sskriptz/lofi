@@ -1,4 +1,5 @@
 export function applyDarkTheme() {
+
     if (appearancePanel) appearancePanel.style.backgroundColor = '#1e293b';
 
     if (timeContainer1) {
@@ -52,11 +53,6 @@ export function applyDarkTheme() {
 
     if (profileContainer) profileContainer.style.backgroundColor = '#1a1a1a';
 
-    const userInfoDiv = document.getElementById('userInfo');
-    if (userInfoDiv && userInfoDiv.children && userInfoDiv.children.length > 1) {
-        const pTag = userInfoDiv.children[1];
-        pTag.style.color = "#ffffff";
-    }
 
     if (profileEditBtnContainer) profileEditBtnContainer.style.backgroundColor = "#1a1a1a";
     if (profileEditIcon) profileEditIcon.style.filter = "invert(1)";
@@ -75,4 +71,75 @@ export function applyDarkTheme() {
         gsContainer.style.backgroundColor = "#1a1a1a";
         gsContainer.style.color = "#ffffff";
     }
+
+    if (spMainSection) {
+        spMainSection.style.backgroundColor = "#1a1a1a";
+    }
+
+    if (userUsername) {
+        userUsername.style.color = "#ffffff";
+    }
+
+    if (socialPanelCloseBtn) {
+        socialPanelCloseBtn.style.color = "#ffffff";
+    }
+
+    if (socialPanelSearchTitle) {
+        socialPanelSearchTitle.style.color = "#ffffff";
+    }
+
+    const searchInput = document.getElementById('searchInputFriends');
+    searchInput.style.backgroundColor = "#2a2a2a";
+    searchInput.style.color = " #f5f5f5";
+
+    if (frNotifications) {
+        frNotifications.style.backgroundColor = "#2a2a2a";
+    }
+
+    if (frSectionTitle) {
+        frSectionTitle.style.color = "#ffffff";
+    }
+
+    if (friendsList) {
+        friendsList.style.backgroundColor = "#2a2a2a";
+    }
+
+
+    const observer = new MutationObserver(function(mutations) {
+        const spans = document.querySelectorAll('.friend-item span');
+        
+        spans.forEach(span => {
+            span.style.color = "#ffffff";
+        });
+
+        const friendItems = document.querySelectorAll('.friend-item');
+
+        friendItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.backgroundColor = '#333';
+            });
+
+            item.addEventListener('mouseleave', () => {
+                item.style.backgroundColor = '';
+            });
+        });
+
+        chatMessages.style.backgroundColor = "#1a1a1a";
+
+        chatInput.style.backgroundColor = "#1a1a1a";
+        
+        messageInput.style.backgroundColor = "#2a2a2a";
+        messageInput.style.color = "#f5f5f5";
+
+        homepageUserDisplayName.style.color = 'white';
+
+        welcomePanel.style.backgroundColor = "#1a1a1a";
+        welcomeMessage.style.color = "white";
+
+    });
+    
+    observer.observe(friendsList, { childList: true, subtree: true });
+
+
+
 }
