@@ -57,21 +57,21 @@
 
 
     <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closeBtn" id="closeBtn">×</a>
+        <a href="#" class="closeBtn" id="closeBtn">×</a>
         <a id="profile-sp-btn">Profile 👤</a>
-        <a href="javascript:void()" id="friends-sp-btn">Friends 👥</a>
-        <a href="javascript:void()" id="community-sp-btn">Community 🌎</a>
-        <a href="javascript:void()" id="fun-sp-btn">Fun Stuff 🎮</a>
-        <a href="javascript:void()" id="music-sp-btn">Music 🎵</a>
-        <a href="javascript:void()" id="appearance-sp-btn">Appearance 🎨</a>
-        <a href="javascript:void()" id="settings-sp-btn">Settings ⚙️</a>
+        <a href="#" id="friends-sp-btn">Friends 👥</a>
+        <a href="#" id="community-sp-btn">Community 🌎</a>
+        <a href="#" id="fun-sp-btn">Fun Stuff 🎮</a>
+        <a href="#" id="music-sp-btn">Music 🎵</a>
+        <a href="#" id="appearance-sp-btn">Appearance 🎨</a>
+        <a href="#" id="settings-sp-btn">Settings ⚙️</a>
         <hr id="sidePanelHr1">
-        <a href="javascript:void()" id="fm-sp-btn">Focus Mode 🎯</a>
+        <a href="#" id="fm-sp-btn">Focus Mode 🎯</a>
         <hr id="sidePanelHr2">
-        <a href="javascript:void()" id="sign-out-sp-btn">Sign Out</a>
+        <a href="#" id="sign-out-sp-btn">Sign Out</a>
         <hr id="sidePanelHr3">
         <a href="./external/about.html" target="_blank" id="about-sp-btn">About</a>
-        <a href="javascript:void()" id="contact-sp-btn">Contact Us</a>
+        <a href="#" id="contact-sp-btn">Contact Us</a>
     </div>
 
     <div id="sidePanelOverlay"></div>
@@ -309,6 +309,31 @@
         </div>
         
         <div class="settings-section">
+            <h3>Accent Color</h3>
+            <div class="color-picker-container">
+                <div class="color-option active" data-color="#6366f1" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#f43f5e" style="background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#10b981" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#0ea5e9" style="background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option" data-color="#f59e0b" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
+                    <div class="color-check"></div>
+                </div>
+                <div class="color-option custom-color" data-color="custom">
+                    <input type="color" id="customColorInput" value="#6366f1">
+                    <span>Custom</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
             <h3>Background</h3>
             <div class="background-selector">
                 <div class="background-option active" data-bg="none">
@@ -331,6 +356,24 @@
         </div>
         
         <div class="settings-section">
+            <h3>Player Style</h3>
+            <div class="player-style-selector">
+                <div class="style-option active" data-style="modern">
+                    <div class="style-preview style-modern"></div>
+                    <span>Modern</span>
+                </div>
+                <div class="style-option" data-style="classic">
+                    <div class="style-preview style-classic"></div>
+                    <span>Classic</span>
+                </div>
+                <div class="style-option" data-style="minimal">
+                    <div class="style-preview style-minimal"></div>
+                    <span>Minimal</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
             <h3>Font</h3>
             <div class="font-selector">
                 <select id="fontSelector" class="settings-select">
@@ -340,6 +383,26 @@
                     <option value="montserrat">Montserrat</option>
                     <option value="opensans">Open Sans</option>
                 </select>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>UI Size</h3>
+            <div class="size-slider-container">
+                <span class="size-label">Small</span>
+                <input type="range" id="uiSizeSlider" min="80" max="120" value="100" class="slider">
+                <span class="size-label">Large</span>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Animations</h3>
+            <div class="toggle-container">
+                <span>Enable animations</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="animationsToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
         </div>
         
