@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listeners for form submissions
     document.getElementById('messageForm')?.addEventListener('submit', (event) => {
         event.preventDefault();
-        import('./messaging.js').then(module => {
+        import('./friending/messaging.js').then(module => {
             module.sendMessage();
         });
     });
