@@ -284,125 +284,65 @@
 
 
     <div id="appearancePanel" class="settings-panel">
-        <div class="settings-header">
-            <h2>Appearance</h2>
-            <p>Customize the look and feel of the website</p>
-            <img id="appearance-panel-close" src="https://static.thenounproject.com/png/1982478-200.png" alt="Close">
-        </div>    
-        
-        <div class="settings-section">
-            <h3>Theme</h3>
-            <div class="theme-selector">
-                <div class="theme-option" data-theme="dark">
-                    <div class="theme-preview dark-theme"></div>
-                    <span>Dark</span>
-                </div>
-                <div class="theme-option" data-theme="light">
-                    <div class="theme-preview light-theme"></div>
-                    <span>Light</span>
-                </div>
-                <div class="theme-option" data-theme="retro">
-                    <div class="theme-preview retro-theme"></div>
-                    <span>Retro</span>
+        <div class="settings-scroll-container">
+            <div class="settings-header">
+                <h2>Appearance</h2>
+                <p>Customize the look and feel of your website</p>
+                <img id="appearance-panel-close" src="https://static.thenounproject.com/png/1982478-200.png" alt="Close">
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="theme-icon">Theme</h3>
+                <div class="theme-selector">
+                    <div class="theme-option" data-theme="dark">
+                        <div class="theme-check"></div>
+                        <div class="theme-preview dark-theme"></div>
+                        <span>Dark</span>
+                    </div>
+                    <div class="theme-option" data-theme="light">
+                        <div class="theme-check"></div>
+                        <div class="theme-preview light-theme"></div>
+                        <span>Light</span>
+                    </div>
+                    <div class="theme-option" data-theme="retro">
+                        <div class="theme-check"></div>
+                        <div class="theme-preview retro-theme"></div>
+                        <span>Retro</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>Accent Color</h3>
-            <div class="color-picker-container">
-                <div class="color-option active" data-color="#6366f1" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
-                    <div class="color-check"></div>
+            
+            <div class="settings-section">
+                <h3 class="background-icon">Background</h3>
+                <p>*To select default backgrounds, use the wallpaper panel on the homepage</p>
+                <div class="custom-bg-container">
+                    <label for="custom-bg-url">Custom Background URL:</label>
+                    <div class="custom-bg-input-row">
+                      <input 
+                        type="text" 
+                        id="custom-bg-url" 
+                        placeholder="Paste image URL here..." 
+                        class="custom-bg-input"
+                      />
+                    </div>
                 </div>
-                <div class="color-option" data-color="#f43f5e" style="background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option" data-color="#10b981" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option" data-color="#0ea5e9" style="background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option" data-color="#f59e0b" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
-                    <div class="color-check"></div>
-                </div>
-                <div class="color-option custom-color" data-color="custom">
-                    <input type="color" id="customColorInput" value="#6366f1">
-                    <span>Custom</span>
-                </div>
+                <button class="custom-bg-button">Apply</button>
             </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>Background</h3>
-            <div class="background-selector">
-                <div class="background-option active" data-bg="none">
-                    <div class="bg-preview bg-none"></div>
-                    <span>None</span>
+            
+            <div class="settings-section">
+                <h3 class="font-icon">Font</h3>
+                <div class="font-selector">
+                    <div class="custom-select-wrapper">
+                        <select id="fontSelector" class="settings-select">
+                            <option value="system">System Default</option>
+                            <option value="poppins">Poppins</option>
+                            <option value="roboto">Roboto</option>
+                            <option value="montserrat">Montserrat</option>
+                            <option value="opensans">Open Sans</option>
+                        </select>
+                        <div class="select-arrow"></div>
+                    </div>
                 </div>
-                <div class="background-option" data-bg="waves">
-                    <div class="bg-preview bg-waves"></div>
-                    <span>Waves</span>
-                </div>
-                <div class="background-option" data-bg="particles">
-                    <div class="bg-preview bg-particles"></div>
-                    <span>Particles</span>
-                </div>
-                <div class="background-option" data-bg="gradient">
-                    <div class="bg-preview bg-gradient"></div>
-                    <span>Gradient</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>Player Style</h3>
-            <div class="player-style-selector">
-                <div class="style-option active" data-style="modern">
-                    <div class="style-preview style-modern"></div>
-                    <span>Modern</span>
-                </div>
-                <div class="style-option" data-style="classic">
-                    <div class="style-preview style-classic"></div>
-                    <span>Classic</span>
-                </div>
-                <div class="style-option" data-style="minimal">
-                    <div class="style-preview style-minimal"></div>
-                    <span>Minimal</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>Font</h3>
-            <div class="font-selector">
-                <select id="fontSelector" class="settings-select">
-                    <option value="system">System Default</option>
-                    <option value="poppins">Poppins</option>
-                    <option value="roboto">Roboto</option>
-                    <option value="montserrat">Montserrat</option>
-                    <option value="opensans">Open Sans</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>UI Size</h3>
-            <div class="size-slider-container">
-                <span class="size-label">Small</span>
-                <input type="range" id="uiSizeSlider" min="80" max="120" value="100" class="slider">
-                <span class="size-label">Large</span>
-            </div>
-        </div>
-        
-        <div class="settings-section">
-            <h3>Animations</h3>
-            <div class="toggle-container">
-                <span>Enable animations</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="animationsToggle" checked>
-                    <span class="toggle-slider"></span>
-                </label>
             </div>
         </div>
         
@@ -410,7 +350,6 @@
             <button id="resetAppearanceBtn" class="secondary-btn">Reset to Default</button>
             <button id="saveAppearanceBtn" class="primary-btn">Save Changes</button>
         </div>
-    
     </div>
 
     <div class="appearance-panel-overlay" id="appearancePanelOverlay"></div>
