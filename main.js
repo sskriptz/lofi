@@ -1,4 +1,3 @@
-// main.js - Main entry point for the application
 
 // Import Firebase modules
 import { initFirebase, getAuth, getFirestore } from './firebase/firebase-config.js';
@@ -9,9 +8,7 @@ import { initThemeManager, initFirebaseServices, loadUserTheme } from './themes/
 
 
 
-// Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Firebase and get references
     initFirebase();
     const auth = getAuth();
     const db = getFirestore();
@@ -19,14 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemeManager();
 
     
-    // Define variables used later in the code
     let messageListener = null;
     let currentChatUser = null;
     
-    // Setup authentication state listener
     setupAuthStateListener();
     
-    // Add event listeners for form submissions
     document.getElementById('messageForm')?.addEventListener('submit', (event) => {
         event.preventDefault();
         import('./friending/messaging.js').then(module => {
@@ -45,13 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }).catch(error => console.error("Error clearing persistence:", error));
     });    
 
-    // Create welcome panel
     const welcomePanel = document.createElement("div");
     welcomePanel.id = "welcomePanel";
     welcomePanel.style.position = "absolute";
     welcomePanel.style.top = "-100px";
     welcomePanel.style.background = "rgba(255, 255, 255, 0.8)";
-    welcomePanel.style.borderRadius = "15px"; // Rounded corners
+    welcomePanel.style.borderRadius = "15px";
     welcomePanel.style.border = "3px solid rgba(0, 0, 0, 0.7)";
     welcomePanel.style.padding = "20px";
     welcomePanel.style.fontSize = "18px";
@@ -295,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Update user profile picture
+
     const profilePicInput = document.getElementById("profile-pic-input");
     const profilePicSaveBtn = document.getElementById("profile-pic-save-btn");
     const profilePicPreview = document.getElementById("profile-pic-preview");
@@ -316,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
             profilePicPreview.src = imageUrl;
             profilePicPreview.style.display = "block";
             
-            // Add error handling for image loading
             profilePicPreview.onerror = () => {
                 profilePicPreview.style.display = "none";
                 profilePicPreview.src = "";
@@ -510,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // ✅ Store only in "bannerURL" field
+            // Store only in "bannerURL" field
             await db.collection("users").doc(user.uid).set({ bannerURL: imageUrl }, { merge: true });
 
             // Update the profile header background with the new banner image
@@ -1141,137 +1134,384 @@ document.addEventListener('DOMContentLoaded', () => {
     const wallpaperBg3Btn = document.getElementById("wallpaperBg3Btn");
     const wallpaperBg4Btn = document.getElementById("wallpaperBg4Btn");
 
+    // Get custom background elements
+    const customBgInput = document.getElementById("custom-bg-url");
+    const applyBgButton = document.querySelector(".custom-bg-button");
+
     // Wallpaper URLs - store these for reference
     const wallpapers = {
-    1: "https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg",
-    2: "https://i.pinimg.com/originals/66/29/ac/6629ac69eee96adbe0880b4f06afdc26.gif",
-    3: "https://s.widget-club.com/images/YyiR86zpwIMIfrCZoSs4ulVD9RF3/293280da671a76a539b89abbce741e3c/309059649f6c758fb2223a2fea97527d.jpg",
-    4: "https://i.postimg.cc/fWGb9PSP/Untitled-design-2.png"
+        1: "https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg",
+        2: "https://i.pinimg.com/originals/66/29/ac/6629ac69eee96adbe0880b4f06afdc26.gif",
+        3: "https://s.widget-club.com/images/YyiR86zpwIMIfrCZoSs4ulVD9RF3/293280da671a76a539b89abbce741e3c/309059649f6c758fb2223a2fea97527d.jpg",
+        4: "https://i.postimg.cc/fWGb9PSP/Untitled-design-2.png"
     };
+
+    // Create preview container and image element
+    const bgPreviewContainer = document.createElement("div");
+    bgPreviewContainer.className = "bg-preview-container";
+    bgPreviewContainer.style.textAlign = "center";
+    bgPreviewContainer.style.marginTop = "10px";
+    bgPreviewContainer.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+    bgPreviewContainer.style.padding = "10px";
+    bgPreviewContainer.style.borderRadius = "10px";
+    bgPreviewContainer.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
+    bgPreviewContainer.style.display = "none";
+    bgPreviewContainer.style.justifyContent = "center";
+
+    // Add the preview container after the input row
+    if (document.querySelector(".custom-bg-container")) {
+        document.querySelector(".custom-bg-container").appendChild(bgPreviewContainer);
+    }
+
+    // Create preview image
+    const bgPreview = document.createElement("img");
+    bgPreview.id = "bg-preview";
+    bgPreview.style.maxWidth = "75%";
+    bgPreview.style.maxHeight = "150px";
+    bgPreview.style.objectFit = "contain";
+    bgPreview.style.borderRadius = "10px";
+    bgPreview.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 1)";
+
+    bgPreviewContainer.appendChild(bgPreview);
+
+    // Create blur control container
+    const blurControlContainer = document.createElement("div");
+    blurControlContainer.className = "blur-control-container";
+    blurControlContainer.style.marginTop = "15px";
+    blurControlContainer.style.padding = "10px";
+    blurControlContainer.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+    blurControlContainer.style.borderRadius = "10px";
+    blurControlContainer.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
+
+    // Create blur slider label
+    const blurLabel = document.createElement("label");
+    blurLabel.htmlFor = "blur-slider";
+    blurLabel.textContent = "Background Blur: 0px";
+    blurLabel.style.display = "block";
+    blurLabel.style.marginBottom = "5px";
+    blurLabel.style.fontWeight = "bold";
+
+    // Create blur slider
+    const blurSlider = document.createElement("input");
+    blurSlider.type = "range";
+    blurSlider.id = "blur-slider";
+    blurSlider.min = "0";
+    blurSlider.max = "20";
+    blurSlider.value = "0";
+    blurSlider.style.width = "100%";
+    blurSlider.style.cursor = "pointer";
+
+    // Add elements to blur control container
+    blurControlContainer.appendChild(blurLabel);
+    blurControlContainer.appendChild(blurSlider);
+
+    // Add blur control after the preview container
+    if (document.querySelector(".custom-bg-container")) {
+        document.querySelector(".custom-bg-container").appendChild(blurControlContainer);
+    }
 
     // Initialize the body with the default wallpaper when the DOM is fully loaded
     document.addEventListener('DOMContentLoaded', function() {
-    // Set default background as initial state
-    document.body.style.backgroundImage = `url('${DEFAULT_WALLPAPER}')`;
-    
-    // Show the body after a slight delay to let background load
-    setTimeout(() => {
-        document.body.classList.add('loaded');
-    }, 100);
+        // Set default background as initial state
+        document.body.style.backgroundImage = `url('${DEFAULT_WALLPAPER}')`;
+        
+        // Show the body after a slight delay to let background load
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+        }, 100);
     });
 
-    // Load user's wallpaper preference when auth state changes
-    auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        try {
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        
-        if (userDoc.exists && userDoc.data().wallpaperPreference) {
-            // User has a saved wallpaper preference
-            const wallpaperIndex = userDoc.data().wallpaperPreference;
-            applyWallpaper(wallpaperIndex);
-        } else {
-            // No saved preference, use default (wallpaper 1)
-            applyWallpaper(1);
-        }
-        } catch (error) {
-        console.error("Error loading wallpaper preference:", error);
-        applyWallpaper(1); // Use default on error
-        }
-    } else {
-        // User is signed out, use default wallpaper
-        applyWallpaper(1);
+    // Validate image URL including base64 data URLs
+    function isValidImageUrl(url) {
+        return /\.(jpg|jpeg|png|gif|webp)$/i.test(url) || url.startsWith("data:image");
     }
-    });
 
     // Function to apply wallpaper and update UI
-    function applyWallpaper(wallpaperIndex) {
-    // Set the background image
-    document.body.style.backgroundImage = `url('${wallpapers[wallpaperIndex]}')`;
-    
-    // Reset all buttons first
-    [wallpaperBg1Btn, wallpaperBg2Btn, wallpaperBg3Btn, wallpaperBg4Btn].forEach(btn => {
-        if (btn) {
-        btn.textContent = "Choose";
-        btn.disabled = false;
+    function applyWallpaper(wallpaperUrl, wallpaperIndex = null) {
+        // Apply the background
+        document.body.style.backgroundImage = `url('${wallpaperUrl}')`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundAttachment = "fixed";
+        
+        // Reset all buttons first
+        [wallpaperBg1Btn, wallpaperBg2Btn, wallpaperBg3Btn, wallpaperBg4Btn].forEach(btn => {
+            if (btn) {
+                btn.textContent = "Choose";
+                btn.disabled = false;
+            }
+        });
+        
+        // Update the chosen button if it's one of the predefined wallpapers
+        if (wallpaperIndex !== null && wallpaperIndex >= 1 && wallpaperIndex <= 4) {
+            const selectedButton = document.getElementById(`wallpaperBg${wallpaperIndex}Btn`);
+            if (selectedButton) {
+                selectedButton.textContent = "Chosen";
+                selectedButton.disabled = true;
+            }
+            
+            // Show preview for predefined wallpaper
+            showWallpaperPreview(wallpaperUrl);
+            
+            // Clear custom background input when using predefined wallpaper
+            if (customBgInput) {
+                customBgInput.value = "";
+            }
+        }
+        
+        // Apply current blur setting
+        applyBackgroundBlur();
+    }
+
+    // Function to show wallpaper preview
+    function showWallpaperPreview(wallpaperUrl) {
+        if (bgPreview && bgPreviewContainer) {
+            bgPreview.src = wallpaperUrl;
+            bgPreviewContainer.style.display = "flex";
+            
+            // Handle image loading errors
+            bgPreview.onerror = () => {
+                bgPreviewContainer.style.display = "none";
+                console.error("Failed to load preview image");
+            };
+        }
+    }
+
+    // Function to apply background blur
+    function applyBackgroundBlur() {
+        const blurValue = blurSlider.value;
+        document.body.style.backdropFilter = `blur(${blurValue}px)`;
+        document.body.style.WebkitBackdropFilter = `blur(${blurValue}px)`; // For Safari
+        blurLabel.textContent = `Background Blur: ${blurValue}px`;
+    }
+
+    // Save wallpaper preference to Firebase - unified function for both predefined and custom
+    async function saveWallpaperPreference(wallpaperUrl, wallpaperIndex = null) {
+        const user = auth.currentUser;
+        
+        if (user) {
+            try {
+                const userDocRef = db.collection('users').doc(user.uid);
+                const userDoc = await userDocRef.get();
+                
+                const wallpaperData = {
+                    currentWallpaper: wallpaperUrl,
+                    blurAmount: parseInt(blurSlider.value) // Save blur setting
+                };
+                
+                // Save the index if it's a predefined wallpaper
+                if (wallpaperIndex !== null) {
+                    wallpaperData.wallpaperPreference = wallpaperIndex;
+                    // Clear custom background when using predefined
+                    wallpaperData.userSettings = {
+                        customBackground: null,
+                        blurAmount: parseInt(blurSlider.value)
+                    };
+                } else {
+                    // Mark as custom when using custom background
+                    wallpaperData.wallpaperPreference = 'custom';
+                    wallpaperData.userSettings = {
+                        customBackground: wallpaperUrl,
+                        blurAmount: parseInt(blurSlider.value)
+                    };
+                }
+                
+                if (userDoc.exists) {
+                    // Update existing document with merge to preserve other fields
+                    await userDocRef.update(wallpaperData);
+                } else {
+                    // Create new document if it doesn't exist
+                    wallpaperData.username = user.displayName || "User"; // Add default username for new users
+                    await userDocRef.set(wallpaperData);
+                }
+                console.log("Wallpaper preference saved successfully!");
+            } catch (error) {
+                console.error("Error saving wallpaper preference:", error);
+            }
+        } else {
+            console.log("User not signed in, cannot save preference");
+        }
+    }
+
+    // Load user's wallpaper preference when auth state changes - unified function
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (userDoc.exists) {
+                    // Load blur setting if available
+                    if (userDoc.data().userSettings && userDoc.data().userSettings.blurAmount !== undefined) {
+                        blurSlider.value = userDoc.data().userSettings.blurAmount;
+                        applyBackgroundBlur();
+                    } else if (userDoc.data().blurAmount !== undefined) {
+                        blurSlider.value = userDoc.data().blurAmount;
+                        applyBackgroundBlur();
+                    }
+                    
+                    // Check for custom background first
+                    if (userDoc.data().userSettings && userDoc.data().userSettings.customBackground) {
+                        const customBgUrl = userDoc.data().userSettings.customBackground;
+                        // Update the input field and preview
+                        if (customBgInput) {
+                            customBgInput.value = customBgUrl;
+                            showWallpaperPreview(customBgUrl);
+                        }
+                        // Apply the custom background
+                        applyWallpaper(customBgUrl, null);
+                    } 
+                    // Check for predefined wallpaper preference
+                    else if (userDoc.data().wallpaperPreference) {
+                        const wallpaperPref = userDoc.data().wallpaperPreference;
+                        // Handle both numeric index and 'custom' value
+                        if (wallpaperPref !== 'custom' && wallpapers[wallpaperPref]) {
+                            applyWallpaper(wallpapers[wallpaperPref], wallpaperPref);
+                        } else {
+                            // Fallback to default if preference is invalid
+                            applyWallpaper(wallpapers[1], 1);
+                        }
+                    } else {
+                        // No preference found, use default
+                        applyWallpaper(wallpapers[1], 1);
+                    }
+                } else {
+                    // No user doc, use default
+                    applyWallpaper(wallpapers[1], 1);
+                }
+            } catch (error) {
+                console.error("Error loading wallpaper preference:", error);
+                applyWallpaper(wallpapers[1], 1); // Use default on error
+            }
+        } else {
+            // User is signed out, use default wallpaper
+            applyWallpaper(wallpapers[1], 1);
         }
     });
-    
-    // Update the chosen button
-    const selectedButton = document.getElementById(`wallpaperBg${wallpaperIndex}Btn`);
-    if (selectedButton) {
-        selectedButton.textContent = "Chosen";
-        selectedButton.disabled = true;
-    }
-    }
 
-    // Save wallpaper preference to Firebase
-    async function saveWallpaperPreference(wallpaperIndex) {
-    const user = auth.currentUser;
-    
-    if (user) {
-        try {
-        // First check if the user document exists
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        
-        if (userDoc.exists) {
-            // Update existing document
-            await db.collection('users').doc(user.uid).update({
-            wallpaperPreference: wallpaperIndex
-            });
-        } else {
-            // Create new document if it doesn't exist
-            await db.collection('users').doc(user.uid).set({
-            wallpaperPreference: wallpaperIndex,
-            username: user.displayName || "User" // Add default username for new users
-            });
-        }
-        console.log("Wallpaper preference saved successfully!");
-        } catch (error) {
-        console.error("Error saving wallpaper preference:", error);
-        }
-    } else {
-        console.log("User not signed in, cannot save preference");
-    }
-    }
-
-    // Wallpaper transition functions with Firebase saving
+    // Wallpaper transition functions with Firebase saving for predefined wallpapers
     async function background1Transition() {
-    applyWallpaper(1);
-    await saveWallpaperPreference(1);
+        applyWallpaper(wallpapers[1], 1);
+        await saveWallpaperPreference(wallpapers[1], 1);
     }
 
     async function background2Transition() {
-    applyWallpaper(2);
-    await saveWallpaperPreference(2);
+        applyWallpaper(wallpapers[2], 2);
+        await saveWallpaperPreference(wallpapers[2], 2);
     }
 
     async function background3Transition() {
-    applyWallpaper(3);
-    await saveWallpaperPreference(3);
+        applyWallpaper(wallpapers[3], 3);
+        await saveWallpaperPreference(wallpapers[3], 3);
     }
 
     async function background4Transition() {
-    applyWallpaper(4);
-    await saveWallpaperPreference(4);
+        applyWallpaper(wallpapers[4], 4);
+        await saveWallpaperPreference(wallpapers[4], 4);
     }
+
+    // Preview custom background when URL is entered
+    if (customBgInput) {
+        customBgInput.addEventListener("input", () => {
+            const imageUrl = customBgInput.value.trim();
+            
+            // Clear previous preview
+            bgPreview.src = "";
+            bgPreviewContainer.style.display = "none"; 
+
+            if (imageUrl && isValidImageUrl(imageUrl)) {
+                showWallpaperPreview(imageUrl);
+            }
+        });
+    }
+
+    // Update custom background
+    async function updateCustomBackground() {
+        const imageUrl = customBgInput.value.trim();
+        const user = auth.currentUser;
+
+        if (!imageUrl || !isValidImageUrl(imageUrl)) {
+            alert("Please enter a valid image URL");
+            return;
+        }
+
+        if (!user) {
+            alert("You must be logged in to update your background");
+            return;
+        }
+
+        try {
+            // Use the unified save function instead of direct Firestore update
+            await saveWallpaperPreference(imageUrl, null);
+            
+            // Apply the custom background
+            applyWallpaper(imageUrl, null);
+            
+            alert("Background updated successfully!");
+        } catch (error) {
+            alert("Failed to update background: " + error.message);
+        }
+    }
+
+    // Handle blur slider changes
+    blurSlider.addEventListener("input", () => {
+        applyBackgroundBlur();
+    });
+
+    // Save blur setting when slider value is changed and released
+    blurSlider.addEventListener("change", async () => {
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                // Get current wallpaper information
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (userDoc.exists) {
+                    let wallpaperUrl;
+                    let wallpaperIndex = null;
+                    
+                    if (userDoc.data().userSettings && userDoc.data().userSettings.customBackground) {
+                        wallpaperUrl = userDoc.data().userSettings.customBackground;
+                    } else if (userDoc.data().wallpaperPreference && userDoc.data().wallpaperPreference !== 'custom') {
+                        wallpaperIndex = userDoc.data().wallpaperPreference;
+                        wallpaperUrl = wallpapers[wallpaperIndex];
+                    } else {
+                        wallpaperIndex = 1;
+                        wallpaperUrl = wallpapers[1];
+                    }
+                    
+                    // Save with updated blur setting
+                    await saveWallpaperPreference(wallpaperUrl, wallpaperIndex);
+                }
+            } catch (error) {
+                console.error("Error saving blur setting:", error);
+            }
+        }
+    });
 
     // Add event listeners to buttons
     if (wallpaperBg1Btn) {
-    wallpaperBg1Btn.addEventListener("click", background1Transition);
+        wallpaperBg1Btn.addEventListener("click", background1Transition);
     }
 
     if (wallpaperBg2Btn) {
-    wallpaperBg2Btn.addEventListener("click", background2Transition);
+        wallpaperBg2Btn.addEventListener("click", background2Transition);
     }
 
     if (wallpaperBg3Btn) {
-    wallpaperBg3Btn.addEventListener("click", background3Transition);
+        wallpaperBg3Btn.addEventListener("click", background3Transition);
     }
 
     if (wallpaperBg4Btn) {
-    wallpaperBg4Btn.addEventListener("click", background4Transition);
+        wallpaperBg4Btn.addEventListener("click", background4Transition);
     }
+
+    // Add click event listener to the Apply button for custom backgrounds
+    if (applyBgButton) {
+        applyBgButton.addEventListener("click", updateCustomBackground);
+    }
+
+
+
 
     //------------- END OF WALLPAPER CODE -------------------
 
@@ -3668,7 +3908,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ----------------- END OF APPEARANCE PANEL JS -------------------
 
 
-  
   // --------------- START OF CLOCK JS ---------------------
 
   let hrs = document.getElementById("hrs");
