@@ -302,28 +302,30 @@ main {
     font-size: calc(0.7vw + 0.55vh);
 }
 
-#snowGif {
-    visibility: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 120vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.15);
-    z-index: 1;
+.snow-particle {
+    position: absolute;
+    top: -5vh;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.9;
     pointer-events: none;
-}
-
-#snowGifImage {
-    visibility: hidden;
-    width: 300%;
-    max-height: 200%;
-    pointer-events: none;
-    opacity: 0.5;
-}
+    animation: fall linear infinite;
+  }
+  
+  @keyframes fall {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh);
+      opacity: 0;
+    }
+  }
+  
 
 #particlesButtonSnow {
     border: none;
@@ -4308,7 +4310,7 @@ div#chatContainer {
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     width: 90%;
     max-width: 800px;
-    max-height: 80vh;
+    max-height: 70vh;
     overflow-y: auto;
     overflow-x: hidden;
     position: fixed;
