@@ -21,12 +21,11 @@ let isInitialLoad = true;
 
 
 export function initFirebaseServices(auth, db) {
-  console.log("Initializing Firebase services in theme manager");
   firebaseAuth = auth;
   firebaseDb = db;
   
   if (firebaseAuth && firebaseDb) {
-    console.log("Firebase services successfully initialized in theme manager");
+
   } else {
     console.error("Failed to initialize Firebase services");
   }
@@ -206,7 +205,6 @@ function closeAppearancePanel() {
 
 // Initialize theme module
 export function initThemeManager() {
-  console.log("Initializing theme manager");
   
   themeOptions.forEach(option => {
     option.addEventListener('click', () => {
