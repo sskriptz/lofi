@@ -961,8 +961,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const rainGifImage = document.getElementById("rainGifImage");
     const rainGif = document.getElementById("rainGif");
     const particlesButtonRain = document.getElementById("particlesButtonRain");
-    const snowGifImage = document.getElementById("snowGifImage");
-    const snowGif = document.getElementById("snowGif");
+    // const snowGifImage = document.getElementById("snowGifImage");
+    // const snowGif = document.getElementById("snowGif");
     const particlesButtonSnow = document.getElementById("particlesButtonSnow");
     const blizzardGifImage = document.getElementById("blizzardGifImage");
     const blizzardGif = document.getElementById("blizzardGif");
@@ -1001,30 +1001,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    function enableSnowParticles () {
+    let snowParticles = null;
 
-        if (snowGifImage.style.visibility === "visible") {
-            snowGifImage.style.visibility = "hidden";
-            snowGif.style.visibility = "hidden";
-            particlesButtonSnow.textContent = "Enable";
+    function createSnowParticle() {
+    const particle = document.createElement("div");
+    particle.classList.add("snow-particle");
 
-            rainParticlesCheck.disabled = false;
-            stormWeatherCheck.disabled = false;
-            blizzardWeatherCheck.disabled = false;
-        } else {
-            snowGifImage.style.visibility = "visible";
-            snowGif.style.visibility = "visible";
-            particlesButtonSnow.textContent = "Disable";
+    const size = Math.random() * 5 + 2;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
 
-            rainParticlesCheck.disabled = true;
-            stormWeatherCheck.disabled = true;
-            blizzardWeatherCheck.disabled = true;
-        }
+    particle.style.left = `${Math.random() * 100}vw`;
+    particle.style.top = `-5vh`;
+    particle.style.animationDuration = `${Math.random() * 8 + 5}s`;
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+        particle.remove();
+    }, 15000);
+    }
+
+    function enableSnowParticles() {
+    if (snowParticles) {
+        stopSnowParticles();
+        particlesButtonSnow.textContent = "Enable";
+        rainParticlesCheck.disabled = false;
+        stormWeatherCheck.disabled = false;
+        blizzardWeatherCheck.disabled = false;
+    } else {
+        startSnowParticles();
+        particlesButtonSnow.textContent = "Disable";
+        rainParticlesCheck.disabled = true;
+        stormWeatherCheck.disabled = true;
+        blizzardWeatherCheck.disabled = true;
+    }
+    }
+
+    function startSnowParticles() {
+    stopSnowParticles();
+    snowParticles = setInterval(() => {
+        createSnowParticle();
+    }, 50);
+    }
+
+    function stopSnowParticles() {
+    if (snowParticles) {
+        clearInterval(snowParticles);
+        snowParticles = null;
+    }
+    
+    document.querySelectorAll(".snow-particle").forEach((particle) => {
+        particle.style.transition = "opacity 0.5s ease-out";
+        particle.style.opacity = "0";
+        setTimeout(() => particle.remove(), 500);
+    });
     }
 
     if (particlesButtonSnow) {
-        particlesButtonSnow.addEventListener("click", enableSnowParticles);
+    particlesButtonSnow.addEventListener("click", enableSnowParticles);
     }
+
 
     // ------------- END OF PARTICLES BUTTONS JS ---------------
 
@@ -3926,25 +3963,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ------------------ SHOP JS -----------------------------
 
-  let shopSPBtn = document.getElementById("store-sp-btn");
-  let shopPanel = document.getElementById("shopPanel");
-  let shopPanelOverlay = document.getElementById("shopPanelOverlay");
+//   let shopSPBtn = document.getElementById("store-sp-btn");
+//   let shopPanel = document.getElementById("shopPanel");
+//   let shopPanelOverlay = document.getElementById("shopPanelOverlay");
 
-  shopSPBtn.addEventListener('click', () => {
-    shopPanel.style.opacity = "1";
-    shopPanel.style.pointerEvents = "auto";
-    shopPanelOverlay.style.display = "flex";
+//   shopSPBtn.addEventListener('click', () => {
+//     shopPanel.style.opacity = "1";
+//     shopPanel.style.pointerEvents = "auto";
+//     shopPanelOverlay.style.display = "flex";
 
-    sideBar.style.transform = "translateX(-100%)";
-    sideBar.style.pointerEvents = "none";
-    sidePanelOverlay.style.display = "none";
-  });
+//     sideBar.style.transform = "translateX(-100%)";
+//     sideBar.style.pointerEvents = "none";
+//     sidePanelOverlay.style.display = "none";
+//   });
 
-  shopPanelOverlay.addEventListener('click', () => {
-    shopPanel.style.opacity = "0";
-    shopPanel.style.pointerEvents = "none";
-    shopPanelOverlay.style.display = "none";
-  })
+//   shopPanelOverlay.addEventListener('click', () => {
+//     shopPanel.style.opacity = "0";
+//     shopPanel.style.pointerEvents = "none";
+//     shopPanelOverlay.style.display = "none";
+//   })
 
 
   // --------------- START OF CLOCK JS ---------------------
