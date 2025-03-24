@@ -3,6 +3,35 @@
 import { getAuth, getFirestore } from '../firebase/firebase-config.js';
 import { openChat } from './messaging.js';
 
+
+
+
+// This is for viewing friend's coins
+
+function formatCoins(coins) {
+    if (coins < 1000) return Math.floor(coins).toString();
+    
+    const units = [
+        { value: 1e15, symbol: 'Q' },
+        { value: 1e12, symbol: 'T' },
+        { value: 1e9, symbol: 'B' },
+        { value: 1e6, symbol: 'M' },
+        { value: 1e3, symbol: 'k' }
+    ];
+
+    for (let unit of units) {
+        if (coins >= unit.value) {
+            const formattedNum = (coins / unit.value).toFixed(1);
+            return `${parseFloat(formattedNum)}${unit.symbol}`;
+        }
+    }
+
+    return Math.floor(coins).toString();
+}
+
+
+
+
 // DOM Elements - Updated to match the new HTML structure
 const notifications = document.getElementById('frNotifications');
 const friendsList = document.getElementById('friendsList');
@@ -425,6 +454,27 @@ function addFriendProfilePanelToDOM() {
             <button id="friendProfilePanelClose">&times;</button>
         </div>
         <div class="fp-option-panel">
+
+            <div class="fp-userfun-section">
+                <div id="fp-currency-section">
+                    <div class="currency-container-fp">
+                        <div class="fp-coins-container">
+                            <img src="https://www.shareicon.net/download/2016/07/08/116966_line.ico" class="coins-image-fp">
+                            <p id="coins-fp"><span>0</span> coins</p>
+                        </div>
+                        <div class="fp-daystreak-container">
+                            <img src="https://media.tenor.com/84knLXwliC4AAAAm/do%C4%9Fum-g%C3%BCn%C3%BC-pastas%C4%B1.webp" class="streak-image-fp">
+                            <p id="streak-fp"><span>0</span> day streak</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="fp-badges-section">
+                    <h3>Badges</h3>
+                    <div class="badges-container-fp"></div>
+                </div>
+            </div>
+
             <div id="fp-aboutme-section">
                 <h3>About Me</h3>
                 <p id="fp-aboutme-content"></p>
@@ -560,6 +610,90 @@ function addFriendProfilePanelToDOM() {
             margin-bottom: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        
+        .fp-userfun-section {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            gap: 13px;
+        }
+
+        #fp-currency-section {
+            background: url("https://i.ibb.co/fd8jVTy/image-5.png");
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 40%;
+            max-width: 40%;
+            height: 70px;
+        }
+
+        .fp-coins-container {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            margin-left: 0.85vw;
+            line-height: 0;
+            vertical-align: top;
+            scale: 0.90;
+        }
+
+        .coins-image-fp {
+            width: 30px;
+            height: 30px;
+            padding-right: 3px;
+        }
+
+
+        .fp-daystreak-container {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            margin-left: 1vw;
+            line-height: 0;
+            vertical-align: top;
+            scale: 0.90;
+        }
+
+        .streak-image-fp {
+            width: 16px;
+            height: 22px;
+            padding: 5px;
+            padding-right: 9px;
+        }
+
+
+
+        #fp-badges-section {
+            background: url("https://i.ibb.co/fd8jVTy/image-5.png");
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            height: 70px;
+            gap: 1vw;
+            width: 60%;
+            max-width: 60%;
+        }
+
+        #fp-badges-section h3 {
+            border-bottom: none !important;
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .badges-container-fp {
+            width: 10vw;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
         
         .fp-row2-sections {
             display: flex;
@@ -683,6 +817,32 @@ async function getFriendProfileInfo(userId, username) {
             <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" alt="Profile">
             <p>${friendData.username}</p>
         `;
+
+
+
+        // Update coins section
+        const coinsElement = document.getElementById('coins-fp');
+        const currentCoins = friendData.coins || 0;
+        const formattedCoins = formatCoins(currentCoins);
+        
+        if (coinsElement) {
+            coinsElement.innerHTML = `<span>${formattedCoins}</span> coins`;
+            // Add tooltip with full number
+            coinsElement.setAttribute('title', currentCoins.toLocaleString() + ' coins');
+            coinsElement.style.cursor = 'help';
+        }
+
+
+        // Update day streak section
+        const streakElement = document.getElementById('streak-fp');
+        const currentStreak = friendData.dayStreak || 0;
+        
+        if (streakElement) {
+            streakElement.innerHTML = `<span>${currentStreak}</span> day streak`;
+            streakElement.setAttribute('title', `${friendData.username}'s current login streak`);
+            streakElement.style.cursor = 'help';
+        }
+
         
         // Apply the friend's banner if available
         if (friendData.bannerURL) {
