@@ -23,8 +23,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-
 </head>
+
 <body>
 
     <div id="rainGif">
@@ -61,7 +61,8 @@
         <a id="profile-sp-btn">Profile 👤</a>
         <a href="javascript:void(0)" id="friends-sp-btn">Friends 👥</a>
         <a href="javascript:void(0)" id="community-sp-btn">Community 🌎</a>
-        <a href="javascript:void(0)" id="fun-sp-btn">Fun Stuff 🎮</a>
+        <a href="javascript:void(0)" id="store-sp-btn">Store 🏪</a>
+        <a href="javascript:void(0)" id="leaderboard-sp-btn">Leaderboards 🏆</a>
         <a href="javascript:void(0)" id="music-sp-btn">Music 🎵</a>
         <a href="javascript:void(0)" id="appearance-sp-btn">Appearance 🎨</a>
         <a href="javascript:void(0)" id="settings-sp-btn">Settings ⚙️</a>
@@ -84,6 +85,27 @@
             <button id="profilePanelClose">&times;</button>
         </div>
         <div class="pp-option-panel">
+
+            <div class="pp-userfun-section">
+                <div id="pp-currency-section">
+                    <div class="currency-container">
+                        <div class="pp-coins-container">
+                            <img src="https://www.shareicon.net/download/2016/07/08/116966_line.ico" class="coins-image">
+                            <p id="coins"><span>0</span> coins</p>
+                        </div>
+                        <div class="pp-daystreak-container">
+                            <img src="https://media.tenor.com/84knLXwliC4AAAAm/do%C4%9Fum-g%C3%BCn%C3%BC-pastas%C4%B1.webp" class="streak-image">
+                            <p id="streak"><span>0</span> day streak</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pp-badges-section">
+                    <h3>Badges</h3>
+                    <div class="badges-container"></div>
+                </div>
+            </div>
+
             <div id="pp-aboutme-section">
                 <h3>About Me</h3>
                 <p id="aboutme-official-p"></p>
@@ -602,16 +624,155 @@
 
     <div id="socialPanelOverlay"></div>
 
-    <!-- Import modularized JavaScript files -->
+
+
+    <div class="shop-panel" id="shopPanel">
+        <div class="shop-panel-header">
+            <h2 class="shop-title">Game Shop</h2>
+            <button class="close-shop-panel">&times;</button>
+        </div>
+        <div class="shop-panel-content">
+            <div class="shop-grid">
+                <div class="shop-item" data-id="speed_boost" data-price="500">
+                    <div class="item-image">
+                        <img src="/api/placeholder/200/200" alt="Speed Boost">
+                    </div>
+                    <div class="item-details">
+                        <h3>Speed Boost</h3>
+                        <p class="item-description">Increases movement speed by 20%</p>
+                        <div class="item-footer">
+                            <span class="price">500 coins</span>
+                            <button class="buy-btn">Buy</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="shop-item" data-id="extra_life" data-price="1000">
+                    <div class="item-image">
+                        <img src="/api/placeholder/200/200" alt="Extra Life">
+                    </div>
+                    <div class="item-details">
+                        <h3>Extra Life</h3>
+                        <p class="item-description">Adds an extra respawn point</p>
+                        <div class="item-footer">
+                            <span class="price">1,000 coins</span>
+                            <button class="buy-btn">Buy</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="shop-item" data-id="weapon_upgrade" data-price="2500">
+                    <div class="item-image">
+                        <img src="/api/placeholder/200/200" alt="Weapon Upgrade">
+                    </div>
+                    <div class="item-details">
+                        <h3>Weapon Upgrade</h3>
+                        <p class="item-description">Increases weapon damage by 15%</p>
+                        <div class="item-footer">
+                            <span class="price">2,500 coins</span>
+                            <button class="buy-btn">Buy</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="shop-item" data-id="shield" data-price="3000">
+                    <div class="item-image">
+                        <img src="/api/placeholder/200/200" alt="Protective Shield">
+                    </div>
+                    <div class="item-details">
+                        <h3>Protective Shield</h3>
+                        <p class="item-description">Reduces incoming damage by 10%</p>
+                        <div class="item-footer">
+                            <span class="price">3,000 coins</span>
+                            <button class="buy-btn">Buy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="purchase-modal" class="shop-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Purchase Confirmation</h2>
+            <p id="modal-message"></p>
+            <div class="modal-actions">
+                <button id="confirm-purchase">Confirm</button>
+                <button id="cancel-purchase">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="shopPanelOverlay"></div>
+
+
+
+    <div id="leaderboard-modal" class="modal" style="opacity: 0; pointer-events: none;">
+        <div class="leaderboard-content">
+            <span class="leaderboard-close">&times;</span>
+            
+            <div class="leaderboard-header">
+                <h2>Leaderboards 🏆</h2>
+                <hr>
+                <div class="leaderboard-tabs">
+                    <div id="coins-tab" class="leaderboard-tab active-tab">Coins</div>
+                    <div id="streaks-tab" class="leaderboard-tab">Day Streaks</div>
+                </div>
+            </div>
+    
+            <div id="coins-leaderboard" class="leaderboard-content-section">
+                <table id="coins-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Coins</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coins-leaderboard-body">
+                        <!-- Coins leaderboard entries will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+    
+            <div id="streaks-leaderboard" class="leaderboard-content-section" style="display: none;">
+                <table id="streaks-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Day Streak</th>
+                        </tr>
+                    </thead>
+                    <tbody id="streaks-leaderboard-body">
+                        <!-- Streaks leaderboard entries will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
     <script type="module">
         // Import the main module that will bootstrap the application
         import { signInWithGoogle, setUsername, signOut } from './firebase/auth-handler.js';
         import { sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend } from './friending/friends-manager.js';
         import { openChat } from './friending/messaging.js';
+        import { initFirebase } from './firebase/firebase-config.js';
+        
+        initFirebase();
         
         // Make functions available globally for inline event handlers
         window.authHandler = { signInWithGoogle, setUsername, signOut };
     </script>
-    <script type="module" src="main.js"></script>
+    <script type="module" src="./main.js"></script>
+
 </body>
 </html>
