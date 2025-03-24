@@ -5,6 +5,9 @@ import { setupAuthStateListener } from './firebase/auth-handler.js';
 import { setupSearchListener } from './friending/search.js';
 import songs from './songs.js';
 import { initThemeManager, initFirebaseServices, loadUserTheme } from './themes/themeManager.js';
+import { initializeCoinSystem } from './coins.js';
+import { initializeDayStreak } from './streak.js';
+import { initLeaderboard } from './leaderboard.js';
 
 
 
@@ -14,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const db = getFirestore();
     initFirebaseServices(auth, db);
     initThemeManager();
+    initializeCoinSystem();
+    initializeDayStreak();
+    initLeaderboard();
 
     
     let messageListener = null;
@@ -935,6 +941,16 @@ document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener("load", () => {
         document.body.style.opacity = "1";
     });
+
+
+
+        
+
+
+
+
+
+
 
 
     var rainParticlesCheck = document.getElementById("particlesButtonRain");
@@ -3908,6 +3924,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // ----------------- END OF APPEARANCE PANEL JS -------------------
 
 
+  // ------------------ SHOP JS -----------------------------
+
+  let shopSPBtn = document.getElementById("store-sp-btn");
+  let shopPanel = document.getElementById("shopPanel");
+  let shopPanelOverlay = document.getElementById("shopPanelOverlay");
+
+  shopSPBtn.addEventListener('click', () => {
+    shopPanel.style.opacity = "1";
+    shopPanel.style.pointerEvents = "auto";
+    shopPanelOverlay.style.display = "flex";
+
+    sideBar.style.transform = "translateX(-100%)";
+    sideBar.style.pointerEvents = "none";
+    sidePanelOverlay.style.display = "none";
+  });
+
+  shopPanelOverlay.addEventListener('click', () => {
+    shopPanel.style.opacity = "0";
+    shopPanel.style.pointerEvents = "none";
+    shopPanelOverlay.style.display = "none";
+  })
+
+
   // --------------- START OF CLOCK JS ---------------------
 
   let hrs = document.getElementById("hrs");
@@ -3939,3 +3978,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
+
