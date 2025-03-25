@@ -39,53 +39,86 @@ export function initializeCoinSystem() {
 
             // Get or initialize coins
             const userDoc = await userRef.get();
-            let currentCoins = userDoc.exists && userDoc.data().coins !== undefined 
-                ? userDoc.data().coins 
-                : 0;
+            let userData = userDoc.exists ? userDoc.data() : {};
+            let currentCoins = userData.coins !== undefined ? userData.coins : 0;
+            let lastDailyBonusDate = userData.lastDailyBonusDate || null;
 
             function updateCoinsDisplay() {
                 const formattedCoins = formatCoins(currentCoins);
                 const coinSpan = coinsElement.querySelector('span');
                 
                 coinSpan.textContent = formattedCoins;
-                
-                // Create tooltip with full number
                 coinSpan.setAttribute('title', currentCoins.toLocaleString() + ' coins');
-                
-                //hover styling to indicate tooltip
                 coinSpan.style.cursor = 'help';
             }
 
+            // Function to check and add daily coins
+            async function checkDailyCoins() {
+                const today = new Date().toISOString().split('T')[0];
+                
+                const welcomePanel = document.getElementById('welcomePanel');
+                const welcomeMessage = document.getElementById('welcomeMessage');
+
+                if (!lastDailyBonusDate || lastDailyBonusDate !== today) {
+                    // Add daily coins
+                    currentCoins += 100;
+                    
+                    // Update Firestore with new coin count and daily bonus date
+                    await userRef.set({ 
+                        coins: currentCoins,
+                        lastDailyBonusDate: today
+                    }, { merge: true });    
+
+                    // Show welcome panel with daily coins message
+                    welcomeMessage.textContent = `Welcome, ${user.displayName}!\n\n\n You received your daily bonus of 100 coins. Your total is now ${currentCoins.toLocaleString()} coins.`;
+                    
+
+                    // Update display
+                    updateCoinsDisplay();
+                } else {
+                    // Already claimed today's bonus
+                    welcomeMessage.textContent = `Welcome back, ${user.displayName}!\n\n\n You've already claimed your daily bonus today. Come back tomorrow for more coins!`;
+                    
+                }
+            }
+
+            // Call daily coins check
+            await checkDailyCoins();
+
             updateCoinsDisplay();
 
-            // Coin earning logic
+            // Existing coin earning logic remains the same
             function startCoinEarning() {
-                // Clear any existing interval to prevent multiple intervals
                 if (coinUpdateInterval) {
                     clearInterval(coinUpdateInterval);
                 }
 
                 coinUpdateInterval = setInterval(async () => {
-                    // Check if document is visible (not in background)
                     if (document.visibilityState === 'visible') {
                         currentCoins += 20;
 
                         try {
-                            // Update Firestore with new coin count
                             await userRef.set({ 
                                 coins: currentCoins 
                             }, { merge: true });
 
-                            // Update display
                             updateCoinsDisplay();
                         } catch (error) {
                             console.error("Error updating coins:", error);
                         }
                     }
-                }, 30000); // how often it should be updated
+                }, 30000);
             }
 
             startCoinEarning();
+
+            // Close button for welcome panel
+            const closePanelBtn = document.getElementById('closePanelBtn');
+            closePanelBtn.addEventListener('click', () => {
+                const welcomePanel = document.getElementById('welcomePanel');
+                welcomePanel.style.top = "-100px";
+                welcomePanel.style.opacity = "0";
+            });
 
             // Handle visibility change to pause/resume coin earning
             document.addEventListener('visibilitychange', () => {
