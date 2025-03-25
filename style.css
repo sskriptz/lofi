@@ -1286,7 +1286,7 @@ main {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 105vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 5000;
 }
@@ -1338,7 +1338,7 @@ main {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 105vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 5000;
     opacity: 0;
@@ -1467,14 +1467,66 @@ main {
 }
 
 .badges-container {
-    width: 10vw;
-    height: 20px;
+    width: 85%;
+    height: 40%;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     padding: 12px;
     margin-top: 12px;
     margin-bottom: 12px;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease-in-out;
+}
+
+.rarity {
+    font-weight: bold;
+    display: block;
+    font-size: 18px;
+}
+
+.rarity.unknown {
+    background: linear-gradient(90deg, #ff0000, #ff7300, #ffeb00, #33ff00, #0099ff, #6b00ff, #ff00c8);
+    background-size: 32% 32%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.rarity.mythical {
+    color: purple;
+}
+
+.rarity.common {
+    color: green;
+}
+
+
+/* ------------- */
 
 .pp-row2-sections {
     display: flex;
@@ -2408,7 +2460,7 @@ div#chatContainer {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 105vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 5000;
 }
@@ -2442,7 +2494,7 @@ div#chatContainer {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 105vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 5000;
 }
@@ -2924,6 +2976,7 @@ div#chatContainer {
     flex-direction: column;
     width: 100%;
     height: 100%;
+    max-height: 50vh;
     padding: 20px;
     overflow-y: auto;
     box-sizing: border-box;
@@ -4295,7 +4348,7 @@ div#chatContainer {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 105%;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
