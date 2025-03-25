@@ -28,6 +28,7 @@ const songs = [
     { title: "Flamin Hot Cheetos (slowed + reverb)", artist: "Clairo", src: "https://www.dropbox.com/scl/fi/vcf10gqhedr364nhl8lxd/clairo-flamin-hot-cheetos-slowed-reverb-TubeRipper.com.mp3?rlkey=tvodjy8uqsbm1vu8w61dv4iao&st=rbhda1b4&raw=1" },
     { title: "Lovely", artist: "Eric Godlow", src: "https://www.dropbox.com/scl/fi/p8njklpse4gvlzkl7l3n4/FREE-Lo-fi-Type-Beat-Lovely-TubeRipper.com.mp3?rlkey=q3ihtfa5fn8b914d1vqwxq5ed&st=nws4d2qz&raw=1" },
     { title: "You're Never Around", artist: "Eric Godlow", src: "https://www.dropbox.com/scl/fi/9zoajlj7bmyfcij7iqwmi/FREE-Lo-fi-Type-Beat-Youre-never-around-TubeRipper.com.mp3?rlkey=43i4mz311ehjvndj2hag6c99e&st=4ciwd2ym&raw=1" },
+    { title: "Cry For Me", artist: "The Weeknd", src: "https://www.dropbox.com/scl/fi/szai6ueone4k2hx9ktz5u/Cry-For-Me-The-Weeknd.mp3?rlkey=phi8k5gzet1kldjww9xivsc0u&st=8zxvpa33&raw=1" },
 ];
 
 
