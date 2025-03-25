@@ -8,6 +8,8 @@ import { initThemeManager, initFirebaseServices, loadUserTheme } from './themes/
 import { initializeCoinSystem } from './coins.js';
 import { initializeDayStreak } from './streak.js';
 import { initLeaderboard } from './leaderboard.js';
+import { initBadgeSystemOnLoad } from './badges.js';
+
 
 
 
@@ -20,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCoinSystem();
     initializeDayStreak();
     initLeaderboard();
+    initBadgeSystemOnLoad();
 
     
     let messageListener = null;
@@ -64,15 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
     welcomePanel.style.fontFamily = "'Inconsolata', monospace";
     welcomePanel.style.backdropFilter = "blur(15px)";
     document.body.appendChild(welcomePanel);
-      
-
+    
     const welcomeMessage = document.createElement("p");
     welcomeMessage.id = "welcomeMessage";
+    welcomeMessage.style.whiteSpace = "pre-line";
     welcomeMessage.style.color = "black";
     welcomePanel.appendChild(welcomeMessage);
-
     
     const closePanelBtn = document.createElement("button");
+    closePanelBtn.id = "closePanelBtn";
     closePanelBtn.textContent = "Continue";
     closePanelBtn.style.background = "#333333"; 
     closePanelBtn.style.border = "2px solid transparent";
