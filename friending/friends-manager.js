@@ -3,6 +3,10 @@
 import { getAuth, getFirestore } from '../firebase/firebase-config.js';
 import { openChat } from './messaging.js';
 
+import {
+    BADGE_MAPPINGS,
+    showBadgePopup,
+} from '../badges.js';
 
 
 
@@ -470,7 +474,6 @@ function addFriendProfilePanelToDOM() {
                 </div>
 
                 <div id="fp-badges-section">
-                    <h3>Badges</h3>
                     <div class="badges-container-fp"></div>
                 </div>
             </div>
@@ -679,15 +682,9 @@ function addFriendProfilePanelToDOM() {
             max-width: 60%;
         }
 
-        #fp-badges-section h3 {
-            border-bottom: none !important;
-            margin-bottom: 0 !important;
-            padding-bottom: 0 !important;
-        }
-
         .badges-container-fp {
-            width: 10vw;
-            height: 20px;
+            width: 85%;
+            height: 40%;
             background-color: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             padding: 12px;
@@ -810,6 +807,48 @@ async function getFriendProfileInfo(userId, username) {
         }
         
         const friendData = friendDoc.data();
+
+
+        // Update badges section
+        const badgesContainer = document.querySelector('.badges-container-fp');
+        
+        if (friendData.badges && friendData.badges.length > 0) {
+            badgesContainer.innerHTML = ''; // Clear any existing badges
+            badgesContainer.style.display = 'flex';
+            badgesContainer.style.justifyContent = 'center';
+            badgesContainer.style.alignItems = 'center';
+            badgesContainer.style.gap = '10px';
+            badgesContainer.style.overflowY = 'hidden';
+            badgesContainer.style.overflowX = 'auto';
+            
+            friendData.badges.forEach(badgeNumber => {
+                // Use the BADGE_MAPPINGS from the badge system
+                const badgePath = BADGE_MAPPINGS[badgeNumber];
+                if (badgePath) {
+                    const badgeImg = document.createElement('img');
+                    badgeImg.src = badgePath;
+                    badgeImg.alt = `Badge ${badgeNumber}`;
+                    badgeImg.style.width = '35px';
+                    badgeImg.style.height = '35px';
+                    badgeImg.style.cursor = 'pointer';
+                    
+                    // Add click event to open pop-up for badge description
+                    badgeImg.addEventListener('click', () => showBadgePopup(badgeNumber));
+                    
+                    badgesContainer.appendChild(badgeImg);
+                }
+            });
+        } else {
+            // Display message if no badges
+            badgesContainer.style.display = 'flex';
+            badgesContainer.style.justifyContent = 'center';
+            badgesContainer.style.alignItems = 'center';
+            badgesContainer.innerHTML = '<p style="color: white; margin: 0; text-align: center;">No badges earned</p>';
+        }
+
+
+
+
         
         // Update profile panel with friend's information
         const fpUserInfo = document.getElementById('fp-user-info');
