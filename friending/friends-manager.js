@@ -44,27 +44,52 @@ const searchInput = document.getElementById('searchInput');
 const openBtn = document.getElementById('hm-icon');
 const socialContainerOverlay = document.getElementById('socialPanelOverlay');
 
-// Send a friend request to another user
+
 async function sendFriendRequest(targetUserId) {
     const auth = getAuth();
     const db = getFirestore();
     
     const currentUser = auth.currentUser;
+    if (!currentUser) {
+        alert('No authenticated user found');
+        return;
+    }
+
     try {
+        // Validate inputs
+        if (!targetUserId) {
+            throw new Error('Invalid target user ID');
+        }
+
+        // Fetch current user document
         const currentUserDoc = await db.collection('users').doc(currentUser.uid).get();
-        const currentUserData = currentUserDoc.data();
+        const currentUserData = currentUserDoc.exists ? currentUserDoc.data() : null;
+
+        // Fetch target user document
         const targetUserDoc = await db.collection('users').doc(targetUserId).get();
-        const targetUserData = targetUserDoc.data();
+        const targetUserData = targetUserDoc.exists ? targetUserDoc.data() : null;
+
+        // Validate documents
+        if (!currentUserData) {
+            throw new Error('Current user document not found');
+        }
+        if (!targetUserData) {
+            throw new Error('Target user document not found');
+        }
+
+        // Safely access or initialize arrays
+        const currentUserFriends = currentUserData.friends || [];
+        const targetUserFriendRequests = targetUserData.friendRequests || [];
 
         // Check if already friends
-        const isAlreadyFriend = currentUserData.friends.some(friend => friend.userId === targetUserId);
+        const isAlreadyFriend = currentUserFriends.some(friend => friend.userId === targetUserId);
         if (isAlreadyFriend) {
             alert('You are already friends with this user!');
             return;
         }
 
         // Check if friend request already sent
-        const requestAlreadySent = targetUserData.friendRequests.some(
+        const requestAlreadySent = targetUserFriendRequests.some(
             request => request.userId === currentUser.uid && request.status === 'pending'
         );
         if (requestAlreadySent) {
@@ -72,19 +97,38 @@ async function sendFriendRequest(targetUserId) {
             return;
         }
 
+        // Prepare friend request data
+        const friendRequestData = {
+            userId: currentUser.uid,
+            username: currentUserData.username || 'Unknown User',
+            status: 'pending',
+            timestamp: new Date().toISOString() // Use ISO string instead of server timestamp
+        };
+
+        // Safely reference the document
         const targetUserRef = db.collection('users').doc(targetUserId);
+        
+        // Use update method to add to array
         await targetUserRef.update({
-            friendRequests: firebase.firestore.FieldValue.arrayUnion({
-                userId: currentUser.uid,
-                username: currentUserData.username,
-                status: 'pending'
-            })
+            friendRequests: firebase.firestore.FieldValue.arrayUnion(friendRequestData)
         });
 
-        searchResults.innerHTML = '';
-        searchInput.value = '';
+        // Clear search results
+        if (searchResults) {
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+        }
+        if (searchInput) {
+            searchInput.value = '';
+        }
+
         alert('Friend request sent!');
     } catch (error) {
+        console.error('Friend Request Error:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+        });
         alert('Error sending friend request: ' + error.message);
     }
 }
