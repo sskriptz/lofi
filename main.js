@@ -1,14 +1,12 @@
-
-// Import Firebase modules
 import { initFirebase, getAuth, getFirestore } from './firebase/firebase-config.js';
 import { setupAuthStateListener } from './firebase/auth-handler.js';
-import { setupSearchListener } from './friending/search.js';
-import songs from './songs.js';
+import songs from './fun/songs.js';
 import { initThemeManager, initFirebaseServices, loadUserTheme } from './themes/themeManager.js';
-import { initializeCoinSystem } from './coins.js';
-import { initializeDayStreak } from './streak.js';
-import { initLeaderboard } from './leaderboard.js';
-import { initBadgeSystemOnLoad } from './badges.js';
+import { initializeCoinSystem } from './fun/coins.js';
+import { initializeDayStreak } from './fun/streak.js';
+import { initLeaderboard } from './fun/leaderboard.js';
+import { initBadgeSystemOnLoad } from './fun/badges.js';
+import { initStoreOnLoad } from './fun/store.js';
 
 
 
@@ -23,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeDayStreak();
     initLeaderboard();
     initBadgeSystemOnLoad();
+    initStoreOnLoad();
 
     
     let messageListener = null;
@@ -212,7 +211,14 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
 
-
+        const storeUserInfo = document.getElementById("pp-user-info-store");
+        storeUserInfo.innerHTML = `
+            <img src="${user.photoURL || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                 alt="Profile" 
+                 width="50" 
+                 style="border-radius: 50%">
+            <p>${user.displayName}</p>
+        `;
 
 
 
@@ -3964,27 +3970,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // ----------------- END OF APPEARANCE PANEL JS -------------------
 
 
-  // ------------------ SHOP JS -----------------------------
+  // ------------------ STORE JS -----------------------------
 
-//   let shopSPBtn = document.getElementById("store-sp-btn");
-//   let shopPanel = document.getElementById("shopPanel");
-//   let shopPanelOverlay = document.getElementById("shopPanelOverlay");
 
-//   shopSPBtn.addEventListener('click', () => {
-//     shopPanel.style.opacity = "1";
-//     shopPanel.style.pointerEvents = "auto";
-//     shopPanelOverlay.style.display = "flex";
+    document.getElementById('store-sp-btn').addEventListener('click', function() {
+        sideBar.style.transform = "translateX(-100%)";
+        sideBar.style.pointerEvents = "none";
+        sidePanelOverlay.style.display = 'none';
 
-//     sideBar.style.transform = "translateX(-100%)";
-//     sideBar.style.pointerEvents = "none";
-//     sidePanelOverlay.style.display = "none";
-//   });
+        document.getElementById('storePanel').style.opacity = '1';
+        document.getElementById('storePanel').style.pointerEvents = 'auto';
+        document.getElementById('storePanelOverlay').style.display = 'block';
+    });
 
-//   shopPanelOverlay.addEventListener('click', () => {
-//     shopPanel.style.opacity = "0";
-//     shopPanel.style.pointerEvents = "none";
-//     shopPanelOverlay.style.display = "none";
-//   })
+
+    document.getElementById('closeStoreBtn').addEventListener('click', function() {
+        document.getElementById('storePanel').style.opacity = '0';
+        document.getElementById('storePanel').style.pointerEvents = 'none';
+        document.getElementById('storePanelOverlay').style.display = 'none';
+    });
+
+    document.getElementById('storePanelOverlay').addEventListener('click', function() {
+        document.getElementById('storePanel').style.opacity = '0';
+        document.getElementById('storePanel').style.pointerEvents = 'none';
+        document.getElementById('storePanelOverlay').style.display = 'none';
+    })
 
 
   // --------------- START OF CLOCK JS ---------------------
