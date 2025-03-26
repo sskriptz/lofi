@@ -3642,7 +3642,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let openBtn = document.getElementById("hm-icon");
   let sideBar = document.getElementById("mySidebar");
-  let closeBtn = document.getElementById("closeBtn");
   let sidePanelOverlay = document.getElementById("sidePanelOverlay");
 
   
@@ -3652,13 +3651,6 @@ document.addEventListener('DOMContentLoaded', () => {
       sideBar.style.pointerEvents = "auto";
       sidePanelOverlay.style.display = "block";
   });
-  
-  closeBtn.addEventListener('click', () => {
-      sideBar.style.transform = "translateX(-100%)";
-      sideBar.style.pointerEvents = "none";
-      sidePanelOverlay.style.display = "none";
-  });
-  
 
   sidePanelOverlay.addEventListener('click', () => {
       sideBar.style.transform = "translateX(-100%)";
