@@ -1231,7 +1231,7 @@ main {
 
 .sidebar {
     height: 100%;
-    width: 230px;
+    width: 250px;
     position: fixed;
     z-index: 5001;
     top: 0;
@@ -1240,14 +1240,45 @@ main {
     overflow: hidden;
     white-space: nowrap;
     transition: transform 0.5s ease;
-    padding-top: 60px;
+    padding-top: 30px;
     
     /* Initially hidden */
     transform: translateX(-100%); 
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
 }
 
 
+#sidebarTop {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 2px solid white;
+    border-radius: 15px;
+    width: 80%;
+    margin-left: 7.5%;
+    margin-bottom: 15px;
+    padding: 10px 5px 10px 5px;
+    background: url("https://i.ibb.co/fd8jVTy/image-5.png");
+}
+
+#sidebarBrand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#sidebarTop img {
+    width: 23px;
+    height: 23px;
+    margin-right: 10px;
+}
+
+#sidebarTop h1 {
+    font-size: 18px;
+    color: white;
+}
 
 .sidebar a {
     padding: 8px 8px 8px 32px;
@@ -1262,16 +1293,8 @@ main {
     color: #f1f1f1;
 }
 
-.sidebar .closeBtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
 #sidePanelHr1, #sidePanelHr2, #sidePanelHr3 {
-    width: 80%;
+    width: 75%;
 }
 
 #sign-out-sp-btn {
