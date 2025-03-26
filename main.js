@@ -1600,6 +1600,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const volumeSlider = document.getElementById("volume-slider");
     const playlistDropdown = document.getElementById("playlist-dropdown");
     const autoplayButton = document.getElementById("autoplay-button");
+    let isDragging = false;
 
     // Constants for truncation
     const MAX_TITLE_LENGTH = 20;
@@ -1802,23 +1803,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+    progressThumb.addEventListener('mousedown', (e) => {
+        e.preventDefault(); // Prevent default drag behavior
+        isDragging = true;
+        let wasPlaying = false;
+    
+        const progressBarRect = progressBar.getBoundingClientRect();
+        const initialOffset = progressBarRect.left;
+    
+        if (!audio.paused) {
+            wasPlaying = true;
+            audio.pause();
+        }
+    
+        const onMouseMove = (moveEvent) => {
+            if (!isDragging) return;
+            
+            const mouseX = moveEvent.clientX - initialOffset;
+            
+            const newX = Math.max(0, Math.min(mouseX, progressBarRect.width));
+            
+            const newProgress = (newX / progressBarRect.width) * 100;
+            
+            progress.style.width = `${newProgress}%`;
+            progressThumb.style.left = `${newProgress}%`;
+            
+            audio.currentTime = (newX / progressBarRect.width) * audio.duration;
+        };
+        
+        const onMouseUp = () => {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+    
+            if (wasPlaying) {
+                audio.play();
+            }
+        };
+        
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+
     volumeSlider.addEventListener("input", () => {
         audio.volume = volumeSlider.value;
     });
 
     progressBar.addEventListener("click", (e) => {
-        if (!audio.src || currentSongIndex === null) {
-            // If no song is loaded, don't do anything
-            return;
-        }
+        if (!audio.src || currentSongIndex === null) return;
         
-        const clickX = e.offsetX;
-        const width = progressBar.clientWidth;
+        const progressBarRect = progressBar.getBoundingClientRect();
+        const clickX = e.clientX - progressBarRect.left;
+        const width = progressBarRect.width;
+        
+        const newProgress = (clickX / width) * 100;
+        
+        progress.style.width = `${newProgress}%`;
+        progressThumb.style.left = `${newProgress}%`;
         audio.currentTime = (clickX / width) * audio.duration;
-        
-        if (isPlaying) {
-            playSong();
-        }
     });
 
     function formatTime(seconds) {
