@@ -24,7 +24,7 @@ const STORE_ITEMS = [
         name: 'Cosmic Particle Effect',
         description: 'Mesmerizing space-themed animation',
         price: 200,
-        category: 'Effects',
+        category: 'Profile Effects',
         image: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxjb3NtaWMlMjBwYXJ0aWNsZXN8ZW58MHx8fHwxNzExMzYyNDAwfDA&ixlib=rb-4.0.3&q=80&w=1080'
     },
     {
