@@ -6,7 +6,7 @@ import { openChat } from './messaging.js';
 import {
     BADGE_MAPPINGS,
     showBadgePopup,
-} from '../badges.js';
+} from '../fun/badges.js';
 
 
 
