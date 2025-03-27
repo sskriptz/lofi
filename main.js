@@ -7,6 +7,7 @@ import { initializeDayStreak } from './fun/streak.js';
 import { initLeaderboard } from './fun/leaderboard.js';
 import { initBadgeSystemOnLoad } from './fun/badges.js';
 import { initStoreOnLoad } from './fun/store.js';
+import { initializeInventory } from './fun/inventory.js';
 
 
 
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initLeaderboard();
     initBadgeSystemOnLoad();
     initStoreOnLoad();
+    initializeInventory();
 
     
     let messageListener = null;
@@ -4031,6 +4033,30 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('storePanel').style.pointerEvents = 'none';
         document.getElementById('storePanelOverlay').style.display = 'none';
     })
+
+    // ------------------ INVENTORY JS ----------------------
+
+    document.getElementById('inventory-sp-btn').addEventListener('click', function() {
+        sideBar.style.transform = "translateX(-100%)";
+        sideBar.style.pointerEvents = "none";
+        sidePanelOverlay.style.display = 'none';
+
+        document.getElementById('inventoryPanel').style.opacity = '1';
+        document.getElementById('inventoryPanel').style.pointerEvents = 'auto';
+        document.getElementById('inventoryPanelOverlay').style.display = 'block';
+    });
+
+    document.getElementById('closeInventoryBtn').addEventListener('click', function() {
+        document.getElementById('inventoryPanel').style.opacity = '0';
+        document.getElementById('inventoryPanel').style.pointerEvents = 'none';
+        document.getElementById('inventoryPanelOverlay').style.display = 'none';
+    });
+
+    document.getElementById('inventoryPanelOverlay').addEventListener('click', function() {
+        document.getElementById('inventoryPanel').style.opacity = '0';
+        document.getElementById('inventoryPanel').style.pointerEvents = 'none';
+        document.getElementById('inventoryPanelOverlay').style.display = 'none';
+    });
 
 
   // --------------- START OF CLOCK JS ---------------------
