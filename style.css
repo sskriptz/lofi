@@ -4863,3 +4863,305 @@ div#chatContainer {
     font-weight: bold;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
+
+
+
+/* INVENTORY */
+
+.inventory-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85vw;
+    max-width: 1200px;
+    height: 85vh;
+    background-color: #36393f;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.inventory-panel.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.inventory-panel:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    transform: translate(-50%, -50%) scale(1.005);
+}
+
+#inventoryPanelOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c2f33;
+    padding: 15px 20px;
+    border-bottom: 1px solid #4f545c;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-header h2 {
+    color: #dcddde;
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+#inventorySearch {
+    background-color: #40444b;
+    border: 1px solid #4f545c;
+    color: #dcddde;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-right: 15px;
+    width: 750px;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+#inventorySearch:focus {
+    border-color: #7289da;
+    box-shadow: 0 0 0 2px rgba(114, 137, 218, 0.2);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #72767d;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.1s;
+    line-height: 1;
+    padding: 0;
+}
+
+.close-btn:hover {
+    color: #dcddde;
+    transform: scale(1.1);
+}
+
+.inventory-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.inventory-categories {
+    width: 220px;
+    background-color: #2f3136;
+    border-right: 1px solid #4f545c;
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none;
+    overflow-y: auto;
+}
+
+.inventory-categories li {
+    padding: 12px 20px;
+    color: #72767d;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.inventory-categories li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.inventory-categories li:hover {
+    background-color: #40444b;
+    color: #dcddde;
+}
+
+.inventory-categories li.active {
+    background-color: #7289da;
+    color: #ffffff;
+}
+
+.inventory-categories li.active::before {
+    background-color: #ffffff;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #36393f;
+    flex: 1;
+    align-items: start;
+}
+
+.inventory-card {
+    background-color: #2f3136;
+    border-radius: 10px;
+    border: 1px solid #4f545c;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow;
+}
+
+.inventory-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+    transform: rotate(-45deg);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.inventory-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.inventory-card:hover::before {
+    opacity: 1;
+}
+
+.inventory-card img {
+    max-width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+}
+
+.inventory-card:hover img {
+    transform: scale(1.05);
+}
+
+.inventory-card-content {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    min-height: 100px; /* Added to prevent content jumping */
+}
+
+.inventory-card-content h3 {
+    color: #dcddde;
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+}
+
+.inventory-card-content p {
+    color: #72767d;
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+}
+
+.inventory-toggle {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+    padding-top: 10px;
+    gap: 10px;
+}
+
+.inventory-toggle label {
+    color: white;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    transform: translateZ(0); /* Enable hardware acceleration */
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4f545c;
+    transition: 
+        background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 
+        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+        background-color 0.4s ease;
+    border-radius: 50%;
+    will-change: transform;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: #7289da;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
