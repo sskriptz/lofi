@@ -1190,7 +1190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //----------- CODE FOR BACKGROUND IMAGE CHANGING ------------------
     
     // Default wallpaper URL - used for new users
-    const DEFAULT_WALLPAPER = "https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg";
+    const DEFAULT_WALLPAPER = "./assets/default-wallpapers/full/bg1.jpg";
 
     // Reference to wallpaper buttons
     const wallpaperBg1Btn = document.getElementById("wallpaperBg1Btn");
@@ -1204,10 +1204,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Wallpaper URLs - store these for reference
     const wallpapers = {
-        1: "https://wallpapers.com/images/featured/lo-fi-mvqzjym6ie17firw.jpg",
-        2: "https://i.pinimg.com/originals/66/29/ac/6629ac69eee96adbe0880b4f06afdc26.gif",
-        3: "https://s.widget-club.com/images/YyiR86zpwIMIfrCZoSs4ulVD9RF3/293280da671a76a539b89abbce741e3c/309059649f6c758fb2223a2fea97527d.jpg",
-        4: "https://i.postimg.cc/fWGb9PSP/Untitled-design-2.png"
+        1: "./assets/default-wallpapers/full/bg1.jpg",
+        2: "./assets/default-wallpapers/full/bg2.gif",
+        3: "./assets/default-wallpapers/full/bg3.jpg",
+        4: "./assets/default-wallpapers/full/bg4.png"
     };
 
     // Create preview container and image element
@@ -2738,7 +2738,7 @@ document.addEventListener('DOMContentLoaded', () => {
       playlistsSection.innerHTML = `
           <div class="playlist-section-header">
               <button class="create-playlist-btn">
-                  <img src="https://cdn-icons-png.flaticon.com/512/3303/3303893.png">
+                  <img src="./assets/elements/plus.png" alt="Create Playlist" class="plus-icon">
               </button>
           </div>
           <div class="playlists-container"></div>
