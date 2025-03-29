@@ -336,19 +336,19 @@
             font-size: 18px;
         }
 
-        #mute-btn {
+        #speaker-btn {
             background-color: rgba(0, 0, 0, 0.5);
             padding: 15px;
             border-radius: 50%;
         }
 
-        #mute-icon {
+        #speaker-icon {
             transition: transform 0.3s ease;
             width: 25px;
             height: 25px;
         }
 
-        #mute-btn:hover #mute-icon {
+        #speaker-btn:hover #mute-icon {
             transform: scale(1.1);
         }
 
@@ -432,8 +432,8 @@
     <div id="main-content">
 
          <!-- Mute/Unmute Button -->
-        <div id="mute-btn" onclick="toggleMute()" style="position: fixed; top: 10px; left: 10px; cursor: pointer; z-index: 1000;">
-            <img id="mute-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS49Jn2LHracg8eQTJn6MWx9V39QfA9rqmZwg&s" alt="Mute" width="30">
+        <div id="speaker-btn" onclick="toggleMute()" style="position: fixed; top: 10px; left: 10px; cursor: pointer; z-index: 1000;">
+            <img id="speaker-icon" src="./assets/elements/speaker.png" alt="Speaker" width="30">
         </div>
 
         <div class="cards-container">
@@ -444,7 +444,7 @@
                 </div>
 
                 <button id="sign-in-btn">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png" alt="Google Logo">
+                    <img src="./assets/elements/google.png" alt="Google Logo">
                     Sign in with Google
                 </button>
 
@@ -470,10 +470,10 @@
             <p>Developed by Kroot Loops</p>
             <div id="social-buttons">
                 <a href="https://github.com/sskriptz" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" width="30" />
+                    <img src="./assets/elements/github.png" alt="GitHub" width="30" />
                 </a>
                 <a href="https://discord.com/users/1091883411674763385" target="_blank">
-                    <img src="https://brandlogos.net/wp-content/uploads/2021/11/discord-logo-512x512.png" alt="Discord" width="30" />
+                    <img src="./assets/elements/discord.png" alt="Discord" width="30" />
                 </a>
             </div>
         </div>
@@ -491,19 +491,19 @@
             // Mute/Unmute Functionality
             let isMuted = false;  // Track mute state
             const audio = document.getElementById("background-music");
-            const muteIcon = document.getElementById("mute-icon");
+            const muteIcon = document.getElementById("speaker-icon");
 
             function toggleMute() {
                 if (audio.muted) {
                     audio.muted = false;
-                    muteIcon.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS49Jn2LHracg8eQTJn6MWx9V39QfA9rqmZwg&s"; // Speaker icon
+                    muteIcon.src = "./assets/elements/speaker.png"; // Speaker icon
                 } else {
                     audio.muted = true;
-                    muteIcon.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZRDX3zAQwjjZ93FfBxSzOmekm9eEno9Do7g&s"; // Mute icon
+                    muteIcon.src = "./assets/elements/mute.png"; // Mute icon
                 }
             }
 
-            const muteButton = document.getElementById("mute-btn");
+            const muteButton = document.getElementById("speaker-btn");
             muteButton.addEventListener("click", toggleMute);
 
         });
