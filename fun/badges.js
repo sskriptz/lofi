@@ -2,9 +2,9 @@ import { getAuth, getFirestore } from '../firebase/firebase-config.js';
 
 // Badge mapping
 const BADGE_MAPPINGS = {
-    1: './assets/owner-badge.png',
-    2: './assets/dev-badge.png',
-    3: './assets/first-100-badge.png',
+    1: './assets/badges/owner-badge.png',
+    2: './assets/badges/dev-badge.png',
+    3: './assets/badges/first-100-badge.png',
 };
 
 // Badge descriptions
