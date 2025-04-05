@@ -1,4 +1,4 @@
-# Lofi - Upgraded
+# The Chill Zone
 
 This is the official lofi website repository that will be used for now. All commits to the main website will be pushed here. This is the main /lofi repository so 
 
