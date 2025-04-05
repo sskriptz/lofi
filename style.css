@@ -753,6 +753,7 @@ main {
 .audio-player-container {
     width: 100%;
     box-sizing: border-box;
+    position: relative;
 }
 
 .audio-player {
@@ -765,7 +766,7 @@ main {
     flex-direction: row;
     align-items: center;
     gap: 2vw;
-    z-index: 9;
+    z-index: 1; /* Lower than playlist */
     margin-top: 2%;
     border-radius: 15px;
     max-width: 100%;
@@ -898,7 +899,7 @@ main {
 
 .volume-control input[type="range"] {
     appearance: none;
-    width: 7vw;
+    width: 6.3vw;
     height: 6px;
     background: #404040;
     border-radius: 3px;
@@ -912,26 +913,6 @@ main {
     background: #87d3a2;
     border-radius: 50%;
     cursor: pointer;
-}
-
-.playlist {
-    width: 100%;
-}
-
-.playlist-dropdown {
-    width: 15vw;
-    background-color: #333333;
-    color: white;
-    padding: 8px;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-right: 2vw;
-}
-
-.playlist-dropdown:hover {
-    background: #404040;
 }
 
 .playlist-controls {
@@ -955,9 +936,123 @@ main {
     background: #1DB954;
 }
 
+#music-option-button {
+    font-size: 14px;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 8vw;
+    margin-right: 20px;
+}
+
+/* Playlist container styling */
+#playlist-container {
+    position: absolute;
+    top: 15px; /* Adjust the position to place the playlist above the audio player */
+    right: 6%;
+    width: 20%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+    background: #2a2a2a; /* Dark background for the playlist */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7); /* Subtle shadow for depth */
+    z-index: 10000;
+    transform: translateY(-100%); /* Initially hidden, will animate in */
+    transition: all 0.5s ease; /* Smooth transition for appearance */
+}
+
+/* When the playlist is visible */
+#playlist-container.show {
+    transform: translateY(0);
+}
+
+/* Playlist header */
+.playlist-header {
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Playlist items */
+.playlist {
+    width: 100%;
+    padding: 0;
+    list-style-type: none;
+    overflow-y: auto;
+    max-height: 200px; /* Limit height and enable scrolling if needed */
+}
+
+.playlist li {
+    padding: 10px;
+    border-bottom: 1px solid #444444;
+    color: #b3b3b3;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for playlist items */
+.playlist li:hover {
+    background-color: #404040;
+    color: white;
+}
+
+/* Close button */
+#close-playlist-button {
+    background: #FF4C4C;
+    color: white;
+    border: none;
+    font-size: 16px;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+/* Close button hover effect */
+#close-playlist-button:hover {
+    background-color: #FF1A1A;
+}
+
+
+#repeat-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #404040; /* Different color when inactive */
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 15px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#repeat-button:hover {
+    background: #1ed760;
+}
+
+#repeat-button.active {
+    background: #1DB954; /* Same green as other active controls */
+}
+
+#repeat-icon {
+    width: 17px;
+    height: 17px;
+    filter: invert(1);
+}
+
 #autoplay-button {
     width: 9vw;
-    /* margin-right: 7vw; */
 }
 
 .gsContainer {
