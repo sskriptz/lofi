@@ -32,6 +32,8 @@ const songs = [
     { title: "Better in the Dark", artist: "Jordana, TV Girl", src: "https://www.dropbox.com/scl/fi/76acxhkpskzo8e35tjxra/Better-in-the-Dark-Jordana.mp3?rlkey=jm6m2jyqkcx7e0yas944rjtui&st=3zq97guw&raw=1" },
     { title: "Taking What's Not Yours", artist: "TV Girl", src: "https://www.dropbox.com/scl/fi/85f0k35a01oez3x2oew75/Taking-What-s-Not-Yours-TV-Girl.mp3?rlkey=omecdlykgkb8s26q4kanth1qm&st=s252iy7d&raw=1" },
     { title: "Not Allowed", artist: "TV Girl", src: "https://www.dropbox.com/scl/fi/l7qd2zztyx9e5r6vkzyhb/Not-Allowed-TV-Girl.mp3?rlkey=fz8jjb06hmushd5dn27gzi7c2&st=g5cclm68&raw=1" },
+    { title: "So Bitter", artist: "Stxlkin", src: "https://www.dropbox.com/scl/fi/bw3dxh1ol8f71r3iz8leq/Stxlkin-So-Bitter-TubeRipper.com.mp3?rlkey=zg76tq2yhr5bcqu8yfj5khj6o&st=ekxsgw05&raw=1" },
+    { title: "Kids", artist: "Current Joys", src: "https://www.dropbox.com/scl/fi/zopu24acu99ax2t0ydb08/SpotiDownloader.com-Kids-Current-Joys.mp3?rlkey=mpprophuoz0dxywbxbekv3zpc&st=i5kunm98&raw=1" },
 ];
 
 
