@@ -31,6 +31,16 @@ const songs = [
     { title: "New N3on", artist: "Playboi Carti", src: "https://www.dropbox.com/scl/fi/wi1sae8fogv4bgdk5ei8y/spotifydown.com-New-N3on-Playboi-Carti.mp3?rlkey=0qkhbb16iy1iqxep7jzfa32o6&st=ehj7wx21&raw=1" },
     { title: "Our Time", artist: "Lil Tecca", src: "https://www.dropbox.com/scl/fi/adiktphs5yqeweepi3p29/spotifydown.com-Our-Time-Lil-Tecca.mp3?rlkey=h521ror9j3s5asc9ewbcx5diw&st=p9xkgdnj&raw=1" },
     { title: "Gang Baby", artist: "NLE Choppa", src: "https://www.dropbox.com/scl/fi/yqxibbvz1b4a4edv7ojr0/spotifydown.com-Gang-Baby-NLE-Choppa.mp3?rlkey=pd51n0sxphvyi2ets34bnddjt&st=8enciim4&raw=1" },
+    { title: "Trauma", artist: "BoyWithUke", src: "https://www.dropbox.com/scl/fi/qcjgcmkx0663eiaofioi8/SpotiDownloader.com-Trauma-BoyWithUke.mp3?rlkey=vothvkrt7brfskezi0vz383vi&st=6koskq71&raw=1" },
+    { title: "Long Drives", artist: "BoyWithUke", src: "https://www.dropbox.com/scl/fi/cjtt31epcyr30979yz87d/SpotiDownloader.com-Long-Drives-BoyWithUke.mp3?rlkey=jqyoedls2r9hsx7zdepmh99og&st=bl31be8g&raw=1" },
+    { title: "Migraine", artist: "BoyWithUke", src: "https://www.dropbox.com/scl/fi/obcpfo4jou69zte3pl6ed/SpotiDownloader.com-Migraine-BoyWithUke.mp3?rlkey=d1ba94a49eq2coajjj9sw1nxq&st=q9gw4ars&raw=1" },
+    { title: "Two Moons", artist: "BoyWithUke", src: "https://www.dropbox.com/scl/fi/4z9jkdxtzz5nkflenoumo/SpotiDownloader.com-Two-Moons-BoyWithUke.mp3?rlkey=fx98e10t26zjyesw0go7h1yue&st=5r6goyn2&raw=1" },
+    { title: "Closer", artist: "The Chainsmokers, Halsey", src: "https://www.dropbox.com/scl/fi/t729ccffzllv84dna9lqg/SpotiDownloader.com-Closer-The-Chainsmokers.mp3?rlkey=byz7n50ua9eq328xvu2aih9q1&st=mss1xyko&raw=1" },
+    { title: "RATHER LIE", artist: "Playboi Carti, The Weeknd", src: "https://www.dropbox.com/scl/fi/d2rgfhtn5tbjv26v3w4hk/SpotiDownloader.com-RATHER-LIE-with-The-Weeknd-Playboi-Carti.mp3?rlkey=j1a77utv0abunflcqixspbb48&st=7wzfahsp&raw=1" },
+    { title: "It's Up (feat. Young Thug & 21 Savage)", artist: "Drake, Young Thug, 21 Savage", src: "https://www.dropbox.com/scl/fi/4ud61zqfi9q7uraojklmg/SpotiDownloader.com-It-s-Up-feat.-Young-Thug-21-Savage-Drake.mp3?rlkey=zm0p0nz9vjvwhnfu8dk03f97v&st=5ox5z3ga&raw=1" },
+    { title: "God's Plan", artist: "Drake", src: "https://www.dropbox.com/scl/fi/o3dvxdm8v02zbnfnzya39/SpotiDownloader.com-God-s-Plan-Drake.mp3?rlkey=51afu94zd0khjldw3yyjdzbg2&st=r7d7v5h0&raw=1" },
+    { title: "for when it's warmer", artist: "Sleepy Fish", src: "https://www.dropbox.com/scl/fi/akxfw2u3x59yge6kbjylb/SpotiDownloader.com-for-when-it-s-warmer-Sleepy-Fish.mp3?rlkey=xhaupx1szu37229wv4979q3c6&st=v9tmt5vm&raw=1" },
+    { title: "Timeless (feat. Playboi Carti)", artist: "The Weeknd, Playboi Carti", src: "https://www.dropbox.com/scl/fi/1b8pmscp7ym7ylma363zn/SpotiDownloader.com-Timeless-feat.-Playboi-Carti-The-Weeknd.mp3?rlkey=d8avr0g3o5k5d6x85mk2ee5ho&st=5k9xysdn&raw=1" },
 ];
 
 
