@@ -5,25 +5,20 @@ export function applyLightTheme() {
     const particleContainer = document.getElementById('particleContainer');
     const particlesButtonRain = document.getElementById('particlesButtonRain');
     const particlesButtonSnow = document.getElementById('particlesButtonSnow');
-    const weatherContainer = document.getElementById('weatherContainer');
+    // const weatherContainer = document.getElementById('weatherContainer');
     const weatherButtonsStorm = document.getElementById('weatherButtonsStorm');
     const weatherButtonsBlizzard = document.getElementById('weatherButtonsBlizzard');
-    const wallpaperContainer = document.getElementById('wallpaperContainer');
-    const wallpaperBg1Btn = document.getElementById('wallpaperBg1Btn');
-    const wallpaperBg2Btn = document.getElementById('wallpaperBg2Btn');
-    const wallpaperBg3Btn = document.getElementById('wallpaperBg3Btn');
-    const wallpaperBg4Btn = document.getElementById('wallpaperBg4Btn');
+    // const wallpaperContainer = document.getElementById('wallpaperContainer');
+    // const wallpaperBg1Btn = document.getElementById('wallpaperBg1Btn');
+    // const wallpaperBg2Btn = document.getElementById('wallpaperBg2Btn');
+    // const wallpaperBg3Btn = document.getElementById('wallpaperBg3Btn');
+    // const wallpaperBg4Btn = document.getElementById('wallpaperBg4Btn');
     const audioPlayer = document.getElementById('audioPlayer');
     const volumeTag = document.getElementById('volumeTag');
     const profileContainer = document.getElementById('profileContainer');
-    const profileEditBtnContainer = document.getElementById('profileEditBtnContainer');
-    const profileEditIcon = document.getElementById('profileEditIcon');
-    const profileSettingsBtnContainer = document.getElementById('profileSettingsBtnContainer');
-    const profileSettingsIcon = document.getElementById('profileSettingsIcon');
     const tdContainer = document.getElementById('tdContainer');
     const tdHeader = document.getElementById('tdHeader');
     const todoList = document.getElementById('todoList');
-    const gsContainer = document.getElementById('gsContainer');
     
     // Apply styles with null checks
     if (appearancePanel) appearancePanel.style.backgroundColor = '#ffffff';
@@ -47,10 +42,10 @@ export function applyLightTheme() {
         particlesButtonSnow.style.color = 'black';
     }
 
-    if (weatherContainer) {
-        weatherContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-        weatherContainer.style.color = 'black';
-    }
+    // if (weatherContainer) {
+    //     weatherContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+    //     weatherContainer.style.color = 'black';
+    // }
     if (weatherButtonsStorm) {
         weatherButtonsStorm.style.backgroundColor = 'transparent'; // Muted red
         weatherButtonsStorm.style.color = 'black';
@@ -60,27 +55,27 @@ export function applyLightTheme() {
         weatherButtonsBlizzard.style.color = 'black';
     }
 
-    if (wallpaperContainer) {
-        wallpaperContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-        wallpaperContainer.style.color = 'black';
-    }
+    // if (wallpaperContainer) {
+    //     wallpaperContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+    //     wallpaperContainer.style.color = 'black';
+    // }
 
-    if (wallpaperBg1Btn) {
-        wallpaperBg1Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'; // Muted teal
-        wallpaperBg1Btn.style.color = 'black';
-    }
-    if (wallpaperBg2Btn) {
-        wallpaperBg2Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-        wallpaperBg2Btn.style.color = 'black';
-    }
-    if (wallpaperBg3Btn) {
-        wallpaperBg3Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-        wallpaperBg3Btn.style.color = 'black';
-    }
-    if (wallpaperBg4Btn) {
-        wallpaperBg4Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-        wallpaperBg4Btn.style.color = 'black';
-    }
+    // if (wallpaperBg1Btn) {
+    //     wallpaperBg1Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'; // Muted teal
+    //     wallpaperBg1Btn.style.color = 'black';
+    // }
+    // if (wallpaperBg2Btn) {
+    //     wallpaperBg2Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+    //     wallpaperBg2Btn.style.color = 'black';
+    // }
+    // if (wallpaperBg3Btn) {
+    //     wallpaperBg3Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+    //     wallpaperBg3Btn.style.color = 'black';
+    // }
+    // if (wallpaperBg4Btn) {
+    //     wallpaperBg4Btn.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+    //     wallpaperBg4Btn.style.color = 'black';
+    // }
 
     if (audioPlayer) audioPlayer.style.backgroundColor = '#3c3c3c';
 
@@ -103,21 +98,10 @@ export function applyLightTheme() {
         pTag.style.color = "black";
     }
 
-    if (profileEditBtnContainer) profileEditBtnContainer.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
-    if (profileEditIcon) profileEditIcon.style.filter = "invert(0)";
-
-    if (profileSettingsBtnContainer) profileSettingsBtnContainer.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
-    if (profileSettingsIcon) profileSettingsIcon.style.filter = "invert(0)";
-
     if (tdContainer) tdContainer.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
     if (tdHeader) tdHeader.style.color = "#3b2f2f";
     if (todoList) {
         todoList.style.backgroundColor = "#f7f9fc";
         todoList.style.border = "2px solid #e8eaf6";
-    }
-
-    if (gsContainer) {
-        gsContainer.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
-        gsContainer.style.color = "black";
     }
 }
