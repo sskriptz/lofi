@@ -54,7 +54,7 @@
     
 
     <img id="hm-icon" src="./assets/elements/menu-icon.png" data-tooltip="Open Menu">  
-    <img id="info-icon" src="./assets/elements/info-icon.png" data-tooltip="Page Information">
+    <!-- <img id="info-icon" src="./assets/elements/info-icon.png" data-tooltip="Page Information"> -->
 
 
     <div id="mySidebar" class="sidebar">
@@ -383,207 +383,178 @@
     <div class="appearance-panel-overlay" id="appearancePanelOverlay"></div>
 
 
+    <div class="profileRowContainer">
+        <div class="profileContainer" id="profileContainer">
+            <div class="userInfoContainer">
+                <div id="userInfo" class="user-info-flex"></div>
+            </div>
+        
+            <div class="signOut-button-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/992/992680.png" id="sign-out-btn">
+            </div>
+        </div>
+    </div>
 
-    <main id="main-legacy">
+
+    <div class="tdContainer" id="tdContainer">
+        <div class="tdHeader" id="tdHeader">To-Do List</div>
+        <div class="tdPanel" id="todoList"></div>
+        <div class="item-counter">Items: <span id="item-count">0</span> / 10</div>
+        <div class="tdButtons">
+            <button class="btn btn-add" id="add-btn">Add Task</button>
+            <button class="btn btn-remove" id="remove-btn">Delete</button>
+            <button class="btn btn-select-all" id="select-all-btn">Select All</button>
+            <button class="btn btn-save" id="save-btn">Save List</button>
+        </div>
+        <div class="tdStats">
+            <div class="stat-item">
+                <span class="stat-label">Completed:</span>
+                <span id="completed-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Pending:</span>
+                <span id="pending-count">0</span>
+            </div>
+        </div>
+        <div class="notification" id="notification">
+            <span id="notification-text"></span>
+        </div>
+    </div>
+
+    <div id="todoListOverlay"></div>
+
+
+    <main>
         <div class="main-items">
-            <div class="column1">
-                <div class="c1-r1-container">
-                    <div class="timeContainer1" id="timeContainer1">
-                        <div class="timeContainer2">
-                            <div class="hrs_container">
-                                <h1 class="timeNumber" id="hrs">00</h1>
-                            </div>
-                            
-                            <div class="colon">:</div>
-
-                            <div class="min_container">
-                                <h1 class="timeNumber" id="min">00</h1>
-                            </div>
-
-                            <div class="colon">:</div>
-
-                            <div class="sec_container">
-                                <h1 class="timeNumber" id="sec">00</h1>
-                            </div>
-
-                            <div class="ampm_container">
-                                <h1 class="timeNumber" id="ampm">00</h1>
-                            </div>
-                        </div>
-
-                        <div class="timeDescriptionContainer">
-                            <div class="hoursDescContainer">
-                                <h1 id="timeDescriptionText">HOURS</h1>
-                            </div>
-
-                            <div class="minutesDescContainer">
-                                <h1 id="timeDescriptionText">MINUTES</h1>
-                            </div>
-
-                            <div class="secondsDescContainer">
-                                <h1 id="timeDescriptionText">SECONDS</h1>
-                            </div>
-
-                            <div class="ampmDescContainer">
-                                <h1 id="timeDescriptionText">AM/PM</h1>
-                            </div>
-                        </div>
-                    </div>
+            <div class="timeAndDateContainer">
+                <div class="time-container">
+                    <h1 class="timeNumber" id="hrs">00</h1>
+                    <div class="colon">:</div>
+                    <h1 class="timeNumber" id="min">00</h1>
+                    <div class="colon">:</div>
+                    <h1 class="timeNumber" id="sec">00</h1>
+                    <h1 class="timeNumber" id="ampm">AM</h1>
                 </div>
 
-                <div class="row2container">
-                    <div class="particleContainer" id="particleContainer">
-                        <h2 id="particleTitleText">particles</h2>
+                <div class="date-container">
+                    <h3 id="date"></h3>
+                </div>
+            </div>
+            
 
-                        <div class="particlesDescriptionTitles">
-                            <h4>Rain 💧</h4>
-                            <h4>Snow ☃️</h4>
-                        </div>
+            <div class="taskbar">
+                <div class="widgets" id="widgets">
+                    <div class="particleContainer" id="particleContainer">
 
                         <div class="particleButtonsContainer">
-                            <button id="particlesButtonRain">Enable</button>
-                            <button id="particlesButtonSnow">Enable</button>
-                        </div>
-                    </div>
-
-                    <div class="weatherContainer" id="weatherContainer">
-                        <h2 id="weatherTitleText">weather</h2>
-
-                        <div class="weatherDescriptionTitles">
-                            <h4>Storm ⛈️</h4>
-                            <h4>Blizzard ❄</h4>
+                            <button id="particlesButtonRain"><img src="https://cdn-icons-png.flaticon.com/512/2060/2060846.png"></button>
+                            <button id="particlesButtonSnow"><img src="https://cdn-icons-png.flaticon.com/512/2465/2465979.png"></button>
                         </div>
 
                         <div class="weatherButtonsContainer">
-                            <button id="weatherButtonsStorm">Enable</button>
-                            <button id="weatherButtonsBlizzard">Enable</button>
+                            <button id="weatherButtonsStorm"><img src="https://cdn-icons-png.flaticon.com/512/3238/3238823.png"></button>
+                            <button id="weatherButtonsBlizzard"><img src="https://cdn-icons-png.flaticon.com/512/4165/4165546.png"></button>
                         </div>
                     </div>
+
+                    <button id="taskbarProfileBtn" class="taskbarMiniBtn">
+                        <img id="taskbarProfilePic" src="https://cdn-icons-png.flaticon.com/512/15181/15181400.png" alt="Profile Picture" class="taskbar-btn-pic">
+                    </button>
+
+                    <button id="taskbarFriendsBtn" class="taskbarMiniBtn">
+                        <img id="taskbarFriendsPic" src="https://cdn-icons-png.flaticon.com/512/1500/1500455.png" alt="Friends Picture" class="taskbar-btn-pic">
+                    </button>
+
+                    <button id="taskbarMusicBtn" class="taskbarMiniBtn">
+                        <img id="taskbarMusicPic" src="https://cdn-icons-png.flaticon.com/512/876/876766.png" alt="Music Picture" class="taskbar-btn-pic" style="width: 30px;">
+                    </button>
+
+                    <div id="taskbarDivider"></div>
+
+                    <button id="taskbarTDBtn" class="taskbarMiniBtn">
+                        <img id="taskbarTDPic" src="https://cdn-icons-png.flaticon.com/512/1950/1950715.png" alt="Todo-List Picture" class="taskbar-btn-pic" style="width: 35px;">
+                    </button>
                 </div>
 
-                <div class="wallpaperContainer" id="wallpaperContainer">
-                    <h2 id="wallpaperTitleText">wallpaper</h2>
+                <div class="audio-player-container">
+                    <div id="playlist-container" class="playlist-container">
+                        <div class="playlist-header">Your Playlist</div>
+                        <ul id="playlist" class="playlist">
+                            <!-- Playlist items go here -->
+                        </ul>
+                        <button id="close-playlist-button" class="close-playlist-button">Close</button>
+                    </div>
                 
-                    <div class="picNbuttonContainer">
-                        <div class="wallpaperImagePreviews">
-                            <img src="./assets/default-wallpapers/previews/bg1-preview.png" id="bg1Preview" alt="Sunset over a pixelated city">
-                            <img src="./assets/default-wallpapers/previews/bg2-preview.png" id="bg2Preview" alt="Studying from the bedroom on a rainy, gloomy day">
-                            <img src="./assets/default-wallpapers/previews/bg3-preview.png" id="bg3Preview" alt="Rainy Anime City">
-                            <img src="./assets/default-wallpapers/previews/bg4-preview.png" id="bg4Preview" alt="Mountainous landscape with a house on a cliff">
+                    <div class="audio-player" id="audioPlayer">
+                        <div class="si-c-container">
+                            <div class="song-info">
+                                <div class="song-title" id="song-title">Song 1</div>
+                                <div class="song-artist" id="song-artist">Artist 1</div>
+                            </div>
+                
+                            <div class="controls">
+                                <button id="prev-button">|&#9664;</button>
+                                <button id="play-button">&#9654;</button>
+                                <button id="next-button">&#9654;|</button>
+                                <button id="repeat-button"><img src="./assets/elements/repeat.png" id="repeat-icon"></button>
+                            </div>
                         </div>
                 
-                        <div class="wallpaperButtonsContainer">
-                            <button id="wallpaperBg1Btn" class="wallpaperButton">Chosen</button>
-                            <button id="wallpaperBg2Btn" class="wallpaperButton">Choose</button>
-                            <button id="wallpaperBg3Btn" class="wallpaperButton">Choose</button>
-                            <button id="wallpaperBg4Btn" class="wallpaperButton">Choose</button>
+                        <div class="pc-vc-container">
+                            <div class="progress-container">
+                                <div class="progress-bar" id="progress-bar">
+                                    <div class="progress" id="progress"></div>
+                                    <div class="progress-thumb" id="progress-thumb"></div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="current-time">0:00</span>
+                                    <span id="total-duration">0:00</span>
+                                </div>
+                            </div>
+                
+                            <div class="volume-control">
+                                <label for="volume-slider" id="volumeTag">Volume</label>
+                                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+                            </div>
+                        </div>
+                
+                        <div class="ap-dd-container">
+                            <div class="playlist-controls">
+                                <button id="music-option-button">Select Music</button>
+                            </div>
+                
+                            <div class="playlist-controls">
+                                <button id="autoplay-button">Autoplay: On</button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-            </div>
-
-            <div class="column2">
-
-                <div class="profileRowContainer">
-                    <div class="profileContainer" id="profileContainer">
-                        <div class="userInfoContainer">
-                            <div id="userInfo" class="user-info-flex"></div>
-                        </div>
-                    
-                        <div class="signOut-button-container">
-                            <button id="sign-out-btn">Sign Out</button>
-                        </div>
-                    </div>
-
-                    <div class="profileEdit-button-container" id="profileEditBtnContainer">
-                        <img src="./assets/elements/profile-edit.png" alt="Profile Edit Icon" class="profileEdit-icon" id="profileEditIcon" width="50px" height="50px" data-tooltip="Customize Profile">
-                    </div>
-                    
-
-                    <div class="profileSettings-button-container" id="profileSettingsBtnContainer">
-                        <img src="./assets/elements/profile-customization.png" alt="Profile Setting Icon" class="profileSettings-icon" id="profileSettingsIcon" width="42px" height="42px" data-tooltip="Profile Settings">
-                    </div>
-                </div>
-                
-                <div class="tdContainer" id="tdContainer">
-                    <div class="tdHeader" id="tdHeader">to-do list</div>
-                    <div class="tdPanel" id="todoList"></div>
-                    <div class="tdButtons">
-                        <button class="btn btn-add" id="add-btn">Add Task</button>
-                        <button class="btn btn-remove" id="remove-btn">Delete</button>
-                        <button class="btn btn-select-all" id="select-all-btn">Select All</button>
-                        <button class="btn btn-save" id="save-btn">Save List</button>
-                    </div>
-                </div>
-
-                <div class="gsContainer" id="gsContainer">
-                    <div class="gsItemsContainer">
-                        <h2 class="gsTitle">Genre Select</h2>
-                        <select id="genre-dropdown" class="genre-dropdown">
-                            <!-- Playlist options will be added dynamically -->
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
             
-        <div class="audio-player-container">
-            <div id="playlist-container" class="playlist-container">
-                <div class="playlist-header">Your Playlist</div>
-                <ul id="playlist" class="playlist">
-                    <!-- Playlist items go here -->
-                </ul>
-                <button id="close-playlist-button" class="close-playlist-button">Close</button>
-            </div>
-        
-            <div class="audio-player" id="audioPlayer">
-                <div class="si-c-container">
-                    <div class="song-info">
-                        <div class="song-title" id="song-title">Song 1</div>
-                        <div class="song-artist" id="song-artist">Artist 1</div>
-                    </div>
-        
-                    <div class="controls">
-                        <button id="prev-button">|&#9664;</button>
-                        <button id="play-button">&#9654;</button>
-                        <button id="next-button">&#9654;|</button>
-                        <button id="repeat-button"><img src="./assets/elements/repeat.png" id="repeat-icon"></button>
-                    </div>
-                </div>
-        
-                <div class="pc-vc-container">
-                    <div class="progress-container">
-                        <div class="progress-bar" id="progress-bar">
-                            <div class="progress" id="progress"></div>
-                            <div class="progress-thumb" id="progress-thumb"></div>
-                        </div>
-                        <div class="time-display">
-                            <span id="current-time">0:00</span>
-                            <span id="total-duration">0:00</span>
-                        </div>
-                    </div>
-        
-                    <div class="volume-control">
-                        <label for="volume-slider" id="volumeTag">Volume</label>
-                        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
-                    </div>
-                </div>
-        
-                <div class="ap-dd-container">
-                    <div class="playlist-controls">
-                        <button id="music-option-button">Select Music</button>
-                    </div>
-        
-                    <div class="playlist-controls">
-                        <button id="autoplay-button">Autoplay: On</button>
-                    </div>
-                </div>
+                <audio id="audio" autoplay></audio> <!-- Removed 'muted' attribute -->
             </div>
         </div>
         
-    
-        <audio id="audio" autoplay></audio> <!-- Removed 'muted' attribute -->
+
+        <!-- <div class="wallpaperContainer" id="wallpaperContainer">
+            <h2 id="wallpaperTitleText">wallpaper</h2>
+        
+            <div class="picNbuttonContainer">
+                <div class="wallpaperImagePreviews">
+                    <img src="./assets/default-wallpapers/previews/bg1-preview.png" id="bg1Preview" alt="Sunset over a pixelated city">
+                    <img src="./assets/default-wallpapers/previews/bg2-preview.png" id="bg2Preview" alt="Studying from the bedroom on a rainy, gloomy day">
+                    <img src="./assets/default-wallpapers/previews/bg3-preview.png" id="bg3Preview" alt="Rainy Anime City">
+                    <img src="./assets/default-wallpapers/previews/bg4-preview.png" id="bg4Preview" alt="Mountainous landscape with a house on a cliff">
+                </div>
+        
+                <div class="wallpaperButtonsContainer">
+                    <button id="wallpaperBg1Btn" class="wallpaperButton">Chosen</button>
+                    <button id="wallpaperBg2Btn" class="wallpaperButton">Choose</button>
+                    <button id="wallpaperBg3Btn" class="wallpaperButton">Choose</button>
+                    <button id="wallpaperBg4Btn" class="wallpaperButton">Choose</button>
+                </div>
+            </div>
+        </div> -->
 
     </main>
 
@@ -745,6 +716,7 @@
 
 
 
+
     <script type="module">
         // Import the main module that will bootstrap the application
         import { signInWithGoogle, setUsername, signOut } from './firebase/auth-handler.js';
@@ -756,10 +728,7 @@
         
         // Make functions available globally for inline event handlers
         window.authHandler = { signInWithGoogle, setUsername, signOut };
-
-
     </script>
-    
     <script type="module" src="./main.js"></script>
 
 </body>
