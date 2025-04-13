@@ -745,7 +745,6 @@
 
 
 
-
     <script type="module">
         // Import the main module that will bootstrap the application
         import { signInWithGoogle, setUsername, signOut } from './firebase/auth-handler.js';
@@ -757,7 +756,24 @@
         
         // Make functions available globally for inline event handlers
         window.authHandler = { signInWithGoogle, setUsername, signOut };
+
+
+
+        if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
+          const current = navigator.mediaSession.metadata;
+        
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: current.title,
+            artist: current.artist,
+            album: current.album,
+            artwork: [
+              { src: 'https://i.postimg.cc/d3cZpZGX/iphonelofi.png', sizes: '512x512', type: 'image/png' }
+            ]
+          });
+        }
+
     </script>
+    
     <script type="module" src="./main.js"></script>
 
 </body>
