@@ -2,10 +2,10 @@ export function applyDarkTheme() {
 
     if (appearancePanel) appearancePanel.style.backgroundColor = '#1e293b';
 
-    if (timeContainer1) {
-        timeContainer1.style.background = "linear-gradient(90deg, #1a1a2e, #16213e, #0f3460)";
-        timeContainer1.style.color = "rgb(195, 192, 192)";
-    }
+    // if (timeContainer1) {
+    //     timeContainer1.style.background = "linear-gradient(90deg, #1a1a2e, #16213e, #0f3460)";
+    //     timeContainer1.style.color = "rgb(195, 192, 192)";
+    // }
 
     if (particleContainer) particleContainer.style.backgroundColor = '#1a1a1a';
     if (particleContainer) particleContainer.style.color = '#ffffff';
@@ -14,11 +14,11 @@ export function applyDarkTheme() {
     if (particlesButtonSnow) particlesButtonSnow.style.backgroundColor = '#333333';
     if (particlesButtonSnow) particlesButtonSnow.style.color = '#ffffff';
 
-    if (weatherContainer) {
-        weatherContainer.style.backgroundColor = '#1a1a1a';
-        weatherContainer.style.color = '#ffffff';
-        weatherContainer.style.borderColor = '#333333';
-    }
+    // if (weatherContainer) {
+    //     weatherContainer.style.backgroundColor = '#1a1a1a';
+    //     weatherContainer.style.color = '#ffffff';
+    //     weatherContainer.style.borderColor = '#333333';
+    // }
     if (weatherButtonsStorm) {
         weatherButtonsStorm.style.backgroundColor = '#333333';
         weatherButtonsStorm.style.color = '#ffffff';
@@ -28,48 +28,37 @@ export function applyDarkTheme() {
         weatherButtonsBlizzard.style.color = '#ffffff';
     }
 
-    if (wallpaperContainer) {
-        wallpaperContainer.style.backgroundColor = '#1a1a1a';
-        wallpaperContainer.style.color = '#ffffff';
-    }
-    if (wallpaperBg1Btn) {
-        wallpaperBg1Btn.style.backgroundColor = '#333333';
-        wallpaperBg1Btn.style.color = '#ffffff';
-    }
-    if (wallpaperBg2Btn) {
-        wallpaperBg2Btn.style.backgroundColor = '#333333';
-        wallpaperBg2Btn.style.color = '#ffffff';
-    }
-    if (wallpaperBg3Btn) {
-        wallpaperBg3Btn.style.backgroundColor = '#333333';
-        wallpaperBg3Btn.style.color = '#ffffff';
-    }
-    if (wallpaperBg4Btn) {
-        wallpaperBg4Btn.style.backgroundColor = '#333333';
-        wallpaperBg4Btn.style.color = '#ffffff';
-    }
+    // if (wallpaperContainer) {
+    //     wallpaperContainer.style.backgroundColor = '#1a1a1a';
+    //     wallpaperContainer.style.color = '#ffffff';
+    // }
+    // if (wallpaperBg1Btn) {
+    //     wallpaperBg1Btn.style.backgroundColor = '#333333';
+    //     wallpaperBg1Btn.style.color = '#ffffff';
+    // }
+    // if (wallpaperBg2Btn) {
+    //     wallpaperBg2Btn.style.backgroundColor = '#333333';
+    //     wallpaperBg2Btn.style.color = '#ffffff';
+    // }
+    // if (wallpaperBg3Btn) {
+    //     wallpaperBg3Btn.style.backgroundColor = '#333333';
+    //     wallpaperBg3Btn.style.color = '#ffffff';
+    // }
+    // if (wallpaperBg4Btn) {
+    //     wallpaperBg4Btn.style.backgroundColor = '#333333';
+    //     wallpaperBg4Btn.style.color = '#ffffff';
+    // }
 
     if (audioPlayer) audioPlayer.style.backgroundColor = '#1a1a1a';
 
     if (profileContainer) profileContainer.style.backgroundColor = '#1a1a1a';
 
 
-    if (profileEditBtnContainer) profileEditBtnContainer.style.backgroundColor = "#1a1a1a";
-    if (profileEditIcon) profileEditIcon.style.filter = "invert(1)";
-    
-    if (profileSettingsBtnContainer) profileSettingsBtnContainer.style.backgroundColor = "#1a1a1a";
-    if (profileSettingsIcon) profileSettingsIcon.style.filter = "invert(1)";
-
     if (tdContainer) tdContainer.style.backgroundColor = "#1a1a1a";
     if (tdHeader) tdHeader.style.color = "#ffffff";
     if (todoList) {
         todoList.style.backgroundColor = "rgb(56, 55, 55)";
         todoList.style.border = "none";
-    }
-    
-    if (gsContainer) {
-        gsContainer.style.backgroundColor = "#1a1a1a";
-        gsContainer.style.color = "#ffffff";
     }
 
     if (spMainSection) {
