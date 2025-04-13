@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Chill Zone</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-auth-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.8.0/firebase-firestore-compat.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/28Kr5RKj/Untitled-design-12.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/d3cZpZGX/iphonelofi.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&family=IBM+Plex+Mono:wght@300&family=Inconsolata:wght@200..900&family=Saira+Condensed:wght@200&display=swap" rel="stylesheet">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&family=IBM+Plex+Mono:wght@300&family=Inconsolata:wght@200..900&family=Open+Sans:ital,wght@0,600;1,600&family=Saira+Condensed:wght@200&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="rainGif">
+        <img src="./assets/gifs/rain.gif" id="rainGifImage">
+    </div>
+
+    <!-- <div id="snowGif">
+        <img src="https://64.media.tumblr.com/9a0af59a52e973ef466799b12d1612ec/tumblr_inline_ovx8vzLyv61s9cck3_640.gif" id="snowGifImage">
+    </div> -->
+
+    <div id="lightningGif">
+        <img src="./assets/gifs/lightning.gif" id="lightningGifImage">
+    </div>
+
+    <div id="blizzardGif">
+        <img src="./assets/gifs/blizzard.gif" id="blizzardGifImage">
+    </div>
+
+
+    <!-- <div class="custom-menu" id="customMenu">
+        <div class="menu-item" onclick="alert('📂 Open File Clicked')">📂 Open File</div>
+        <div class="menu-item" onclick="alert('⚙️ Settings Clicked')">⚙️ Settings</div>
+        <div class="menu-item" onclick="alert('ℹ️ About Clicked')">ℹ️ About</div>
+        <div class="menu-item" onclick="alert('❌ Exit Clicked')">❌ Exit</div>
+    </div> -->
+    
+
+    <img id="hm-icon" src="./assets/elements/menu-icon.png" data-tooltip="Open Menu">  
+    <img id="info-icon" src="./assets/elements/info-icon.png" data-tooltip="Page Information">
+
+
+    <div id="mySidebar" class="sidebar">
+        <div id="sidebarTop">
+            <div id="sidebarBrand">
+                <img src="./assets/logo.png">
+                <h1>The Chill Zone</h1>
+            </div>
+        </div>
+        <a id="profile-sp-btn" style="cursor: pointer;">Profile 👤</a>
+        <a id="friends-sp-btn" style="cursor: pointer;">Friends 👥</a>
+        <a id="community-sp-btn" style="cursor: pointer;">Community 🌎</a>
+        <a id="inventory-sp-btn" style="cursor: pointer;">Inventory 🎒</a>
+        <a id="store-sp-btn" style="cursor: pointer;">Store 🏪</a>
+        <a id="leaderboard-sp-btn" style="cursor: pointer;">Leaderboards 🏆</a>
+        <a id="music-sp-btn" style="cursor: pointer;">Music 🎵</a>
+        <a id="appearance-sp-btn" style="cursor: pointer;">Appearance 🎨</a>
+        <a id="settings-sp-btn" style="cursor: pointer;">Settings ⚙️</a>
+        <hr id="sidePanelHr1">
+        <a id="productivity-sp-btn" style="cursor: pointer;">Productivity 🎯</a>
+        <hr id="sidePanelHr2">
+        <a id="sign-out-sp-btn" style="cursor: pointer;">Sign Out</a>
+        <hr id="sidePanelHr3">
+        <a href="./external/about.html" target="_blank" id="about-sp-btn" style="cursor: pointer;">About</a>
+        <a id="contact-sp-btn" style="cursor: pointer;">Contact Us</a>
+    </div>
+
+    <div id="sidePanelOverlay"></div>
+
+
+
+    <div id="profilePanel">
+        <div id="profilePanelHeader">
+            <div id="pp-user-info" class="pp-user-info-flex"></div>
+            <button id="profilePanelClose">&times;</button>
+        </div>
+        <div class="pp-option-panel">
+
+            <div class="pp-userfun-section">
+                <div id="pp-currency-section">
+                    <div class="currency-container">
+                        <div class="pp-coins-container">
+                            <img src="./assets/elements/coins.ico" class="coins-image">
+                            <p id="coins"><span>0</span> coins</p>
+                        </div>
+                        <div class="pp-daystreak-container">
+                            <img src="./assets/elements/streak-icon.webp" class="streak-image">
+                            <p id="streak"><span>0</span> day streak</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pp-badges-section">
+                    <div class="badges-container"></div>
+                </div>
+            </div>
+
+            <div id="pp-aboutme-section">
+                <h3>About Me</h3>
+                <p id="aboutme-official-p"></p>
+            </div>
+    
+            <div class="pp-row2-sections">
+                <div id="pp-socials-section">
+                    <h3>Socials</h3>
+                    <div id="socials-official-p"></div>
+                </div>
+    
+                <div id="pp-other-section">
+                    <h3>Other</h3>
+                    <p id="acc-creation-date"></p>
+                </div>
+            </div>
+    
+            <div class="pp-bottom-buttons">
+                <button id="ppbb-1" class="pp-button">Customize Profile ✏️</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="profilePanelOverlay"></div>
+
+
+
+    <div id="profile-customization-panel">
+        <div class="pcp-header">
+            <h2>Profile Customization</h2>
+        </div>
+        <hr id="pcpHr">
+        <div class="pcp-option-panel">
+            <form id="pp-customization-pane0" class="customization-pane">
+                <fieldset>
+                    <p class="section-title">Change Profile Picture</p>
+                    <div class="profile-pic-preview">
+                        <img id="profile-pic-preview" src="" alt="Profile Picture Preview" style="max-height: 100px; max-width: 100px; border-radius: 50%; display: none; margin-bottom: 12px; object-fit: cover;">
+                    </div>
+                    <div class="change-profile-pic-items change-items">
+                        <input type="text" id="profile-pic-input" placeholder="Paste image URL here">
+                        <button id="profile-pic-save-btn" class="save-btn" type="button">Save</button>
+                    </div>
+                </fieldset>
+            </form>
+
+            <form id="pp-customization-pane-banner" class="customization-pane">
+                <fieldset>
+                    <p class="section-title">Change Profile Banner</p>
+                    <div class="change-banner-items change-items">
+                        <input type="text" id="banner-input" placeholder="Paste banner image URL here">
+                        <button id="banner-save-btn" class="save-btn" type="button">Save</button>
+                    </div>
+                    <div class="bannerPreviewContainer"></div>
+                </fieldset>
+            </form>
+
+            <form id="pp-customization-pane-color" class="customization-pane">
+                <fieldset>
+                    <p class="section-title">Change Profile Color</p>
+                    <div class="change-color-items change-items">
+                        <input type="color" id="solid-color-input" title="Choose a solid color">
+                        <input type="text" id="gradient-color-input" placeholder="Enter CSS gradient (e.g., linear-gradient(red, blue))">
+                        <button id="color-save-btn" class="save-btn" type="button">Save</button>
+                    </div>
+                </fieldset>
+            </form>
+
+            <form id="pp-customization-pane1" class="customization-pane">
+                <fieldset>
+                    <p class="section-title">Change Username</p>
+                    <p id="usernameChangeWarning">Warning: Changing your username will result in a page refresh</p>
+                    <div class="username-change-items change-items">
+                        <input type="text" id="username-input" maxlength="24" placeholder="Enter new username">
+                        <button id="username-save-btn" class="save-btn" type="button">Save</button>
+                    </div>
+                </fieldset>
+            </form>
+    
+            <form id="pp-customization-pane2" class="customization-pane">
+                <fieldset>
+                    <p class="section-title">Change About Me</p>
+                    <div class="change-aboutme-items change-items">
+                        <textarea id="aboutme-input" maxlength="300" rows="4" placeholder="Tell people about yourself..."></textarea>
+                        <button id="aboutme-save-btn" class="save-btn" type="button">Save</button>
+                    </div>
+                </fieldset>
+            </form> 
+    
+            <form id="pp-customization-pane3" class="customization-pane">
+                <fieldset>
+                    <p class="section-title">Change Socials</p>
+                    <div class="change-socials-items change-items">
+                        <textarea id="socials-input" maxlength="300" rows="4" placeholder="Add your social media links..."></textarea>
+                        <button id="socials-save-btn" class="save-btn" type="button">Save</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modern Music Panel HTML Structure -->
+    <div id="musicPanel">
+        <!-- Panel Header -->
+        <div class="panel-header">
+            <div class="panel-title">TCZ ~ Music Library 🎵</div>
+            <div class="now-playing">
+                <span id="currentSongTitle">Select a track to preview</span>
+            </div>
+            <div class="equalizer" id="equalizer">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+        </div>
+
+        <!-- Tab Container -->
+        <div class="tab-container">
+            <button class="tab-button active" data-tab="discover">Discover ✨</button>
+            <button class="tab-button" data-tab="library">Artists 🧑‍🎤</button>
+            <button class="tab-button" data-tab="my-library">My Library 📚</button>
+            <button class="tab-button" data-tab="settings">Settings ⚙️</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="discover">
+                <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" id="searchBar" placeholder="Search music...">
+                <div class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All</button>
+                <button class="filter-tab" data-filter="recent">Recent</button>
+                <button class="filter-tab" data-filter="favorites">Favorites</button>
+            </div>
+
+            <!-- Music List -->
+            <div class="music-list-container">
+                <ul class="music-list" id="musicList">
+                    <!-- Songs will be dynamically populated here by JavaScript -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="library" style="display: none;">
+            <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
+        </div>
+
+        <div class="tab-content" id="my-library" style="display: none;">
+            <div class="my-library-container">
+                <div class="my-favorites-ml-container">
+                    <div class="my-favorites-openBtn">♡</div>
+                    <h4>My Favorites</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="settings" style="display: none;">
+            <h3 style="text-align: center; padding: 20px;">Still in Development!</h1>
+        </div>
+
+        <!-- Player Footer -->
+        <div class="player-footer">
+            <div class="now-preview">Preview: 15 seconds</div>
+            <!-- <div class="action-buttons">
+                <button class="action-button tooltip" data-tooltip="Share">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                </button>
+                <button class="action-button tooltip" data-tooltip="More options">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                </button>
+            </div> -->
+        </div>
+    </div>
+
+    <div id="musicPanelOverlay"></div>
+
+
+    <div id="appearancePanel" class="settings-panel">
+        <div class="settings-scroll-container">
+            <div class="settings-header">
+                <h2>Appearance</h2>
+                <p>Customize the look and feel of your website</p>
+                <img id="appearance-panel-close" src="./assets/elements/x.png" alt="Close">
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="theme-icon">Theme</h3>
+                <div class="theme-selector">
+                    <div class="theme-option" data-theme="dark">
+                        <div class="theme-check"></div>
+                        <div class="theme-preview dark-theme"></div>
+                        <span>Dark</span>
+                    </div>
+                    <div class="theme-option" data-theme="light">
+                        <div class="theme-check"></div>
+                        <div class="theme-preview light-theme"></div>
+                        <span>Light</span>
+                    </div>
+                    <div class="theme-option" data-theme="retro">
+                        <div class="theme-check"></div>
+                        <div class="theme-preview retro-theme"></div>
+                        <span>Retro</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="background-icon">Background</h3>
+                <p>*To select default backgrounds, use the wallpaper panel on the homepage</p>
+                <div class="custom-bg-container">
+                    <label for="custom-bg-url">Custom Background URL:</label>
+                    <div class="custom-bg-input-row">
+                      <input 
+                        type="text" 
+                        id="custom-bg-url" 
+                        placeholder="Paste image URL here..." 
+                        class="custom-bg-input"
+                      />
+                    </div>
+                </div>
+                <button class="custom-bg-button">Apply</button>
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="font-icon">Font</h3>
+                <div class="font-selector">
+                    <div class="custom-select-wrapper">
+                        <select id="fontSelector" class="settings-select">
+                            <option value="system">System Default</option>
+                            <option value="poppins">Poppins</option>
+                            <option value="roboto">Roboto</option>
+                            <option value="montserrat">Montserrat</option>
+                            <option value="opensans">Open Sans</option>
+                        </select>
+                        <div class="select-arrow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-actions">
+            <button id="resetAppearanceBtn" class="secondary-btn">Reset to Default</button>
+            <button id="saveAppearanceBtn" class="primary-btn">Save Changes</button>
+        </div>
+    </div>
+
+    <div class="appearance-panel-overlay" id="appearancePanelOverlay"></div>
+
+
+
+    <main id="main-legacy">
+        <div class="main-items">
+            <div class="column1">
+                <div class="c1-r1-container">
+                    <div class="timeContainer1" id="timeContainer1">
+                        <div class="timeContainer2">
+                            <div class="hrs_container">
+                                <h1 class="timeNumber" id="hrs">00</h1>
+                            </div>
+                            
+                            <div class="colon">:</div>
+
+                            <div class="min_container">
+                                <h1 class="timeNumber" id="min">00</h1>
+                            </div>
+
+                            <div class="colon">:</div>
+
+                            <div class="sec_container">
+                                <h1 class="timeNumber" id="sec">00</h1>
+                            </div>
+
+                            <div class="ampm_container">
+                                <h1 class="timeNumber" id="ampm">00</h1>
+                            </div>
+                        </div>
+
+                        <div class="timeDescriptionContainer">
+                            <div class="hoursDescContainer">
+                                <h1 id="timeDescriptionText">HOURS</h1>
+                            </div>
+
+                            <div class="minutesDescContainer">
+                                <h1 id="timeDescriptionText">MINUTES</h1>
+                            </div>
+
+                            <div class="secondsDescContainer">
+                                <h1 id="timeDescriptionText">SECONDS</h1>
+                            </div>
+
+                            <div class="ampmDescContainer">
+                                <h1 id="timeDescriptionText">AM/PM</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row2container">
+                    <div class="particleContainer" id="particleContainer">
+                        <h2 id="particleTitleText">particles</h2>
+
+                        <div class="particlesDescriptionTitles">
+                            <h4>Rain 💧</h4>
+                            <h4>Snow ☃️</h4>
+                        </div>
+
+                        <div class="particleButtonsContainer">
+                            <button id="particlesButtonRain">Enable</button>
+                            <button id="particlesButtonSnow">Enable</button>
+                        </div>
+                    </div>
+
+                    <div class="weatherContainer" id="weatherContainer">
+                        <h2 id="weatherTitleText">weather</h2>
+
+                        <div class="weatherDescriptionTitles">
+                            <h4>Storm ⛈️</h4>
+                            <h4>Blizzard ❄</h4>
+                        </div>
+
+                        <div class="weatherButtonsContainer">
+                            <button id="weatherButtonsStorm">Enable</button>
+                            <button id="weatherButtonsBlizzard">Enable</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wallpaperContainer" id="wallpaperContainer">
+                    <h2 id="wallpaperTitleText">wallpaper</h2>
+                
+                    <div class="picNbuttonContainer">
+                        <div class="wallpaperImagePreviews">
+                            <img src="./assets/default-wallpapers/previews/bg1-preview.png" id="bg1Preview" alt="Sunset over a pixelated city">
+                            <img src="./assets/default-wallpapers/previews/bg2-preview.png" id="bg2Preview" alt="Studying from the bedroom on a rainy, gloomy day">
+                            <img src="./assets/default-wallpapers/previews/bg3-preview.png" id="bg3Preview" alt="Rainy Anime City">
+                            <img src="./assets/default-wallpapers/previews/bg4-preview.png" id="bg4Preview" alt="Mountainous landscape with a house on a cliff">
+                        </div>
+                
+                        <div class="wallpaperButtonsContainer">
+                            <button id="wallpaperBg1Btn" class="wallpaperButton">Chosen</button>
+                            <button id="wallpaperBg2Btn" class="wallpaperButton">Choose</button>
+                            <button id="wallpaperBg3Btn" class="wallpaperButton">Choose</button>
+                            <button id="wallpaperBg4Btn" class="wallpaperButton">Choose</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="column2">
+
+                <div class="profileRowContainer">
+                    <div class="profileContainer" id="profileContainer">
+                        <div class="userInfoContainer">
+                            <div id="userInfo" class="user-info-flex"></div>
+                        </div>
+                    
+                        <div class="signOut-button-container">
+                            <button id="sign-out-btn">Sign Out</button>
+                        </div>
+                    </div>
+
+                    <div class="profileEdit-button-container" id="profileEditBtnContainer">
+                        <img src="./assets/elements/profile-edit.png" alt="Profile Edit Icon" class="profileEdit-icon" id="profileEditIcon" width="50px" height="50px" data-tooltip="Customize Profile">
+                    </div>
+                    
+
+                    <div class="profileSettings-button-container" id="profileSettingsBtnContainer">
+                        <img src="./assets/elements/profile-customization.png" alt="Profile Setting Icon" class="profileSettings-icon" id="profileSettingsIcon" width="42px" height="42px" data-tooltip="Profile Settings">
+                    </div>
+                </div>
+                
+                <div class="tdContainer" id="tdContainer">
+                    <div class="tdHeader" id="tdHeader">to-do list</div>
+                    <div class="tdPanel" id="todoList"></div>
+                    <div class="tdButtons">
+                        <button class="btn btn-add" id="add-btn">Add Task</button>
+                        <button class="btn btn-remove" id="remove-btn">Delete</button>
+                        <button class="btn btn-select-all" id="select-all-btn">Select All</button>
+                        <button class="btn btn-save" id="save-btn">Save List</button>
+                    </div>
+                </div>
+
+                <div class="gsContainer" id="gsContainer">
+                    <div class="gsItemsContainer">
+                        <h2 class="gsTitle">Genre Select</h2>
+                        <select id="genre-dropdown" class="genre-dropdown">
+                            <!-- Playlist options will be added dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <div class="audio-player-container">
+            <div id="playlist-container" class="playlist-container">
+                <div class="playlist-header">Your Playlist</div>
+                <ul id="playlist" class="playlist">
+                    <!-- Playlist items go here -->
+                </ul>
+                <button id="close-playlist-button" class="close-playlist-button">Close</button>
+            </div>
+        
+            <div class="audio-player" id="audioPlayer">
+                <div class="si-c-container">
+                    <div class="song-info">
+                        <div class="song-title" id="song-title">Song 1</div>
+                        <div class="song-artist" id="song-artist">Artist 1</div>
+                    </div>
+        
+                    <div class="controls">
+                        <button id="prev-button">|&#9664;</button>
+                        <button id="play-button">&#9654;</button>
+                        <button id="next-button">&#9654;|</button>
+                        <button id="repeat-button"><img src="./assets/elements/repeat.png" id="repeat-icon"></button>
+                    </div>
+                </div>
+        
+                <div class="pc-vc-container">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar">
+                            <div class="progress" id="progress"></div>
+                            <div class="progress-thumb" id="progress-thumb"></div>
+                        </div>
+                        <div class="time-display">
+                            <span id="current-time">0:00</span>
+                            <span id="total-duration">0:00</span>
+                        </div>
+                    </div>
+        
+                    <div class="volume-control">
+                        <label for="volume-slider" id="volumeTag">Volume</label>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+                    </div>
+                </div>
+        
+                <div class="ap-dd-container">
+                    <div class="playlist-controls">
+                        <button id="music-option-button">Select Music</button>
+                    </div>
+        
+                    <div class="playlist-controls">
+                        <button id="autoplay-button">Autoplay: On</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    
+        <audio id="audio" autoplay></audio> <!-- Removed 'muted' attribute -->
+
+    </main>
+
+    <div id="friendsWholeContainer">
+        <div id="socialContainer">
+            <div id="spMainSection" class="spMainSection clearfix">
+                <button id="socialPanelCloseBtn" style="float: right;" onclick="socialPanelClose()">✖</button>
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;" id="spUserInfoContainer">
+                    <img id="userProfilePic" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="Profile Picture">
+                    <h2 id="userUsername"></h2>
+                </div>
+                
+                <div class="search-section" id="socialPanelSearchSection">
+                    <h3 class="section-title" id="socialPanelSearchTitle">Search Users</h3>
+                    <input type="text" id="searchInputFriends" placeholder="Search by username">
+                    <!-- <h4 id="usernameSearchResults"></h4> -->
+                    <div id="searchResults"></div>
+                </div>
+
+                <hr id="searchSectionBottomHr">
+
+                <div id="notifications-and-friends-container">
+                    <div class="fr-notifications-section">
+                        <h3 class="fr-section-title" id="frSectionTitle">Friend Requests</h3>
+                        <div id="frNotifications"></div>
+                    </div>
+
+                    <div class="friends-list">
+                        <h3 class="section-title">Friends</h3>
+                        <div id="friendsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="chatContainer" class="chat-container">
+            <div class="chat-header">
+                <h3 id="chatUsername">Chat with <span></span></h3>
+                <button id="chatPanelClose" onclick="chatPanelClose()">✖</button>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input" id="chatInput">
+                <form id="messageForm" onsubmit="sendMessage(event)">
+                    <input type="text" id="messageInput" placeholder="Type a message...">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="socialPanelOverlay"></div>
+
+
+    <div id="leaderboard-modal" class="modal" style="opacity: 0; pointer-events: none;">
+        <div class="leaderboard-content">
+            <span class="leaderboard-close">&times;</span>
+            
+            <div class="leaderboard-header">
+                <h2>Leaderboards 🏆</h2>
+                <hr>
+                <div class="leaderboard-tabs">
+                    <div id="coins-tab" class="leaderboard-tab active-tab">Coins</div>
+                    <div id="streaks-tab" class="leaderboard-tab">Day Streaks</div>
+                </div>
+            </div>
+    
+            <div id="coins-leaderboard" class="leaderboard-content-section">
+                <table id="coins-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Coins</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coins-leaderboard-body">
+                        <!-- Coins leaderboard entries will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+    
+            <div id="streaks-leaderboard" class="leaderboard-content-section" style="display: none;">
+                <table id="streaks-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Day Streak</th>
+                        </tr>
+                    </thead>
+                    <tbody id="streaks-leaderboard-body">
+                        <!-- Streaks leaderboard entries will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Store Panel -->
+    <div id="storePanel" class="store-panel">
+        <div class="store-container">
+            <div class="store-sidebar">
+                <div class="store-sidebar-header">
+                    <h2>🛒 TCZ Store</h2>
+                </div>
+                <ul class="store-categories">
+                    <!-- Categories will be dynamically inserted here -->
+                </ul>
+                <div class="store-profile-container">
+                    <div id="pp-user-info-store" class="pp-user-info-flex-store"></div>
+                    <hr style="width: 73%; margin-top: 15px;">
+                    <div class="store-coins-container">
+                        <img src="./assets/elements/coins.ico" class="coins-image">
+                        <p id="store-coins"><span>0</span> coins</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="store-main-content">
+                <div class="store-header">
+                    <div class="store-search">
+                        <input type="text" id="storeSearch" placeholder="Search items...">
+                    </div>
+                    <button id="closeStoreBtn">×</button>
+                </div>
+                
+                <div class="store-content">
+                    <div id="storeGrid" class="store-grid">
+                        <!-- Store items will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="storePanelOverlay"></div>
+  
+
+    <div id="inventoryPanel" class="inventory-panel">
+        <div class="inventory-header">
+            <h2>Your Inventory</h2>
+            <input type="text" id="inventorySearch" placeholder="Search items...">
+            <button id="closeInventoryBtn" class="close-btn">&times;</button>
+        </div>
+        <div class="inventory-container">
+            <ul class="inventory-categories">
+                <!-- Categories will be dynamically populated -->
+            </ul>
+            <div class="inventory-grid" id="inventoryGrid">
+                <!-- Inventory items will be dynamically populated here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="inventoryPanelOverlay"></div>
+
+
+
+
+    <script type="module">
+        // Import the main module that will bootstrap the application
+        import { signInWithGoogle, setUsername, signOut } from './firebase/auth-handler.js';
+        import { sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend } from './friending/friends-manager.js';
+        import { openChat } from './friending/messaging.js';
+        import { initFirebase } from './firebase/firebase-config.js';
+        
+        initFirebase();
+        
+        // Make functions available globally for inline event handlers
+        window.authHandler = { signInWithGoogle, setUsername, signOut };
+
+
+    </script>
+    
+    <script type="module" src="./main.js"></script>
+
+</body>
+</html>
