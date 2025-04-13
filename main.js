@@ -14,15 +14,6 @@ import { initializeInventory } from './fun/inventory.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        artwork: [
-          { src: 'https://i.postimg.cc/d3cZpZGX/iphonelofi.png', sizes: '512x512', type: 'image/png' }
-        ]
-      });
-    }
-
-
     
     initFirebase();
     const auth = getAuth();
