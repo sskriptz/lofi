@@ -37,7 +37,7 @@ function formatCoins(coins) {
 
 
 // DOM Elements - Updated to match the new HTML structure
-const notifications = document.getElementById('frNotifications');
+const frNotificationContainer = document.getElementById('frNotifications');
 const friendsList = document.getElementById('friendsList');
 const searchResults = document.getElementById('searchResults');
 const searchInput = document.getElementById('searchInput');
@@ -138,40 +138,89 @@ async function loadFriendRequests() {
     const auth = getAuth();
     const db = getFirestore();
     
+    console.log("Loading friend requests...");
     const currentUser = auth.currentUser;
-    const userDoc = await db.collection('users').doc(currentUser.uid).get();
-    const userData = userDoc.data();
+    if (!currentUser) {
+        console.error("No current user found");
+        return;
+    }
     
-    notifications.innerHTML = '';
-
-    if (userData.friendRequests && userData.friendRequests.length > 0) {
-        for (const request of userData.friendRequests) {
-            if (request.status === 'pending') {
-                // Fetch requester's current data to get their up-to-date profile picture
-                const requesterDoc = await db.collection('users').doc(request.userId).get();
-                const requesterData = requesterDoc.data();
-                
-                const notification = document.createElement('div');
-                notification.className = 'notification';
-                notification.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                        <img src="${requesterData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
-                            alt="Profile" 
-                            style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                        <p>Friend request from ${request.username}</p>
-                    </div>
-                    <div>
-                        <button onclick="acceptFriendRequest('${request.userId}')">Accept</button>
-                        <button onclick="rejectFriendRequest('${request.userId}')">Reject</button>
-                    </div>
-                `;
-                notifications.appendChild(notification);
-            }
+    try {
+        const userDocRef = db.collection('users').doc(currentUser.uid);
+        const userDoc = await userDocRef.get();
+        
+        if (!userDoc.exists) {
+            console.error("User document not found");
+            frNotificationContainer.innerHTML = '<p style="color: white; padding: 20px;">User data not found</p>';
+            return;
         }
-    } else {
-        notifications.innerHTML = 'No friend requests';
-        notifications.style.color = 'white';
-        notifications.style.padding = '20px';
+        
+        const userData = userDoc.data();
+        console.log("User data loaded:", userData);
+        
+        // Clear existing notifications
+        frNotificationContainer.innerHTML = '';
+        
+        // Check if friendRequests array exists and has elements
+        if (userData.friendRequests && Array.isArray(userData.friendRequests) && userData.friendRequests.length > 0) {
+            console.log(`Found ${userData.friendRequests.length} friend requests`);
+            
+            // Count pending requests
+            const pendingRequests = userData.friendRequests.filter(req => req.status === 'pending');
+            console.log(`Found ${pendingRequests.length} pending requests`);
+            
+            if (pendingRequests.length > 0) {
+                // For each pending request, create notification
+                for (const request of pendingRequests) {
+                    console.log("Processing request:", request);
+                    
+                    try {
+                        // Try to fetch requester data
+                        const requesterDoc = await db.collection('users').doc(request.userId).get();
+                        
+                        if (!requesterDoc.exists) {
+                            console.warn(`Requester ${request.userId} does not exist, skipping`);
+                            continue;
+                        }
+                        
+                        const requesterData = requesterDoc.data();
+                        console.log("Requester data:", requesterData);
+                        
+                        // Create notification element
+                        const friendRequestnotification = document.createElement('div');
+                        friendRequestnotification.className = 'friendRequestnotification';
+                        friendRequestnotification.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <img src="${requesterData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" 
+                                    alt="Profile" 
+                                    style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                <p>Friend request from ${request.username}</p>
+                            </div>
+                            <div>
+                                <button onclick="acceptFriendRequest('${request.userId}')">Accept</button>
+                                <button onclick="rejectFriendRequest('${request.userId}')">Reject</button>
+                            </div>
+                        `;
+                        
+                        frNotificationContainer.appendChild(friendRequestnotification);
+                        console.log("Added notification to DOM");
+                    } catch (innerError) {
+                        console.error("Error processing request:", innerError);
+                    }
+                }
+            } else {
+                // No pending requests
+                frNotificationContainer.innerHTML = '<p style="color: white; padding-left: 20px;">No friend requests</p>';
+                console.log("No pending requests found");
+            }
+        } else {
+            // No friend requests at all
+            frNotificationContainer.innerHTML = '<p style="color: white; padding-left: 20px;">No friend requests</p>';
+            console.log("No friend requests array found or it's empty");
+        }
+    } catch (error) {
+        console.error("Error in loadFriendRequests:", error);
+        frNotificationContainer.innerHTML = `<p style="color: white; padding-left: 20px;">Error: ${error.message}</p>`;
     }
 }
 
@@ -190,17 +239,22 @@ async function acceptFriendRequest(requesterId) {
         const currentUserData = currentUserDoc.data();
         const requesterData = requesterDoc.data();
 
+        // Find the exact friend request object to remove
+        const friendRequestToRemove = currentUserData.friendRequests.find(
+            request => request.userId === requesterId && request.status === 'pending'
+        );
+
+        if (!friendRequestToRemove) {
+            throw new Error('Friend request not found');
+        }
+
         // Add to current user's friends list
         await currentUserRef.update({
             friends: firebase.firestore.FieldValue.arrayUnion({
                 userId: requesterId,
                 username: requesterData.username
             }),
-            friendRequests: firebase.firestore.FieldValue.arrayRemove({
-                userId: requesterId,
-                username: requesterData.username,
-                status: 'pending'
-            })
+            friendRequests: firebase.firestore.FieldValue.arrayRemove(friendRequestToRemove)
         });
 
         // Add to requester's friends list
@@ -211,9 +265,30 @@ async function acceptFriendRequest(requesterId) {
             })
         });
 
-        loadFriendRequests();
+        // Immediately remove the notification from the UI
+        const notificationElements = document.querySelectorAll('.friendRequestnotification');
+        for (const element of notificationElements) {
+            const buttons = element.querySelectorAll('button');
+            for (const button of buttons) {
+                if (button.onclick && button.onclick.toString().includes(requesterId)) {
+                    // This is the notification for this request - remove it
+                    element.remove();
+                    break;
+                }
+            }
+        }
+        
+        // Check if there are any remaining notifications
+        const remainingNotifications = document.querySelectorAll('.friendRequestnotification');
+        if (remainingNotifications.length === 0) {
+            // No more notifications, display the "No friend requests" message
+            frNotificationContainer.innerHTML = '<p style="color: white; padding-left: 20px;">No friend requests</p>';
+        }
+
+        // Reload friends list
         loadFriends();
     } catch (error) {
+        console.error('Error accepting friend request:', error);
         alert('Error accepting friend request: ' + error.message);
     }
 }
@@ -225,19 +300,46 @@ async function rejectFriendRequest(requesterId) {
     
     const currentUser = auth.currentUser;
     const currentUserRef = db.collection('users').doc(currentUser.uid);
-    const requesterRef = db.collection('users').doc(requesterId);
 
     try {
-        const requesterDoc = await requesterRef.get();
+        // Get current user data to find the exact friend request object
+        const currentUserDoc = await currentUserRef.get();
+        const currentUserData = currentUserDoc.data();
+        
+        // Find the exact friend request object to remove
+        const friendRequestToRemove = currentUserData.friendRequests.find(
+            request => request.userId === requesterId && request.status === 'pending'
+        );
+
+        if (!friendRequestToRemove) {
+            throw new Error('Friend request not found');
+        }
+
         await currentUserRef.update({
-            friendRequests: firebase.firestore.FieldValue.arrayRemove({
-                userId: requesterId,
-                username: requesterDoc.data().username,
-                status: 'pending'
-            })
+            friendRequests: firebase.firestore.FieldValue.arrayRemove(friendRequestToRemove)
         });
-        loadFriendRequests();
+        
+        // Immediately remove the notification from the UI
+        const notificationElements = document.querySelectorAll('.friendRequestnotification');
+        for (const element of notificationElements) {
+            const buttons = element.querySelectorAll('button');
+            for (const button of buttons) {
+                if (button.onclick && button.onclick.toString().includes(requesterId)) {
+                    // This is the notification for this request - remove it
+                    element.remove();
+                    break;
+                }
+            }
+        }
+        
+        // Check if there are any remaining notifications
+        const remainingNotifications = document.querySelectorAll('.friendRequestnotification');
+        if (remainingNotifications.length === 0) {
+            // No more notifications, display the "No friend requests" message
+            frNotificationContainer.innerHTML = '<p style="color: white; padding-left: 20px;">No friend requests</p>';
+        }
     } catch (error) {
+        console.error('Error rejecting friend request:', error);
         alert('Error rejecting friend request: ' + error.message);
     }
 }
@@ -279,7 +381,7 @@ async function loadFriends() {
         // Update friend items to add profile click functionality
         updateFriendsListWithProfileClick();
     } else {
-        friendsList.innerHTML = '<p>No friends yet</p>';
+        friendsList.innerHTML = '<p style="color: white; padding-left: 10px;">No friends yet</p>';
     }
 }
 
@@ -507,7 +609,7 @@ function addFriendProfilePanelToDOM() {
                 <div id="fp-currency-section">
                     <div class="currency-container-fp">
                         <div class="fp-coins-container">
-                            <img src="https://www.shareicon.net/download/2016/07/08/116966_line.ico" class="coins-image-fp">
+                            <img src="./assets/elements/coins.ico" class="coins-image-fp">
                             <p id="coins-fp"><span>0</span> coins</p>
                         </div>
                         <div class="fp-daystreak-container">
