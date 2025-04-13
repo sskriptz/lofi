@@ -9,12 +9,9 @@ import { initBadgeSystemOnLoad } from './fun/badges.js';
 import { initStoreOnLoad } from './fun/store.js';
 import { initializeInventory } from './fun/inventory.js';
 
-
-
+const { auth: firebaseAuth, db: firebaseDB } = initFirebase();
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    
     initFirebase();
     const auth = getAuth();
     const db = getFirestore();
@@ -197,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  alt="Profile" 
                  width="50" 
                  style="border-radius: 50%">
-            <p id="homepageUserDisplayName">Hello, ${user.displayName}</p>
+            <p id="homepageUserDisplayName">${user.displayName}</p>
         `;
 
 
@@ -990,7 +987,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rainGifImage.style.visibility === "visible") {
             rainGifImage.style.visibility = "hidden";
             rainGif.style.visibility = "hidden";
-            particlesButtonRain.textContent = "Enable";
+            particlesButtonRain.style.backgroundColor = "rgb(51, 51, 51)";
 
             snowParticlesCheck.disabled = false;
             stormWeatherCheck.disabled = false;
@@ -998,7 +995,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             rainGifImage.style.visibility = "visible";
             rainGif.style.visibility = "visible";
-            particlesButtonRain.textContent = "Disable";
+            particlesButtonRain.style.backgroundColor = "green";
 
             snowParticlesCheck.disabled = true;
             stormWeatherCheck.disabled = true;
@@ -1038,13 +1035,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function enableSnowParticles() {
     if (snowParticles) {
         stopSnowParticles();
-        particlesButtonSnow.textContent = "Enable";
+        particlesButtonSnow.style.backgroundColor = "rgb(51, 51, 51)";
         rainParticlesCheck.disabled = false;
         stormWeatherCheck.disabled = false;
         blizzardWeatherCheck.disabled = false;
     } else {
         startSnowParticles();
-        particlesButtonSnow.textContent = "Disable";
+        particlesButtonSnow.style.backgroundColor = "green";
         rainParticlesCheck.disabled = true;
         stormWeatherCheck.disabled = true;
         blizzardWeatherCheck.disabled = true;
@@ -1072,7 +1069,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (particlesButtonSnow) {
-    particlesButtonSnow.addEventListener("click", enableSnowParticles);
+        particlesButtonSnow.addEventListener("click", enableSnowParticles);
     }
 
 
@@ -1090,17 +1087,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (blizzardGifImage.style.visibility === "visible") {
             blizzardGifImage.style.visibility = "hidden";
             blizzardGif.style.visibility = "hidden";
-            weatherButtonsBlizzard.textContent = "Enable";
+            // weatherButtonsBlizzard.textContent = "Enable";
             rainParticlesCheck.disabled = false;
             snowParticlesCheck.disabled = false;
             stormWeatherCheck.disabled = false;
+            weatherButtonsBlizzard.style.backgroundColor = "rgb(51, 51, 51)";
         } else {
             blizzardGifImage.style.visibility = "visible";
             blizzardGif.style.visibility = "visible";
-            weatherButtonsBlizzard.textContent = "Disable";
+            // weatherButtonsBlizzard.textContent = "Disable";
             rainParticlesCheck.disabled = true;
             snowParticlesCheck.disabled = true;
             stormWeatherCheck.disabled = true;
+            weatherButtonsBlizzard.style.backgroundColor = "green";
         }
     }
 
@@ -1121,7 +1120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rainGif.style.visibility = "hidden";
             lightningGifImage.style.visibility = "hidden";
             lightningGif.style.visibility = "hidden";
-            weatherButtonsStorm.textContent = "Enable";
+            weatherButtonsStorm.style.backgroundColor = "rgb(51, 51, 51)";
 
             rainParticlesCheck.disabled = false;
             snowParticlesCheck.disabled = false;
@@ -1133,7 +1132,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rainGif.style.visibility = "visible";
             lightningGifImage.style.visibility = "visible";
             lightningGif.style.visibility = "visible";
-            weatherButtonsStorm.textContent = "Disable";
+            weatherButtonsStorm.style.backgroundColor = "green";
 
             rainParticlesCheck.disabled = true;
             snowParticlesCheck.disabled = true;
@@ -1861,10 +1860,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateMainPlayerPlaylist() {
         populatePlaylist();
-
+    
         if (currentSongIndex !== null) {
             const favoritedSongs = songs.filter(song => favorites.includes(song.title));
-
+    
             if (currentSongIndex >= favoritedSongs.length) {
                 audio.pause();
                 audio.src = "";
@@ -1873,6 +1872,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 playButton.textContent = "▶";
                 isPlaying = false;
                 currentSongIndex = null;
+                
+                // Reset the title when stopping playback
+                document.title = "The Chill Zone";
             }
         }
     }
@@ -1880,20 +1882,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== PLAYBACK CONTROL FUNCTIONS =====
     function loadSong(index) {
         const favoritedSongs = songs.filter(song => favorites.includes(song.title));
-
+    
         if (index < 0 || index >= favoritedSongs.length || favoritedSongs.length === 0) {
             return;
         }
-
+    
         const song = favoritedSongs[index];
         currentSongIndex = index;
         audio.src = song.src;
-
+    
         songTitle.textContent = truncateText(song.title, MAX_TITLE_LENGTH);
         songArtist.textContent = truncateText(song.artist, MAX_ARTIST_LENGTH);
-
+        
+        // Update the document title with song information
+        document.title = `TCZ | ${song.title} - ${song.artist}`;
+    
         audio.currentTime = 0;
-
+    
         // Mark the first selection
         firstSelectionMade = true;
     }
@@ -1910,6 +1915,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         songTitle.textContent = truncateText(song.title, MAX_TITLE_LENGTH);
         songArtist.textContent = truncateText(song.artist, MAX_ARTIST_LENGTH);
+        
+        // Update the document title with song information
+        document.title = `TCZ | ${song.title} - ${song.artist}`;
         
         audio.currentTime = 0;
         
@@ -2167,18 +2175,21 @@ document.addEventListener('DOMContentLoaded', () => {
             favorites = [];
             populatePlaylist();
         }
-
+    
         songTitle.textContent = "Nothing is playing";
         songArtist.textContent = "";
         audio.src = "";
         currentSongIndex = null;
-
+        
+        // Set the default page title when nothing is playing
+        document.title = "The Chill Zone";
+    
         currentTime.textContent = "0:00";
         totalDuration.textContent = "0:00";
-
+    
         playButton.textContent = "▶";
         audio.volume = volumeSlider.value;
-
+    
         repeatButton.classList.remove("active");
         audio.loop = false;
     };
@@ -2234,6 +2245,19 @@ document.addEventListener('DOMContentLoaded', () => {
         musicPanel.style.opacity= "0";
         musicPanel.style.pointerEvents = "none";
         musicPanelOverlay.style.display = "none";
+    });
+
+
+
+    let taskbarMusicBtn = document.getElementById("taskbarMusicBtn");
+
+    taskbarMusicBtn.addEventListener("click", () => {
+        setTimeout(() => {
+            musicPanel.style.opacity= "1";
+            musicPanel.style.pointerEvents = "auto";
+        }, 100);
+
+        musicPanelOverlay.style.display = "block";
     });
 
 
@@ -3688,222 +3712,494 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // To Do List
 
-    const todoList = document.getElementById('todoList');
-    const saveButton = document.getElementById('save-btn');
-    const addButton = document.getElementById('add-btn');
-    const removeButton = document.getElementById('remove-btn');
-    const selectAllButton = document.getElementById('select-all-btn');
-    
-    // Function to check if the todo list is empty and disable/enable buttons
-    function checkIfEmpty() {
-        const todoItems = todoList.querySelectorAll('.todo-item');
+
+    // Import Firebase functions
+
+// Initialize Firebase first before using it
+
+const taskbarTDBtn = document.getElementById("taskbarTDBtn");
+const tdContainer = document.getElementById("tdContainer");
+const tdOverlay = document.getElementById("todoListOverlay");
+const todoList = document.getElementById('todoList');
+const saveButton = document.getElementById('save-btn');
+const addButton = document.getElementById('add-btn');
+const removeButton = document.getElementById('remove-btn');
+const selectAllButton = document.getElementById('select-all-btn');
+const itemCountEl = document.getElementById('item-count');
+const completedCountEl = document.getElementById('completed-count');
+const pendingCountEl = document.getElementById('pending-count');
+const notification = document.getElementById('notification');
+const notificationText = document.getElementById('notification-text');
+
+// Firebase variables
+let userRef = null;
+let activeReminders = [];
+
+// Initialize Firebase references
+function initializeFirebase() {
+    try {
+        // Get the initialized instances from the imported functions
         
-        // Disable the buttons if there are no items
-        if (todoItems.length === 0) {
-            removeButton.disabled = true;
-            selectAllButton.disabled = true;
-            removeButton.classList.add('disabled');
-            selectAllButton.classList.add('disabled');
+        if (auth) {
+            // Set up auth state listener once we have auth
+            auth.onAuthStateChanged(handleAuthStateChange);
         } else {
-            removeButton.disabled = false;
-            selectAllButton.disabled = false;
-            removeButton.classList.remove('disabled');
-            selectAllButton.classList.remove('disabled');
+            console.error("Firebase authentication not initialized");
         }
+    } catch (error) {
+        console.error("Error getting Firebase instances:", error);
     }
-    
+}
 
-
-
-
-
-    // Function to create a new todo item
-    function createTodoItem(title = 'New Task', time = '12:00') {
-        const todoItem = document.createElement('div');
-        todoItem.className = 'todo-item';
-        todoItem.id = "todoItem";
-        todoItem.draggable = true;
-    
-        todoItem.innerHTML = `
-            <input type="text" value="${title}" />
-            <input type="time" value="${time}" />
-            <input type="checkbox" class="select-task" />
-        `;
-    
-        todoItem.addEventListener('dragstart', () => {
-            todoItem.classList.add('dragging');
-        });
-    
-        todoItem.addEventListener('dragend', () => {
-            todoItem.classList.remove('dragging');
-        });
-    
-        return todoItem;
-    }
-
-
-
-
-    // Handle drag-and-drop to reorder items
-    todoList.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        const draggingItem = document.querySelector('.dragging');
-        const afterElement = getDragAfterElement(todoList, e.clientY);
-        if (afterElement == null) {
-            todoList.appendChild(draggingItem);
-        } else {
-            todoList.insertBefore(draggingItem, afterElement);
-        }
-    });
-
-
-
-
-
-
-    
-    // Get the element after the dragged item based on cursor position
-    function getDragAfterElement(container, y) {
-        const draggableElements = [...container.querySelectorAll('.todo-item:not(.dragging)')];
-        return draggableElements.reduce((closest, child) => {
-            const box = child.getBoundingClientRect();
-            const offset = y - box.top - box.height / 2;
-            if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
-            } else {
-                return closest;
-            }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-
-
-
-
-
-    
-    // Add a new todo item when the "Add" button is clicked
-    addButton.addEventListener('click', () => {
-        todoList.appendChild(createTodoItem());
-        checkIfEmpty(); // Recheck and disable buttons if necessary
-    });
-
-
-
-
-
-    
-    // Remove selected items when the "Remove" button is clicked
-    removeButton.addEventListener('click', () => {
-        const selectedItems = todoList.querySelectorAll('.select-task:checked');
+// Handle authentication state changes
+function handleAuthStateChange(user) {
+    if (user && db) {
+        userRef = db.collection("users").doc(user.uid);
+        loadFromFirebase();
         
-        // Remove the selected items
-        selectedItems.forEach(item => {
-            todoList.removeChild(item.closest('.todo-item'));
-        });
-    
-        // Reset the "Select All" button to "Select All" if no items are checked
-        const checkboxes = todoList.querySelectorAll('.select-task');
-        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-        if (!anyChecked) {
-            selectAllButton.textContent = "Select All"; // Reset the button text to "Select All"
+        // Request notification permission
+        if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+            Notification.requestPermission();
         }
+    } else {
+        userRef = null;
+        todoList.innerHTML = '';
+        checkIfEmpty();
+    }
+}
+
+// Try to initialize Firebase
+try {
+    initializeFirebase();
+} catch (error) {
+    console.error("Error initializing Firebase:", error);
+}
+
+// Maximum number of to-do items allowed
+const MAX_ITEMS = 10;
+
+// Show notification message
+function showNotification(message, isError = false) {
+    notificationText.textContent = message;
+    notification.classList.add('show');
     
-        removeButton.textContent = "Deleted";
+    if (isError) {
+        notification.classList.add('error');
+    } else {
+        notification.classList.remove('error');
+    }
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// Update statistics display
+function updateStats() {
+    const todoItems = todoList.querySelectorAll('.todo-item');
+    const completedItems = todoList.querySelectorAll('.todo-item.completed');
+    
+    itemCountEl.textContent = todoItems.length;
+    completedCountEl.textContent = completedItems.length;
+    pendingCountEl.textContent = todoItems.length - completedItems.length;
+}
+
+// Toggle to-do list display
+taskbarTDBtn.addEventListener('click', () => {
+    tdOverlay.style.display = 'block';
+    requestAnimationFrame(() => {
+        tdContainer.classList.add('show');
+    });
+});
+
+// Hide to-do list when clicking outside
+tdOverlay.addEventListener('click', (e) => {
+    if (e.target === tdOverlay) {
+        tdContainer.classList.remove('show');
         setTimeout(() => {
-            removeButton.textContent = "Delete";
-        }, 1000);
+            tdOverlay.style.display = 'none';
+        }, 300);
+    }
+});
+
+// Function to check if the todo list is empty and disable/enable buttons
+function checkIfEmpty() {
+    const todoItems = todoList.querySelectorAll('.todo-item');
     
-        checkIfEmpty(); // Recheck and disable buttons if necessary
+    // Update item counter
+    itemCountEl.textContent = todoItems.length;
+    
+    // Disable the buttons if there are no items
+    if (todoItems.length === 0) {
+        removeButton.disabled = true;
+        selectAllButton.disabled = true;
+        removeButton.style.opacity = '0.5';
+        selectAllButton.style.opacity = '0.5';
+    } else {
+        removeButton.disabled = false;
+        selectAllButton.disabled = false;
+        removeButton.style.opacity = '1';
+        selectAllButton.style.opacity = '1';
+    }
+    
+    // Disable add button if max items reached
+    if (todoItems.length >= MAX_ITEMS) {
+        addButton.disabled = true;
+        addButton.style.opacity = '0.5';
+    } else {
+        addButton.disabled = false;
+        addButton.style.opacity = '1';
+    }
+    
+    updateStats();
+}
+
+// Function to create a new todo item
+function createTodoItem(data = {}) {
+    const {
+        title = 'New Task',
+        time = '12:00',
+        priority = 'medium',
+        completed = false,
+        id = Date.now().toString()
+    } = data;
+    
+    const todoItem = document.createElement('div');
+    todoItem.className = 'todo-item';
+    todoItem.classList.add(`${priority}-priority`);
+    if (completed) todoItem.classList.add('completed');
+    todoItem.id = id;
+    todoItem.draggable = true;
+    
+    todoItem.innerHTML = `
+        <input type="checkbox" class="complete-checkbox" ${completed ? 'checked' : ''} />
+        <input type="text" value="${title}" placeholder="Task description..." />
+        <input type="time" value="${time}" />
+        <select class="priority-selector">
+            <option value="low" ${priority === 'low' ? 'selected' : ''}>Low</option>
+            <option value="medium" ${priority === 'medium' ? 'selected' : ''}>Medium</option>
+            <option value="high" ${priority === 'high' ? 'selected' : ''}>High</option>
+        </select>
+        <input type="checkbox" class="select-task" />
+    `;
+    
+    // Mark complete when checkbox is clicked
+    const completeCheckbox = todoItem.querySelector('.complete-checkbox');
+    completeCheckbox.addEventListener('change', () => {
+        if (completeCheckbox.checked) {
+            todoItem.classList.add('completed');
+        } else {
+            todoItem.classList.remove('completed');
+        }
+        updateStats();
     });
-
-
-
-
-
     
-    
-    // Toggle select all checkboxes when the "Select All" button is clicked
-    selectAllButton.addEventListener('click', () => {
-        const allChecked = selectAllButton.textContent === "Deselect";
-        const checkboxes = todoList.querySelectorAll('.select-task');
-    
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = !allChecked;
-        });
-    
-        selectAllButton.textContent = allChecked ? "Select All" : "Deselect";
+    // Handle priority changes
+    const prioritySelector = todoItem.querySelector('.priority-selector');
+    prioritySelector.addEventListener('change', () => {
+        todoItem.classList.remove('low-priority', 'medium-priority', 'high-priority');
+        todoItem.classList.add(`${prioritySelector.value}-priority`);
     });
     
-
-
-
-
-
-    // Save the todo list and set reminders when the "Save" button is clicked
-    saveButton.addEventListener('click', () => {
-        saveButton.textContent = "Saved";
-        setTimeout(() => {
-            saveButton.textContent = "Save List";
-        }, 1000);
-    
-        const items = [...todoList.querySelectorAll('.todo-item')].map(item => {
-            return {
-                element: item,
-                title: item.querySelector('input[type="text"]').value,
-                time: item.querySelector('input[type="time"]').value
-            };
-        });
-    
-        items.forEach(item => {
-            const now = new Date();
-            const alertTime = new Date();
-            const [hours, minutes] = item.time.split(':');
-            alertTime.setHours(hours, minutes, 0, 0);
-    
-            const timeDifference = alertTime.getTime() - now.getTime();
-            if (timeDifference > 0) {
-                setTimeout(() => {
-                    alert(`Reminder: ${item.title} at ${item.time}`);
-                    item.element.classList.add('disabled');
-                    item.element.querySelector('.select-task').disabled = false;
-                }, timeDifference);
-            }
-        });
+    // Handle drag events
+    todoItem.addEventListener('dragstart', () => {
+        todoItem.classList.add('dragging');
     });
     
-    // Run the check initially when the page loads to update button states
+    todoItem.addEventListener('dragend', () => {
+        todoItem.classList.remove('dragging');
+    });
+    
+    return todoItem;
+}
+
+// Handle drag-and-drop to reorder items
+todoList.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const draggingItem = document.querySelector('.dragging');
+    const afterElement = getDragAfterElement(todoList, e.clientY);
+    if (afterElement == null) {
+        todoList.appendChild(draggingItem);
+    } else {
+        todoList.insertBefore(draggingItem, afterElement);
+    }
+});
+
+// Get the element after the dragged item based on cursor position
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.todo-item:not(.dragging)')];
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+// Add a new todo item when the "Add" button is clicked
+addButton.addEventListener('click', () => {
+    const todoItems = todoList.querySelectorAll('.todo-item');
+    
+    if (todoItems.length >= MAX_ITEMS) {
+        showNotification(`You can only add up to ${MAX_ITEMS} tasks!`, true);
+        return;
+    }
+    
+    todoList.appendChild(createTodoItem());
     checkIfEmpty();
+    showNotification('New task added');
+});
+
+// Remove selected items when the "Remove" button is clicked
+removeButton.addEventListener('click', () => {
+    const selectedItems = todoList.querySelectorAll('.select-task:checked');
+    
+    if (selectedItems.length === 0) {
+        showNotification('No tasks selected!', true);
+        return;
+    }
+    
+    // Remove the selected items
+    selectedItems.forEach(item => {
+        todoList.removeChild(item.closest('.todo-item'));
+    });
+    
+    // Reset the "Select All" button to "Select All" if no items are checked
+    const checkboxes = todoList.querySelectorAll('.select-task');
+    const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    if (!anyChecked) {
+        selectAllButton.textContent = "Select All";
+    }
+    
+    removeButton.textContent = "Deleted";
+    setTimeout(() => {
+        removeButton.textContent = "Delete";
+    }, 1000);
+    
+    checkIfEmpty();
+    showNotification(`${selectedItems.length} task(s) deleted`);
+});
+
+// Toggle select all checkboxes when the "Select All" button is clicked
+selectAllButton.addEventListener('click', () => {
+    const allChecked = selectAllButton.textContent === "Deselect";
+    const checkboxes = todoList.querySelectorAll('.select-task');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = !allChecked;
+    });
+    
+    selectAllButton.textContent = allChecked ? "Select All" : "Deselect";
+});
+
+// Clear all active reminders
+function clearActiveReminders() {
+    activeReminders.forEach(timeoutId => clearTimeout(timeoutId));
+    activeReminders = [];
+}
+
+// Set reminders for all tasks
+function setReminders() {
+    clearActiveReminders();
+    
+    const items = [...todoList.querySelectorAll('.todo-item:not(.completed)')].map(item => {
+        return {
+            element: item,
+            id: item.id,
+            title: item.querySelector('input[type="text"]').value,
+            time: item.querySelector('input[type="time"]').value
+        };
+    });
+    
+    items.forEach(item => {
+        const now = new Date();
+        const alertTime = new Date();
+        const [hours, minutes] = item.time.split(':');
+        alertTime.setHours(hours, minutes, 0, 0);
+        
+        const timeDifference = alertTime.getTime() - now.getTime();
+        if (timeDifference > 0) {
+            const timeoutId = setTimeout(() => {
+                // Check if Notification API is supported
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Task Reminder', {
+                        body: `${item.title} at ${item.time}`,
+                        icon: '/favicon.ico'
+                    });
+                } else {
+                    // Fallback to alert if notifications aren't supported or allowed
+                    alert(`Reminder: ${item.title} at ${item.time}`);
+                }
+                
+                // Find the task element (it might have changed since setting the reminder)
+                const taskElement = document.getElementById(item.id);
+                if (taskElement) {
+                    taskElement.classList.add('disabled');
+                    taskElement.querySelector('.select-task').disabled = false;
+                }
+            }, timeDifference);
+            
+            activeReminders.push(timeoutId);
+        }
+    });
+}
+
+// Save the todo list to Firebase
+async function saveToFirebase() {
+    if (!userRef) {
+        console.warn("Cannot save: User not logged in or Firebase not initialized");
+        showNotification("Cannot save: Please log in first", true);
+        return;
+    }
+    
+    const todoItems = [...todoList.querySelectorAll('.todo-item')].map(item => {
+        return {
+            id: item.id,
+            title: item.querySelector('input[type="text"]').value,
+            time: item.querySelector('input[type="time"]').value,
+            priority: item.querySelector('.priority-selector').value,
+            completed: item.classList.contains('completed')
+        };
+    });
+    
+    try {
+        await userRef.set({
+            todoList: todoItems
+        }, { merge: true });
+        
+        showNotification('Todo list saved successfully!');
+        setReminders();
+    } catch (error) {
+        console.error("Error saving todo list:", error);
+        showNotification('Failed to save todo list!', true);
+    }
+}
+
+// Load todo list from Firebase
+async function loadFromFirebase() {
+    if (!userRef) {
+        console.warn("Cannot load: User not logged in or Firebase not initialized");
+        return;
+    }
+    
+    try {
+        const doc = await userRef.get();
+        if (doc.exists) {
+            const userData = doc.data();
+            
+            if (userData.todoList && Array.isArray(userData.todoList)) {
+                // Clear existing items
+                todoList.innerHTML = '';
+                
+                // Add items from Firebase (up to MAX_ITEMS)
+                const itemsToAdd = userData.todoList.slice(0, MAX_ITEMS);
+                itemsToAdd.forEach(item => {
+                    todoList.appendChild(createTodoItem(item));
+                });
+                
+                checkIfEmpty();
+                setReminders();
+                showNotification('Todo list loaded');
+            }
+        }
+    } catch (error) {
+        console.error("Error loading todo list:", error);
+        showNotification('Failed to load todo list!', true);
+    }
+}
+
+// Save button click event
+saveButton.addEventListener('click', async () => {
+    if (!userRef) {
+        showNotification("Please log in to save your tasks", true);
+        return;
+    }
+    
+    saveButton.textContent = "Saving...";
+    await saveToFirebase();
+    
+    setTimeout(() => {
+        saveButton.textContent = "Save List";
+    }, 1000);
+});
+
+// Initial checks
+checkIfEmpty();
+
+// Auto-save when the page is being unloaded
+window.addEventListener('beforeunload', () => {
+    if (userRef && auth && auth.currentUser) {
+        // For beforeunload, we can't rely on async operations
+        // Try to use localStorage as a backup
+        try {
+            const todoItems = [...todoList.querySelectorAll('.todo-item')].map(item => {
+                return {
+                    id: item.id,
+                    title: item.querySelector('input[type="text"]').value,
+                    time: item.querySelector('input[type="time"]').value,
+                    priority: item.querySelector('.priority-selector').value,
+                    completed: item.classList.contains('completed')
+                };
+            });
+            
+            // Store in localStorage as a temporary backup
+            localStorage.setItem('todoBackup_' + auth.currentUser.uid, JSON.stringify(todoItems));
+        } catch (e) {
+            console.error("Error creating backup:", e);
+        }
+    }
+});
+
+// Check for backup on load (in case the page was closed before saving)
+function checkForBackup() {
+    if (auth && auth.currentUser && localStorage) {
+        const backupKey = 'todoBackup_' + auth.currentUser.uid;
+        const backup = localStorage.getItem(backupKey);
+        
+        if (backup) {
+            try {
+                const todoItems = JSON.parse(backup);
+                
+                // If there are items in the backup and none in Firebase, restore from backup
+                if (todoItems.length > 0 && todoList.querySelectorAll('.todo-item').length === 0) {
+                    todoItems.forEach(item => {
+                        todoList.appendChild(createTodoItem(item));
+                    });
+                    
+                    // Save to Firebase right away
+                    saveToFirebase().then(() => {
+                        localStorage.removeItem(backupKey);
+                        showNotification('Restored unsaved tasks');
+                    });
+                    
+                    checkIfEmpty();
+                } else {
+                    // If we loaded from Firebase successfully, clear the backup
+                    localStorage.removeItem(backupKey);
+                }
+            } catch (e) {
+                console.error("Error restoring backup:", e);
+                localStorage.removeItem(backupKey);
+            }
+        }
+    }
+}
+
+// Check for backup when auth state changes
+if (auth) {
+    auth.onAuthStateChanged(() => {
+        setTimeout(checkForBackup, 1000); // Slight delay to allow Firebase load first
+    });
+}
+
+    
 
     // ------------- END OF TODOLIST JS ---------------
 
     
-    
-    // ----------- START OF GENRE DROPDOWN JS ------------
-
-    const genres = [
-        { genre: "Rap" },
-        { genre: "Pop" },
-    ];
-    
-    const genreDropdown = document.getElementById("genre-dropdown");
-    
-    function populateGenreDropdown() {
-        genreDropdown.innerHTML = "";
-        genres.forEach((genre, index) => { 
-            const option = document.createElement("option");
-            option.value = index;
-            option.textContent = genre.genre;
-            genreDropdown.appendChild(option);
-        });
-    }
-    
-    populateGenreDropdown();
-    
-    // ------------ END OF GENRE DROPDOWN JS ---------------
-
-
-
 
     // --------------------- START OF SIDE-PANEL JS ---------------------
 
@@ -3966,6 +4262,30 @@ document.addEventListener('DOMContentLoaded', () => {
         openBtn.style.pointerEvents = "none";
         openBtn.style.opacity = "0.5";
     });
+
+
+    let taskbarFriendsBtn = document.getElementById("taskbarFriendsBtn");
+
+    taskbarFriendsBtn.addEventListener("click", () => {
+        let socialPanelOverlay = document.getElementById("socialPanelOverlay");
+        let socialContainer = document.getElementById("socialContainer");
+    
+        socialPanelOverlay.style.display = "block";
+        socialPanelOverlay.style.opacity = "1";
+        socialPanelOverlay.style.pointerEvents = "auto";
+
+        document.getElementById("chatContainer").style.display = "none";
+        document.getElementById("chatContainer").style.opacity = "0";
+        document.getElementById("chatContainer").style.pointerEvents = "none";
+    
+        setTimeout(() => {
+            socialContainer.style.opacity = "1";
+            socialContainer.style.pointerEvents = "auto";
+        }, 100);
+    
+        openBtn.style.pointerEvents = "none";
+        openBtn.style.opacity = "0.5";
+    });
     
 
 
@@ -3979,6 +4299,23 @@ document.addEventListener('DOMContentLoaded', () => {
     
         sidePanelOverlay.style.display = "none"; 
     
+        profilePanelOverlay.style.display = "block";
+        profilePanelOverlay.style.opacity = "1";
+        profilePanelOverlay.style.pointerEvents = "auto";
+    
+        setTimeout(() => {
+            profilePanel.style.opacity = "1";
+            profilePanel.style.pointerEvents = "auto";
+        }, 100);
+    
+        openBtn.style.pointerEvents = "none";
+        openBtn.style.opacity = "0.5";
+    });
+
+
+    let profileTaskbarBtn = document.getElementById("taskbarProfileBtn");
+
+    profileTaskbarBtn.addEventListener('click', () => {
         profilePanelOverlay.style.display = "block";
         profilePanelOverlay.style.opacity = "1";
         profilePanelOverlay.style.pointerEvents = "auto";
@@ -4068,51 +4405,51 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------------- TOOLTIPS START ---------------------
 
 
-    let mainScreenProfileCustomizationBtn = document.getElementById("profileEditIcon");
+    // let mainScreenProfileCustomizationBtn = document.getElementById("profileEditIcon");
 
-    mainScreenProfileCustomizationBtn.addEventListener('mouseenter', () => {
-        let tooltipText = mainScreenProfileCustomizationBtn.getAttribute("data-tooltip");
-        let tooltip = document.createElement("div");
-        tooltip.className = "profileEditMainPageTooltip";
-        tooltip.textContent = tooltipText;
+    // mainScreenProfileCustomizationBtn.addEventListener('mouseenter', () => {
+    //     let tooltipText = mainScreenProfileCustomizationBtn.getAttribute("data-tooltip");
+    //     let tooltip = document.createElement("div");
+    //     tooltip.className = "profileEditMainPageTooltip";
+    //     tooltip.textContent = tooltipText;
 
-        document.body.appendChild(tooltip);
+    //     document.body.appendChild(tooltip);
 
-        // Position tooltip above the profile edit icon
-        let rect = mainScreenProfileCustomizationBtn.getBoundingClientRect();
-        tooltip.style.left = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + "px";
-        tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 5 + "px";
+    //     // Position tooltip above the profile edit icon
+    //     let rect = mainScreenProfileCustomizationBtn.getBoundingClientRect();
+    //     tooltip.style.left = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + "px";
+    //     tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 5 + "px";
 
-        setTimeout(() => {
-            tooltip.classList.add("show");
-        }, 10);
+    //     setTimeout(() => {
+    //         tooltip.classList.add("show");
+    //     }, 10);
 
-        mainScreenProfileCustomizationBtn.tooltipElement = tooltip;
-    });
+    //     mainScreenProfileCustomizationBtn.tooltipElement = tooltip;
+    // });
 
-    mainScreenProfileCustomizationBtn.addEventListener('mouseleave', () => {
-        if (mainScreenProfileCustomizationBtn.tooltipElement) {
-            mainScreenProfileCustomizationBtn.tooltipElement.classList.remove("show");
+    // mainScreenProfileCustomizationBtn.addEventListener('mouseleave', () => {
+    //     if (mainScreenProfileCustomizationBtn.tooltipElement) {
+    //         mainScreenProfileCustomizationBtn.tooltipElement.classList.remove("show");
 
-            setTimeout(() => {
-                mainScreenProfileCustomizationBtn.tooltipElement.remove();
-            }, 300);
-        }
-    });
+    //         setTimeout(() => {
+    //             mainScreenProfileCustomizationBtn.tooltipElement.remove();
+    //         }, 300);
+    //     }
+    // });
 
-    mainScreenProfileCustomizationBtn.addEventListener('click', () => {
-        profilePanelOverlay.style.opacity = "1";
-        profilePanelOverlay.style.pointerEvents = "auto";
-        profilePanelOverlay.style.display = "block";
+    // mainScreenProfileCustomizationBtn.addEventListener('click', () => {
+    //     profilePanelOverlay.style.opacity = "1";
+    //     profilePanelOverlay.style.pointerEvents = "auto";
+    //     profilePanelOverlay.style.display = "block";
 
-        setTimeout(() => {
-            profileCustomizationPanel.style.opacity = "1";
-            profileCustomizationPanel.style.pointerEvents = "auto";
-        }, 50);
+    //     setTimeout(() => {
+    //         profileCustomizationPanel.style.opacity = "1";
+    //         profileCustomizationPanel.style.pointerEvents = "auto";
+    //     }, 50);
 
-        openBtn.style.pointerEvents = "none";
-        openBtn.style.opacity = "0.5";
-    });
+    //     openBtn.style.pointerEvents = "none";
+    //     openBtn.style.opacity = "0.5";
+    // });
 
     
     document.getElementById("userInfo").addEventListener("click", (event) => {
@@ -4129,36 +4466,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    let mainScreenProfileSettingsBtn = document.getElementById("profileSettingsIcon");
+    // let mainScreenProfileSettingsBtn = document.getElementById("profileSettingsIcon");
 
-    mainScreenProfileSettingsBtn.addEventListener('mouseenter', () => {
-        let tooltipText = mainScreenProfileSettingsBtn.getAttribute("data-tooltip");
-        let tooltip = document.createElement("div");
-        tooltip.className = "profileSettingsMainPageTooltip";
-        tooltip.textContent = tooltipText;
+    // mainScreenProfileSettingsBtn.addEventListener('mouseenter', () => {
+    //     let tooltipText = mainScreenProfileSettingsBtn.getAttribute("data-tooltip");
+    //     let tooltip = document.createElement("div");
+    //     tooltip.className = "profileSettingsMainPageTooltip";
+    //     tooltip.textContent = tooltipText;
 
-        document.body.appendChild(tooltip);
+    //     document.body.appendChild(tooltip);
 
-        let rect = mainScreenProfileSettingsBtn.getBoundingClientRect();
-        tooltip.style.left = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + "px";
-        tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 5 + "px";
+    //     let rect = mainScreenProfileSettingsBtn.getBoundingClientRect();
+    //     tooltip.style.left = rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2) + "px";
+    //     tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 5 + "px";
 
-        setTimeout(() => {
-            tooltip.classList.add("show");
-        }, 10);
+    //     setTimeout(() => {
+    //         tooltip.classList.add("show");
+    //     }, 10);
 
-        mainScreenProfileSettingsBtn.tooltipElement = tooltip;
-    });
+    //     mainScreenProfileSettingsBtn.tooltipElement = tooltip;
+    // });
 
-    mainScreenProfileSettingsBtn.addEventListener('mouseleave', () => {
-        if (mainScreenProfileSettingsBtn.tooltipElement) {
-            mainScreenProfileSettingsBtn.tooltipElement.classList.remove("show");
+    // mainScreenProfileSettingsBtn.addEventListener('mouseleave', () => {
+    //     if (mainScreenProfileSettingsBtn.tooltipElement) {
+    //         mainScreenProfileSettingsBtn.tooltipElement.classList.remove("show");
 
-            setTimeout(() => {
-                mainScreenProfileSettingsBtn.tooltipElement.remove();
-            }, 300);
-        }
-    });
+    //         setTimeout(() => {
+    //             mainScreenProfileSettingsBtn.tooltipElement.remove();
+    //         }, 300);
+    //     }
+    // });
 
 
 
@@ -4197,36 +4534,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    let infoIconBtn = document.getElementById("info-icon");
+    // let infoIconBtn = document.getElementById("info-icon");
 
-    infoIconBtn.addEventListener('mouseenter', () => {
-        let tooltipText = infoIconBtn.getAttribute("data-tooltip");
-        let tooltip = document.createElement("div");
-        tooltip.className = "infoIconTooltip";
-        tooltip.textContent = tooltipText;
+    // infoIconBtn.addEventListener('mouseenter', () => {
+    //     let tooltipText = infoIconBtn.getAttribute("data-tooltip");
+    //     let tooltip = document.createElement("div");
+    //     tooltip.className = "infoIconTooltip";
+    //     tooltip.textContent = tooltipText;
     
-        document.body.appendChild(tooltip);
+    //     document.body.appendChild(tooltip);
     
-        let rect = hmMenuBtn.getBoundingClientRect();
-        tooltip.style.right = rect.right + window.scrollX + 5 + "px";
-        tooltip.style.top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2) + "px";
+    //     let rect = hmMenuBtn.getBoundingClientRect();
+    //     tooltip.style.right = rect.right + window.scrollX + 5 + "px";
+    //     tooltip.style.top = rect.top + window.scrollY + (rect.height / 2) - (tooltip.offsetHeight / 2) + "px";
     
-        setTimeout(() => {
-            tooltip.classList.add("show");
-        }, 10);
+    //     setTimeout(() => {
+    //         tooltip.classList.add("show");
+    //     }, 10);
     
-        infoIconBtn.tooltipElement = tooltip;
-    });
+    //     infoIconBtn.tooltipElement = tooltip;
+    // });
 
-    infoIconBtn.addEventListener('mouseleave', () => {
-        if (infoIconBtn.tooltipElement) {
-            infoIconBtn.tooltipElement.classList.remove("show");
+    // infoIconBtn.addEventListener('mouseleave', () => {
+    //     if (infoIconBtn.tooltipElement) {
+    //         infoIconBtn.tooltipElement.classList.remove("show");
 
-            setTimeout(() => {
-                infoIconBtn.tooltipElement.remove();
-            }, 300);
-        }
-    });
+    //         setTimeout(() => {
+    //             infoIconBtn.tooltipElement.remove();
+    //         }, 300);
+    //     }
+    // });
 
     
     // ---------------- TOOLTIPS END ---------------------
@@ -4324,31 +4661,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // --------------- START OF CLOCK JS ---------------------
+    // --------------- START OF CLOCK+DATE JS ---------------------
 
     let hrs = document.getElementById("hrs");
     let min = document.getElementById("min");
     let sec = document.getElementById("sec");
     let ampm = document.getElementById("ampm");
+    let dateEl = document.getElementById("date");
 
-    setInterval(() => {
-        let currentTime = new Date(); // Get the current time
+    function updateClockAndDate() {
+        let currentTime = new Date();
         let hours = currentTime.getHours();
         let minutes = currentTime.getMinutes();
         let seconds = currentTime.getSeconds();
 
-        // Determine AM or PM
+        // AM or PM
         let meridian = hours >= 12 ? "PM" : "AM";
 
-        // Convert to 12-hour format
-        let displayHours = hours % 12 || 12; // Show 12 for midnight/noon
+        // 12-hour format
+        let displayHours = hours % 12 || 12;
 
-        // Update the clock elements
+        // Update clock
         hrs.innerHTML = String(displayHours).padStart(2, '0');
         min.innerHTML = String(minutes).padStart(2, '0');
         sec.innerHTML = String(seconds).padStart(2, '0');
         ampm.innerHTML = meridian;
-    }, 1000);
+
+        // Format date: e.g., Monday, April 7, 2025
+        let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateEl.innerHTML = currentTime.toLocaleDateString(undefined, options);
+    }
+
+    setInterval(updateClockAndDate, 1000);
+    updateClockAndDate(); // Initial call to prevent 1s delay
+
 
 
     // ------------------ END OF CLOCK JS -----------------------
