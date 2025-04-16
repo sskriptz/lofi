@@ -8,6 +8,8 @@ import { initLeaderboard } from './fun/leaderboard.js';
 import { initBadgeSystemOnLoad } from './fun/badges.js';
 import { initStoreOnLoad } from './fun/store.js';
 import { initializeInventory } from './fun/inventory.js';
+import { initFocusModeOnLoad } from './fun/focus-mode.js';
+
 
 const { auth: firebaseAuth, db: firebaseDB } = initFirebase();
 
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initBadgeSystemOnLoad();
     initStoreOnLoad();
     initializeInventory();
+    initFocusModeOnLoad();
 
     
     let messageListener = null;
@@ -4199,7 +4202,14 @@ if (auth) {
 
     // ------------- END OF TODOLIST JS ---------------
 
-    
+
+
+    // --------------------- START OF FOCUS MODE JS ---------------------
+
+
+
+
+    // ---------------------- END OF FOCUS MODE JS ---------------------
 
     // --------------------- START OF SIDE-PANEL JS ---------------------
 
