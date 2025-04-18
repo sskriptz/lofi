@@ -41,6 +41,7 @@ const songs = [
     { title: "God's Plan", artist: "Drake", src: "https://www.dropbox.com/scl/fi/o3dvxdm8v02zbnfnzya39/SpotiDownloader.com-God-s-Plan-Drake.mp3?rlkey=51afu94zd0khjldw3yyjdzbg2&st=r7d7v5h0&raw=1" },
     { title: "for when it's warmer", artist: "Sleepy Fish", src: "https://www.dropbox.com/scl/fi/akxfw2u3x59yge6kbjylb/SpotiDownloader.com-for-when-it-s-warmer-Sleepy-Fish.mp3?rlkey=xhaupx1szu37229wv4979q3c6&st=v9tmt5vm&raw=1" },
     { title: "Timeless (feat. Playboi Carti)", artist: "The Weeknd, Playboi Carti", src: "https://www.dropbox.com/scl/fi/1b8pmscp7ym7ylma363zn/SpotiDownloader.com-Timeless-feat.-Playboi-Carti-The-Weeknd.mp3?rlkey=d8avr0g3o5k5d6x85mk2ee5ho&st=5k9xysdn&raw=1" },
+    { title: "I KNOW?", artist: "Travis Scott", src: "https://www.dropbox.com/scl/fi/l1l6um1kcm3nprr90i67p/SpotiDownloader.com-I-KNOW-_-Travis-Scott.mp3?rlkey=gast3b0in18k9oa86o2cajc1s&st=7fi2wkko&raw=1" },
 ];
 
 
