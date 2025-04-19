@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const auth = getAuth();
     const db = getFirestore();
     initFirebaseServices(auth, db);
-    initThemeManager();
+    initThemeManager(); 
     initializeCoinSystem();
     initializeDayStreak();
     initLeaderboard();
@@ -1648,7 +1648,7 @@ document.addEventListener('DOMContentLoaded', () => {
         headerContainer.className = 'playlist-header-container';
         headerContainer.innerHTML = `
             <div class="playlist-breadcrumbs">
-                <span class="breadcrumb-item active">My Playlists</span>
+                <span class="breadcrumb-item-mb active">My Playlists</span>
             </div>
         `;
         playlistContainer.appendChild(headerContainer);
@@ -1663,8 +1663,8 @@ document.addEventListener('DOMContentLoaded', () => {
         favoritesItem.innerHTML = `
             <div class="playlist-icon">❤️</div>
             <div class="playlist-info">
-                <div class="playlist-name">Favorites</div>
-                <div class="playlist-count">${favorites.length} ${favorites.length === 1 ? 'song' : 'songs'}</div>
+                <div class="playlist-name-mb">Favorites</div>
+                <div class="playlist-count-mb">${favorites.length} ${favorites.length === 1 ? 'song' : 'songs'}</div>
             </div>
         `;
         playlistsListContainer.appendChild(favoritesItem);
@@ -1680,8 +1680,8 @@ document.addEventListener('DOMContentLoaded', () => {
             playlistItem.innerHTML = `
                 <div class="playlist-icon">🎵</div>
                 <div class="playlist-info">
-                    <div class="playlist-name">${playlist.name}</div>
-                    <div class="playlist-count">${songCount} ${songCount === 1 ? 'song' : 'songs'}</div>
+                    <div class="playlist-name-mb">${playlist.name}</div>
+                    <div class="playlist-count-mb">${songCount} ${songCount === 1 ? 'song' : 'songs'}</div>
                 </div>
             `;
             
@@ -1710,6 +1710,7 @@ document.addEventListener('DOMContentLoaded', () => {
             playlistsListContainer.appendChild(messageItem);
         }
     }
+    
 
     // Function to open the favorites playlist
     function openFavoritesPlaylist() {
@@ -1721,9 +1722,9 @@ document.addEventListener('DOMContentLoaded', () => {
         headerContainer.className = 'playlist-header-container';
         headerContainer.innerHTML = `
             <div class="playlist-breadcrumbs">
-                <span class="breadcrumb-item" data-action="back-to-playlists">My Playlists</span>
+                <span class="breadcrumb-item-mb" data-action="back-to-playlists">My Playlists</span>
                 <span class="breadcrumb-separator">></span>
-                <span class="breadcrumb-item active">Favorites</span>
+                <span class="breadcrumb-item-mb active">Favorites</span>
             </div>
         `;
         playlistContainer.appendChild(headerContainer);
@@ -1756,9 +1757,9 @@ document.addEventListener('DOMContentLoaded', () => {
         headerContainer.className = 'playlist-header-container';
         headerContainer.innerHTML = `
             <div class="playlist-breadcrumbs">
-                <span class="breadcrumb-item" data-action="back-to-playlists">My Playlists</span>
+                <span class="breadcrumb-item-mb" data-action="back-to-playlists">My Playlists</span>
                 <span class="breadcrumb-separator">></span>
-                <span class="breadcrumb-item active">${playlist.name}</span>
+                <span class="breadcrumb-item-mb active">${playlist.name}</span>
             </div>
         `;
         playlistContainer.appendChild(headerContainer);
@@ -1802,7 +1803,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add each song to the playlist
         playlistSongDetails.forEach((song, index) => {
             const songItem = document.createElement('li');
-            songItem.textContent = truncateText(`${song.title} - ${song.artist}`, MAX_TITLE_LENGTH);
+            songItem.textContent = truncateText(`${song.title} - ${song.artist}`, MAX_TITLE_LENGTH + 7);
             songItem.dataset.index = index;
             songItem.addEventListener('click', () => {
                 loadPlaylistSong(playlistSongDetails, index);
@@ -1850,7 +1851,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add each favorited song to the playlist as a list item
             favoritedSongs.forEach((song, index) => {
                 const songItem = document.createElement("li");
-                songItem.textContent = truncateText(`${song.title} - ${song.artist}`, MAX_TITLE_LENGTH);
+                songItem.textContent = truncateText(`${song.title} - ${song.artist}`, MAX_TITLE_LENGTH + 7);
                 songItem.dataset.index = index; // Store the index in the data attribute
                 songItem.addEventListener("click", () => {
                     loadSong(index); // Load the selected song on click
@@ -1881,6 +1882,134 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+
+    // Add this code after the updateMainPlayerPlaylist() function
+
+    // ===== PLAYLIST SEARCH FUNCTIONALITY =====
+    function createSearchBar(parentElement) {
+        // Remove existing search bar if any
+        const existingSearch = parentElement.querySelector('.tcz-playlist-search-container');
+        if (existingSearch) {
+            existingSearch.remove();
+        }
+        
+        // Create search container with a distinctive class name
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'tcz-playlist-search-container';
+        searchContainer.style.padding = '10px';
+        searchContainer.style.position = 'sticky';
+        searchContainer.style.top = '0';
+        searchContainer.style.backgroundColor = '#141414';
+        searchContainer.style.zIndex = '10';
+        searchContainer.style.width = '100%';
+        searchContainer.style.borderBottom = '1px solid #333';
+        
+        // Create search input with a unique ID
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.id = 'tcz-playlist-search-input';
+        searchInput.className = 'tcz-playlist-search-field';
+        searchInput.placeholder = 'Search for song or artist...';
+        searchInput.style.width = '87%';
+        searchInput.style.padding = '8px 12px';
+        searchInput.style.border = '1px solid #555';
+        searchInput.style.borderRadius = '4px';
+        searchInput.style.backgroundColor = '#222';
+        searchInput.style.color = '#fff';
+        searchInput.style.fontSize = '14px';
+        
+        // Add elements to container
+        searchContainer.appendChild(searchInput);
+        
+        // Add search container as the first child after the header
+        const headerContainer = parentElement.querySelector('.playlist-header-container');
+        if (headerContainer && headerContainer.nextSibling) {
+            parentElement.insertBefore(searchContainer, headerContainer.nextSibling);
+        } else {
+            parentElement.appendChild(searchContainer);
+        }
+        
+        // Set up event listeners
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            filterPlaylistSongs(searchTerm);
+        });
+        
+        return searchInput;
+    }
+
+    function filterPlaylistSongs(searchTerm) {
+        const songItems = playlistContainer.querySelectorAll('.playlist-songs li:not(.empty-favorites-message):not(.empty-playlist-message)');
+        let hasVisibleSongs = false;
+        
+        songItems.forEach(item => {
+            const songText = item.textContent.toLowerCase();
+            if (songText.includes(searchTerm)) {
+                item.style.display = '';
+                hasVisibleSongs = true;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        
+        // Handle no results message
+        let noResultsMsg = playlistContainer.querySelector('.tcz-no-results-message');
+        
+        // If there are no visible songs and search term is not empty
+        if (!hasVisibleSongs && searchTerm !== '') {
+            if (!noResultsMsg) {
+                // Create the message if it doesn't exist
+                noResultsMsg = document.createElement('li');
+                noResultsMsg.className = 'tcz-no-results-message';
+                noResultsMsg.textContent = 'No songs match your search';
+                noResultsMsg.style.textAlign = 'center';
+                noResultsMsg.style.padding = '15px';
+                noResultsMsg.style.color = '#888';
+                noResultsMsg.style.fontStyle = 'italic';
+                
+                const songsList = playlistContainer.querySelector('.playlist-songs');
+                if (songsList) {
+                    songsList.appendChild(noResultsMsg);
+                }
+            } else {
+                // Make sure it's visible
+                noResultsMsg.style.display = '';
+            }
+        } 
+        // If search is empty or there are results, hide the no results message
+        else if (noResultsMsg) {
+            noResultsMsg.style.display = 'none';
+        }
+    }
+
+
+    // Modify openFavoritesPlaylist function
+    const originalOpenFavoritesPlaylist = openFavoritesPlaylist;
+    openFavoritesPlaylist = function() {
+        originalOpenFavoritesPlaylist();
+        // Add search bar after the playlist is populated
+        createSearchBar(playlistContainer);
+    };
+
+    // Modify openUserPlaylist function
+    const originalOpenUserPlaylist = openUserPlaylist;
+    openUserPlaylist = function(playlistId) {
+        originalOpenUserPlaylist(playlistId);
+        // Add search bar after the playlist is populated
+        createSearchBar(playlistContainer);
+    };
+
+    // Also modify populatePlaylist if it can be called directly
+    const originalPopulatePlaylist = populatePlaylist;
+    populatePlaylist = function() {
+        originalPopulatePlaylist();
+        // Check if we're displaying a playlist (not the main playlist selection screen)
+        if (activePlaylistType === 'favorites' || activePlaylistType === 'userPlaylist') {
+            createSearchBar(playlistContainer);
+        }
+    };
+
 
     // ===== PLAYBACK CONTROL FUNCTIONS =====
     function loadSong(index) {
