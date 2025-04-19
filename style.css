@@ -1051,81 +1051,223 @@ main {
 }
 
 /* Playlist container styling */
-#playlist-container {
-    position: absolute;
-    top: 15px; /* Adjust the position to place the playlist above the audio player */
-    right: 6%;
-    width: 20%;
+
+/* Overlay Playlist Container Styles */
+.playlist-container {
+    background-color: #121212;
+    border-radius: 12px;
+    color: #ffffff;
+    width: 30%;
+    max-width: 360px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     display: none;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1vw;
-    background: #2a2a2a; /* Dark background for the playlist */
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7); /* Subtle shadow for depth */
-    z-index: 10000;
-    transform: translateY(-100%); /* Initially hidden, will animate in */
-    transition: all 0.5s ease; /* Smooth transition for appearance */
+    position: absolute;
+    top: 15px;
+    right: 6%;
+    z-index: 1000; /* Ensures it appears above other content */
+    height: auto;
+    max-height: 55vh; /* Limit maximum height */
+    transform: translateY(-100%);
 }
 
-/* When the playlist is visible */
-#playlist-container.show {
-    transform: translateY(0);
+.playlist-container::-webkit-scrollbar {
+    width: 6px;
 }
 
-/* Playlist header */
+.playlist-container::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 3px;
+}
+
+.playlist-container::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+}
+
+.playlist-container::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
 .playlist-header {
+    padding: 16px 20px;
     font-size: 20px;
-    color: white;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-align: center;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Playlist items */
+/* Playlist Items */
 .playlist {
-    width: 100%;
+    list-style: none;
     padding: 0;
-    list-style-type: none;
+    margin: 0;
     overflow-y: auto;
-    max-height: 200px; /* Limit height and enable scrolling if needed */
+    overflow-x: hidden;
+    max-height: calc(80vh - 120px); /* Account for header and close button */
+}
+
+.playlist::-webkit-scrollbar {
+    width: 6px;
+}
+
+.playlist::-webkit-scrollbar-track {
+    background: #3f3e3e;
+    border-radius: 3px;
+}
+
+.playlist::-webkit-scrollbar-thumb {
+    background: #a9b1b9;
+    border-radius: 3px;
+}
+
+.playlist::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
 }
 
 .playlist li {
-    padding: 10px;
-    border-bottom: 1px solid #444444;
-    color: #b3b3b3;
-    font-size: 16px;
+    padding: 12px 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Hover effect for playlist items */
 .playlist li:hover {
-    background-color: #404040;
-    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Close button */
-#close-playlist-button {
-    background: #FF4C4C;
-    color: white;
-    border: none;
-    font-size: 16px;
-    padding: 8px 15px;
-    border-radius: 6px;
+.playlist li.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Breadcrumb Navigation */
+.playlist-breadcrumbs {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 8px;
+    padding: 0 20px;
+    padding-top: 16px;
+}
+
+.breadcrumb-item-mb {
+    color: #b3b3b3;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
+    transition: color 0.2s ease;
 }
 
-/* Close button hover effect */
-#close-playlist-button:hover {
-    background-color: #FF1A1A;
+.breadcrumb-item-mb:hover {
+    color: #ffffff;
+    text-decoration: underline;
 }
 
+.breadcrumb-item-mb.active {
+    color: #ffffff;
+    font-weight: 600;
+    cursor: default;
+}
+
+.breadcrumb-separator {
+    margin: 0 8px;
+    color: #b3b3b3;
+}
+
+/* Close Button */
+.close-playlist-button {
+    margin: 12px 20px;
+    padding: 8px 0;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    width: calc(100% - 40px);
+}
+
+.close-playlist-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Enhanced playlist selection styling */
+.playlist-selection-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.playlist-selection-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.playlist-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background-color: #282828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 14px;
+    font-size: 16px;
+}
+
+.favorites-item .playlist-icon {
+    background: linear-gradient(135deg, #450af5, #c4efd9);
+}
+
+.playlist-info {
+    flex: 1;
+}
+
+.playlist-name-mb {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlist-count-mb {
+    font-size: 13px;
+    color: #b3b3b3;
+}
+
+/* Empty state styling */
+.empty-playlists-message,
+.empty-playlist-message {
+    padding: 20px;
+    text-align: center;
+    color: #b3b3b3;
+    font-size: 14px;
+}
+
+/* Header container styling */
+.playlist-header-container {
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Add animation for a smooth appearance */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.playlist-container {
+    animation: fadeIn 0.2s ease-out;
+}
+
+
+/* back to audio player breh */
 
 #repeat-button {
     display: flex;
