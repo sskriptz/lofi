@@ -5,13 +5,23 @@ const BADGE_MAPPINGS = {
     1: './assets/badges/owner-badge.png',
     2: './assets/badges/dev-badge.png',
     3: './assets/badges/first-100-badge.png',
+    4: './assets/badges/1kcoinbadge.png',   // 1,000 coins
+    5: './assets/badges/10kcoinbadge.png',   // 10,000 coins
+    6: './assets/badges/50kcoinbadge.png',   // 50,000 coins
+    7: './assets/badges/100kcoinbadge.png',   // 100,000 coins
+    8: './assets/badges/1Mcoinbadge.png'    // 1,000,000 coins
 };
 
 // Badge descriptions
 const BADGE_DESCRIPTIONS = {
     1: `<span class="rarity unknown">Rarity: ???</span><br>Owner Badge: Awarded to the creator or owner of the project.`,
     2: `<span class="rarity mythical">Rarity: Mythical</span><br>Developer Badge: Earned by developers who contributed to the project.`,
-    3: `<span class="rarity common">Rarity: Common</span><br>First 100 Badge: Given to the first 100 users who joined.`
+    3: `<span class="rarity common">Rarity: Common</span><br>First 100 Badge: Given to the first 100 users who joined.`,
+    4: `<span class="rarity common">Rarity: Common</span><br>Coin Collector I: Earned by accumulating 1,000 coins.`,
+    5: `<span class="rarity uncommon">Rarity: Uncommon</span><br>Coin Collector II: Earned by accumulating 10,000 coins.`,
+    6: `<span class="rarity rare">Rarity: Rare</span><br>Coin Collector III: Earned by accumulating 50,000 coins.`,
+    7: `<span class="rarity epic">Rarity: Epic</span><br>Coin Collector IV: Earned by accumulating 100,000 coins.`,
+    8: `<span class="rarity legendary">Rarity: Legendary</span><br>Coin Collector V: Earned by accumulating 1,000,000 coins.`
 };
 
 function showBadgePopup(badgeNumber) {
@@ -81,6 +91,66 @@ function showBadgePopup(badgeNumber) {
     popup.appendChild(closeButton);
     overlay.appendChild(popup);
     document.body.appendChild(overlay);
+}
+
+// Function to refresh badge display
+export async function refreshBadgeDisplay() {
+    const auth = getAuth();
+    const db = getFirestore();
+    
+    if (!auth || !db || !auth.currentUser) {
+        console.error("Firebase authentication or Firestore not initialized or user not logged in");
+        return;
+    }
+    
+    const userRef = db.collection("users").doc(auth.currentUser.uid);
+    
+    try {
+        const userDoc = await userRef.get();
+        const userData = userDoc.exists ? userDoc.data() : {};
+        const badgesContainer = document.querySelector('.badges-container');
+        
+        if (!badgesContainer) {
+            console.error("Badges container not found in DOM");
+            return;
+        }
+
+        if (userData.badges && userData.badges.length > 0) {
+            badgesContainer.style.overflowX = 'auto';
+            badgesContainer.style.overflowY = 'hidden';
+            badgesContainer.style.display = 'flex';
+            badgesContainer.style.justifyContent = 'center';
+            badgesContainer.style.alignItems = 'center';
+            badgesContainer.style.gap = '10px';
+
+            badgesContainer.innerHTML = '';
+
+            userData.badges.forEach(badgeNumber => {
+                const badgePath = BADGE_MAPPINGS[badgeNumber];
+                if (badgePath) {
+                    const badgeImg = document.createElement('img');
+                    badgeImg.src = badgePath;
+                    badgeImg.alt = `Badge ${badgeNumber}`;
+                    badgeImg.style.width = '35px';
+                    badgeImg.style.height = '35px';
+                    badgeImg.style.cursor = 'pointer';
+
+                    // Add click event to open pop-up
+                    badgeImg.addEventListener('click', () => showBadgePopup(badgeNumber));
+
+                    badgesContainer.appendChild(badgeImg);
+                }
+            });
+        } else {
+            badgesContainer.style.display = 'flex';
+            badgesContainer.style.justifyContent = 'center';
+            badgesContainer.style.alignItems = 'center';
+            badgesContainer.innerHTML = '<p style="color: white;">No badges earned yet</p>';
+            badgesContainer.style.overflowX = 'visible';
+        }
+    } catch (error) {
+        console.error("Error refreshing badge display:", error);
+    }
 }
 
 
