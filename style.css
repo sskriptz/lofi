@@ -283,14 +283,23 @@ main {
   
   @keyframes fall {
     0% {
-      transform: translateY(0);
+      transform: translateY(0) translateX(0);
       opacity: 1;
+    }
+    25% {
+      transform: translateY(27.5vh) translateX(var(--wind-drift));
+    }
+    50% {
+      transform: translateY(55vh) translateX(calc(var(--wind-drift) * 1.5));
+    }
+    75% {
+      transform: translateY(82.5vh) translateX(var(--wind-drift));
     }
     90% {
       opacity: 1;
     }
     100% {
-      transform: translateY(110vh);
+      transform: translateY(110vh) translateX(0);
       opacity: 0;
     }
   }
@@ -1574,7 +1583,7 @@ main {
     color: #f1f1f1;
 }
 
-#sidePanelHr1, #sidePanelHr2, #sidePanelHr3 {
+#sidePanelHr1, #sidePanelHr2 {
     width: 75%;
 }
 
@@ -1832,6 +1841,21 @@ main {
     color: green;
 }
 
+.rarity.uncommon {
+    color: orange;
+}
+
+.rarity.rare {
+    color: blue;
+}
+
+.rarity.epic {
+    color: red;
+}
+
+.rarity.legendary {
+    color: gold;
+}
 
 /* ------------- */
 
