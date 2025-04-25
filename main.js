@@ -1013,67 +1013,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-    let snowParticles = null;
-
-    function createSnowParticle() {
-    const particle = document.createElement("div");
-    particle.classList.add("snow-particle");
-
-    const size = Math.random() * 5 + 2;
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-
-    particle.style.left = `${Math.random() * 100}vw`;
-    particle.style.top = `-5vh`;
-    particle.style.animationDuration = `${Math.random() * 8 + 5}s`;
-
-    document.body.appendChild(particle);
-
-    setTimeout(() => {
-        particle.remove();
-    }, 15000);
-    }
-
-    function enableSnowParticles() {
-    if (snowParticles) {
+      
+      let snowParticles = null;
+      
+      function createSnowParticle() {
+        const particle = document.createElement("div");
+        particle.classList.add("snow-particle");
+      
+        const size = Math.random() * 5 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+      
+        // Random horizontal position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `-5vh`;
+        
+        // Random side movement (wind drift)
+        const windDrift = (Math.random() - 0.5) * 100; // Random value between -50 and 50 pixels
+        particle.style.setProperty('--wind-drift', `${windDrift}px`);
+        
+        particle.style.animationDuration = `${Math.random() * 8 + 5}s`;
+      
+        document.body.appendChild(particle);
+      
+        setTimeout(() => {
+          if (document.body.contains(particle)) {
+            particle.remove();
+          }
+        }, 15000);
+      }
+      
+      function enableSnowParticles() {
+        if (snowParticles) {
+          stopSnowParticles();
+          particlesButtonSnow.style.backgroundColor = "rgb(51, 51, 51)";
+          rainParticlesCheck.disabled = false;
+          stormWeatherCheck.disabled = false;
+          blizzardWeatherCheck.disabled = false;
+        } else {
+          startSnowParticles();
+          particlesButtonSnow.style.backgroundColor = "green";
+          rainParticlesCheck.disabled = true;
+          stormWeatherCheck.disabled = true;
+          blizzardWeatherCheck.disabled = true;
+        }
+      }
+      
+      function startSnowParticles() {
         stopSnowParticles();
-        particlesButtonSnow.style.backgroundColor = "rgb(51, 51, 51)";
-        rainParticlesCheck.disabled = false;
-        stormWeatherCheck.disabled = false;
-        blizzardWeatherCheck.disabled = false;
-    } else {
-        startSnowParticles();
-        particlesButtonSnow.style.backgroundColor = "green";
-        rainParticlesCheck.disabled = true;
-        stormWeatherCheck.disabled = true;
-        blizzardWeatherCheck.disabled = true;
-    }
-    }
-
-    function startSnowParticles() {
-    stopSnowParticles();
-    snowParticles = setInterval(() => {
-        createSnowParticle();
-    }, 50);
-    }
-
-    function stopSnowParticles() {
-    if (snowParticles) {
-        clearInterval(snowParticles);
-        snowParticles = null;
-    }
-    
-    document.querySelectorAll(".snow-particle").forEach((particle) => {
-        particle.style.transition = "opacity 0.5s ease-out";
-        particle.style.opacity = "0";
-        setTimeout(() => particle.remove(), 500);
-    });
-    }
-
-    if (particlesButtonSnow) {
+        snowParticles = setInterval(() => {
+          createSnowParticle();
+        }, 50);
+      }
+      
+      function stopSnowParticles() {
+        if (snowParticles) {
+          clearInterval(snowParticles);
+          snowParticles = null;
+        }
+        
+        document.querySelectorAll(".snow-particle").forEach((particle) => {
+          particle.style.transition = "opacity 0.5s ease-out";
+          particle.style.opacity = "0";
+          setTimeout(() => {
+            if (document.body.contains(particle)) {
+              particle.remove();
+            }
+          }, 500);
+        });
+      }
+      
+      if (particlesButtonSnow) {
         particlesButtonSnow.addEventListener("click", enableSnowParticles);
-    }
+      }
 
 
     // ------------- END OF PARTICLES BUTTONS JS ---------------
