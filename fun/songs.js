@@ -42,6 +42,13 @@ const songs = [
     { title: "for when it's warmer", artist: "Sleepy Fish", src: "https://www.dropbox.com/scl/fi/akxfw2u3x59yge6kbjylb/SpotiDownloader.com-for-when-it-s-warmer-Sleepy-Fish.mp3?rlkey=xhaupx1szu37229wv4979q3c6&st=v9tmt5vm&raw=1" },
     { title: "Timeless (feat. Playboi Carti)", artist: "The Weeknd, Playboi Carti", src: "https://www.dropbox.com/scl/fi/1b8pmscp7ym7ylma363zn/SpotiDownloader.com-Timeless-feat.-Playboi-Carti-The-Weeknd.mp3?rlkey=d8avr0g3o5k5d6x85mk2ee5ho&st=5k9xysdn&raw=1" },
     { title: "I KNOW?", artist: "Travis Scott", src: "https://www.dropbox.com/scl/fi/l1l6um1kcm3nprr90i67p/SpotiDownloader.com-I-KNOW-_-Travis-Scott.mp3?rlkey=gast3b0in18k9oa86o2cajc1s&st=7fi2wkko&raw=1" },
+    { title: "Me N My Kup", artist: "Ken Carson", src: "https://www.dropbox.com/scl/fi/rsff4ck8p1fr1ijjs7okb/SpotiDownloader.com-Me-N-My-Kup-Ken-Carson.mp3?rlkey=dgwljlh15j88hk0kcy8u6eh7t&st=76bin9dk&raw=1" },
+    { title: "Mama, I'm Sorry", artist: "Lil Uzi Vert", src: "https://www.dropbox.com/scl/fi/uy3e2rlucw4vs5pmcxiwh/SpotiDownloader.com-Mama-I-m-Sorry-Lil-Uzi-Vert.mp3?rlkey=unll3st0u6bhq13ui0aso4nbq&st=6pg0sxox&raw=1" },
+    { title: "EVIL J0RDAN", artist: "Playboi Carti", src: "https://www.dropbox.com/scl/fi/olev7t09rb5nep3qn1rcz/SpotiDownloader.com-EVIL-J0RDAN-Playboi-Carti.mp3?rlkey=3q9901byn2k6vb0mk096geeie&st=thsuq9f5&raw=1" },
+    { title: "Sunroof", artist: "Nicky Youre, hey daisy", src: "https://www.dropbox.com/scl/fi/rmzchb54cyslkxrsvaf34/SpotiDownloader.com-Sunroof-Nicky-Youre.mp3?rlkey=hak80uqd75ss91f45gmmbnu6i&st=9t0q05hu&raw=1" },
+    { title: "Flight", artist: "Jared Anthony", src: "https://www.dropbox.com/scl/fi/dh8t0pjx2ayxleuybo7n9/SpotiDownloader.com-Flight-Jared-Anthony.mp3?rlkey=k69ee2z1xf6r72hlibhswbelq&st=6sq3jx76&raw=1" },
+    { title: "MY EYES", artist: "Travis Scott", src: "https://www.dropbox.com/scl/fi/jre33hudf7s4755g7byxk/SpotiDownloader.com-MY-EYES-Travis-Scott.mp3?rlkey=gkmeolcxuywy2kz4i29m3bac4&st=hbaakc1r&raw=1"},
+    { title: "Mood (feat. iann dior)", artist: "24kGoldn, iann dior", src: "https://www.dropbox.com/scl/fi/4kny8a1xrrv9v8alf40sq/SpotiDownloader.com-Mood-feat.-iann-dior-24kGoldn.mp3?rlkey=bdidni83gtubbu6x7vdqeu4na&st=prg1bz8j&raw=1"},
 ];
 
 
