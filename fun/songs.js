@@ -49,6 +49,7 @@ const songs = [
     { title: "Flight", artist: "Jared Anthony", src: "https://www.dropbox.com/scl/fi/dh8t0pjx2ayxleuybo7n9/SpotiDownloader.com-Flight-Jared-Anthony.mp3?rlkey=k69ee2z1xf6r72hlibhswbelq&st=6sq3jx76&raw=1" },
     { title: "MY EYES", artist: "Travis Scott", src: "https://www.dropbox.com/scl/fi/jre33hudf7s4755g7byxk/SpotiDownloader.com-MY-EYES-Travis-Scott.mp3?rlkey=gkmeolcxuywy2kz4i29m3bac4&st=hbaakc1r&raw=1"},
     { title: "Mood (feat. iann dior)", artist: "24kGoldn, iann dior", src: "https://www.dropbox.com/scl/fi/4kny8a1xrrv9v8alf40sq/SpotiDownloader.com-Mood-feat.-iann-dior-24kGoldn.mp3?rlkey=bdidni83gtubbu6x7vdqeu4na&st=prg1bz8j&raw=1"},
+    { title: "Glow", artist: "Livingston", src: "https://www.dropbox.com/scl/fi/med9ni40xtejrpk1ommqi/SpotiDownloader.com-Glow-Livingston.mp3?rlkey=36w0opq9aa2ww9vgo5drag0xp&st=1ksq9j99&raw=1" },
 ];
 
 
