@@ -985,21 +985,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ------------- START OF PARTICLES BUTTONS JS ----------------
 
+    const rainContainer = document.getElementById('rain');
+
+    let rainParticlesInterval = null;
+    let rainParticles = [];
+
+    function createRainParticle() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'drop-wrapper';
+    wrapper.style.left = `${Math.random() * 100}vw`;
+    wrapper.style.top = `-${Math.random() * 20}vh`;
+    wrapper.style.height = `${15 + Math.random() * 20}px`;
+
+    const drop = document.createElement('div');
+    drop.className = 'drop';
+    drop.style.animationDuration = `${1.2 + Math.random() * 0.8}s`;
+    drop.style.animationDelay = `0s`;
+    drop.style.filter = `blur(${Math.random() * 0.8 + 0.3}px) drop-shadow(0 0 4px rgba(173, 216, 230, 0.6))`;
+    drop.style.height = '100%';
+
+    wrapper.appendChild(drop);
+    rainContainer.appendChild(wrapper);
+    rainParticles.push(wrapper);
+
+    setTimeout(() => {
+        if (wrapper.parentElement) wrapper.remove();
+        rainParticles = rainParticles.filter(p => p !== wrapper);
+    }, 3000);
+    }
+
+    function startRainParticles() {
+    stopRainParticles(); // avoid multiple intervals
+    rainParticlesInterval = setInterval(() => {
+        createRainParticle();
+    }, 20);
+    }
+
+    function stopRainParticles() {
+    if (rainParticlesInterval) {
+        clearInterval(rainParticlesInterval);
+        rainParticlesInterval = null;
+    }
+    rainParticles.forEach(p => p.remove());
+    rainParticles = [];
+    }
+
     function enableRainParticles() {
+        const isActive = rainParticlesInterval !== null;
 
-        if (rainGifImage.style.visibility === "visible") {
-            rainGifImage.style.visibility = "hidden";
-            rainGif.style.visibility = "hidden";
+        if (isActive) {
+            stopRainParticles();
             particlesButtonRain.style.backgroundColor = "rgb(51, 51, 51)";
-
             snowParticlesCheck.disabled = false;
             stormWeatherCheck.disabled = false;
             blizzardWeatherCheck.disabled = false;
+            stopLightning();  // just in case
         } else {
-            rainGifImage.style.visibility = "visible";
-            rainGif.style.visibility = "visible";
+            startRainParticles();
             particlesButtonRain.style.backgroundColor = "green";
-
             snowParticlesCheck.disabled = true;
             stormWeatherCheck.disabled = true;
             blizzardWeatherCheck.disabled = true;
@@ -1008,84 +1051,86 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     if (particlesButtonRain) {
-        particlesButtonRain.addEventListener("click", enableRainParticles);
+    particlesButtonRain.addEventListener("click", enableRainParticles);
     }
 
 
 
+
+
       
-      let snowParticles = null;
-      
-      function createSnowParticle() {
-        const particle = document.createElement("div");
-        particle.classList.add("snow-particle");
-      
-        const size = Math.random() * 5 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-      
-        // Random horizontal position
-        particle.style.left = `${Math.random() * 100}vw`;
-        particle.style.top = `-5vh`;
-        
-        // Random side movement (wind drift)
-        const windDrift = (Math.random() - 0.5) * 100; // Random value between -50 and 50 pixels
-        particle.style.setProperty('--wind-drift', `${windDrift}px`);
-        
-        particle.style.animationDuration = `${Math.random() * 8 + 5}s`;
-      
-        document.body.appendChild(particle);
-      
-        setTimeout(() => {
-          if (document.body.contains(particle)) {
+    let snowParticles = null;
+    
+    function createSnowParticle() {
+    const particle = document.createElement("div");
+    particle.classList.add("snow-particle");
+    
+    const size = Math.random() * 5 + 2;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    
+    // Random horizontal position
+    particle.style.left = `${Math.random() * 100}vw`;
+    particle.style.top = `-5vh`;
+    
+    // Random side movement (wind drift)
+    const windDrift = (Math.random() - 0.5) * 100; // Random value between -50 and 50 pixels
+    particle.style.setProperty('--wind-drift', `${windDrift}px`);
+    
+    particle.style.animationDuration = `${Math.random() * 8 + 5}s`;
+    
+    document.body.appendChild(particle);
+    
+    setTimeout(() => {
+        if (document.body.contains(particle)) {
             particle.remove();
-          }
-        }, 15000);
-      }
-      
-      function enableSnowParticles() {
-        if (snowParticles) {
-          stopSnowParticles();
-          particlesButtonSnow.style.backgroundColor = "rgb(51, 51, 51)";
-          rainParticlesCheck.disabled = false;
-          stormWeatherCheck.disabled = false;
-          blizzardWeatherCheck.disabled = false;
-        } else {
-          startSnowParticles();
-          particlesButtonSnow.style.backgroundColor = "green";
-          rainParticlesCheck.disabled = true;
-          stormWeatherCheck.disabled = true;
-          blizzardWeatherCheck.disabled = true;
         }
-      }
-      
-      function startSnowParticles() {
+    }, 15000);
+    }
+    
+    function enableSnowParticles() {
+    if (snowParticles) {
         stopSnowParticles();
-        snowParticles = setInterval(() => {
-          createSnowParticle();
-        }, 50);
-      }
-      
-      function stopSnowParticles() {
-        if (snowParticles) {
-          clearInterval(snowParticles);
-          snowParticles = null;
+        particlesButtonSnow.style.backgroundColor = "rgb(51, 51, 51)";
+        rainParticlesCheck.disabled = false;
+        stormWeatherCheck.disabled = false;
+        blizzardWeatherCheck.disabled = false;
+    } else {
+        startSnowParticles();
+        particlesButtonSnow.style.backgroundColor = "green";
+        rainParticlesCheck.disabled = true;
+        stormWeatherCheck.disabled = true;
+        blizzardWeatherCheck.disabled = true;
+    }
+    }
+    
+    function startSnowParticles() {
+    stopSnowParticles();
+    snowParticles = setInterval(() => {
+        createSnowParticle();
+    }, 50);
+    }
+    
+    function stopSnowParticles() {
+    if (snowParticles) {
+        clearInterval(snowParticles);
+        snowParticles = null;
+    }
+    
+    document.querySelectorAll(".snow-particle").forEach((particle) => {
+        particle.style.transition = "opacity 0.5s ease-out";
+        particle.style.opacity = "0";
+        setTimeout(() => {
+        if (document.body.contains(particle)) {
+            particle.remove();
         }
-        
-        document.querySelectorAll(".snow-particle").forEach((particle) => {
-          particle.style.transition = "opacity 0.5s ease-out";
-          particle.style.opacity = "0";
-          setTimeout(() => {
-            if (document.body.contains(particle)) {
-              particle.remove();
-            }
-          }, 500);
-        });
-      }
-      
-      if (particlesButtonSnow) {
-        particlesButtonSnow.addEventListener("click", enableSnowParticles);
-      }
+        }, 500);
+    });
+    }
+    
+    if (particlesButtonSnow) {
+    particlesButtonSnow.addEventListener("click", enableSnowParticles);
+    }
 
 
     // ------------- END OF PARTICLES BUTTONS JS ---------------
@@ -1094,23 +1139,229 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // ------------- START OF WEATHER BUTTONS JS ------------------
+    // ------------- START OF WEATHER BUTTONS JS -----------------
+
+    let stormCloudsContainer = document.querySelector('.storm-clouds-container');
+    let lightningContainer = document.querySelector('.lightning-container');
+
+    if (!stormCloudsContainer) {
+    stormCloudsContainer = document.createElement('div');
+    stormCloudsContainer.className = 'storm-clouds-container';
+    document.body.appendChild(stormCloudsContainer);
+    }
+    if (!lightningContainer) {
+    lightningContainer = document.createElement('div');
+    lightningContainer.className = 'lightning-container';
+    document.body.appendChild(lightningContainer);
+    }
+
+    // ---- Clouds Setup ----
+    function createCloud(cloudClass, circles) {
+    const cloud = document.createElement('div');
+    cloud.className = `cloud ${cloudClass}`;
+    circles.forEach(c => {
+        const circle = document.createElement('div');
+        circle.className = `cloud-circle ${c}`;
+        cloud.appendChild(circle);
+    });
+    stormCloudsContainer.appendChild(cloud);
+    return cloud;
+    }
+
+    let clouds = [];
+    function initClouds() {
+    clouds = [
+        createCloud('cloud1', ['c1','c2','c3','c4']),
+        createCloud('cloud2', ['c1','c2','c3','c4']),
+        createCloud('cloud3', ['c1','c2','c3','c4'])
+    ];
+
+    clouds.forEach(cloud => {
+        cloud.x = Math.random() * window.innerWidth;
+        cloud.y = 5 + Math.random() * 60;
+        cloud.vx = (Math.random() * 0.8) + 0.1;
+        if (Math.random() < 0.5) cloud.vx *= -1;
+        cloud.vy = (Math.random() * 0.3) - 0.15;
+        cloud.style.transform = `translate(${cloud.x}px, ${cloud.y}px)`;
+    });
+    }
+
+    let cloudsAnimationId;
+    function animateClouds() {
+    clouds.forEach(cloud => {
+        cloud.vx += (Math.random() - 0.5) * 0.02;
+        cloud.vx = Math.max(-1.2, Math.min(1.2, cloud.vx));
+        cloud.x += cloud.vx;
+        cloud.y += cloud.vy;
+        if (cloud.x > window.innerWidth + 150) cloud.x = -150;
+        if (cloud.x < -150) cloud.x = window.innerWidth + 150;
+        if (cloud.y < 0 || cloud.y > 90) cloud.vy = -cloud.vy;
+        cloud.vy += (Math.random() - 0.5) * 0.03;
+        cloud.vy = Math.max(-0.3, Math.min(0.3, cloud.vy));
+        cloud.style.transform = `translate(${cloud.x}px, ${cloud.y}px)`;
+    });
+    cloudsAnimationId = requestAnimationFrame(animateClouds);
+    }
+
+    function stopCloudsAnimation() {
+    if (cloudsAnimationId) cancelAnimationFrame(cloudsAnimationId);
+    clouds.forEach(cloud => cloud.remove());
+    clouds = [];
+    }
+
+    // ---- Lightning Setup ----
+    class Bolt {
+    constructor(container) {
+        this.container = container;
+        this.main = document.createElement('div');
+        this.main.className = 'bolt-main';
+        container.appendChild(this.main);
+
+        this.branches = Array.from({ length: 3 }).map(() => {
+        const b = document.createElement('div');
+        b.className = 'bolt-branch';
+        container.appendChild(b);
+        return b;
+        });
+    }
+
+    flash() {
+        const vw = window.innerWidth;
+        const left = 40 + Math.random() * (vw - 80);
+        const rotate = -80 + Math.random() * 160;
+        const scale = 0.85 + Math.random() * 0.3;
+
+        this.main.style.left = `${left}px`;
+        this.main.style.top = `0px`;
+        this.main.style.transform = `scale(${scale}) rotate(${rotate}deg)`;
+        this.main.style.opacity = '1';
+        this.main.animate([{opacity: 1}, {opacity: 0}], {
+        duration: 10 + Math.random() * 20,
+        easing: 'ease-out'
+        });
+
+        this.branches.forEach((b, i) => {
+        const forkAngle = 25 + Math.random() * 20;
+        const direction = i % 2 === 0 ? 1 : -1;
+        b.style.left = `${left + direction * 30}px`;
+        b.style.top = `${40 + i * 20}px`;
+        b.style.transform = `rotate(${rotate + direction * forkAngle}deg)`;
+        b.style.opacity = '1';
+        b.animate([{opacity: 1}, {opacity: 0}], {
+            duration: 10 + Math.random() * 20,
+            easing: 'ease-out'
+        });
+        });
+    }
+
+    remove() {
+        this.main.remove();
+        this.branches.forEach(b => b.remove());
+    }
+    }
+
+    let lightningBolts = [];
+    let lightningLoopTimeout;
+    function startLightning() {
+    // create bolts if none
+    if (lightningBolts.length === 0) {
+        lightningBolts = [new Bolt(lightningContainer), new Bolt(lightningContainer)];
+    }
+
+    function lightningLoop() {
+        lightningBolts.forEach(bolt => bolt.flash());
+        lightningLoopTimeout = setTimeout(lightningLoop, 100 + Math.random() * 150);
+    }
+    lightningLoop();
+    }
+
+    function stopLightning() {
+    clearTimeout(lightningLoopTimeout);
+    lightningBolts.forEach(bolt => bolt.remove());
+    lightningBolts = [];
+    }
+
+
+    let stormActive = false;
+
+    function enableStorm() {
+    stormActive = !stormActive;
+
+    if (stormActive) {
+
+        lightningContainer.style.display = 'block';
+        stormCloudsContainer.style.display = 'block';
+
+        initClouds();
+        animateClouds();
+        startLightning();
+        startRainParticles();
+
+        weatherButtonsStorm.style.backgroundColor = "green";
+
+        rainParticlesCheck.disabled = true;
+        snowParticlesCheck.disabled = true;
+        blizzardWeatherCheck.disabled = true;
+
+    } else {
+        stopCloudsAnimation();
+        stopLightning();
+        stopRainParticles();
+
+        lightningContainer.style.display = 'none';
+        stormCloudsContainer.style.display = 'none';
+
+        weatherButtonsStorm.style.backgroundColor = "rgb(51, 51, 51)";
+
+        rainParticlesCheck.disabled = false;
+        snowParticlesCheck.disabled = false;
+        blizzardWeatherCheck.disabled = false;
+    }
+    }
+
+    if (weatherButtonsStorm) {
+        weatherButtonsStorm.addEventListener("click", enableStorm);
+    }
+
+
+    if (weatherButtonsStorm) {
+        weatherButtonsStorm.addEventListener("click", enableStorm);
+    }
+
+
+
+
 
 
     function enableBlizzard() {
+        const isVisible = blizzardGif.classList.contains('visible');
 
-        if (blizzardGifImage.style.visibility === "visible") {
-            blizzardGifImage.style.visibility = "hidden";
-            blizzardGif.style.visibility = "hidden";
-            // weatherButtonsBlizzard.textContent = "Enable";
+        if (isVisible) {
+            // Remove visible class to trigger fade out
+            blizzardGif.classList.remove('visible');
+            blizzardGifImage.classList.remove('visible');
+
+            // After transition, set visibility hidden
+            setTimeout(() => {
+            blizzardGif.style.visibility = 'hidden';
+            blizzardGifImage.style.visibility = 'hidden';
+            }, 800);
+
             rainParticlesCheck.disabled = false;
             snowParticlesCheck.disabled = false;
             stormWeatherCheck.disabled = false;
             weatherButtonsBlizzard.style.backgroundColor = "rgb(51, 51, 51)";
         } else {
-            blizzardGifImage.style.visibility = "visible";
-            blizzardGif.style.visibility = "visible";
-            // weatherButtonsBlizzard.textContent = "Disable";
+            // Set visibility visible immediately
+            blizzardGif.style.visibility = 'visible';
+            blizzardGifImage.style.visibility = 'visible';
+
+            // Add visible class to trigger fade in
+            setTimeout(() => {
+            blizzardGif.classList.add('visible');
+            blizzardGifImage.classList.add('visible');
+            }, 10); // slight delay to ensure CSS picks up the change
+
             rainParticlesCheck.disabled = true;
             snowParticlesCheck.disabled = true;
             stormWeatherCheck.disabled = true;
@@ -1124,78 +1375,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    let stormActive = false;
-    let lightningInterval;
-
-    function enableStorm() {
-        if (stormActive) {
-            // Stop the storm
-            clearInterval(lightningInterval);
-            rainGifImage.style.visibility = "hidden";
-            rainGif.style.visibility = "hidden";
-            lightningGifImage.style.visibility = "hidden";
-            lightningGif.style.visibility = "hidden";
-            weatherButtonsStorm.style.backgroundColor = "rgb(51, 51, 51)";
-
-            rainParticlesCheck.disabled = false;
-            snowParticlesCheck.disabled = false;
-            blizzardWeatherCheck.disabled = false;
-            stormActive = false;
-        } else {
-            // Start the storm
-            rainGifImage.style.visibility = "visible";
-            rainGif.style.visibility = "visible";
-            lightningGifImage.style.visibility = "visible";
-            lightningGif.style.visibility = "visible";
-            weatherButtonsStorm.style.backgroundColor = "green";
-
-            rainParticlesCheck.disabled = true;
-            snowParticlesCheck.disabled = true;
-            blizzardWeatherCheck.disabled = true;
-            stormActive = true;
-
-            // Make the lightning alternate positions continuously
-            lightningInterval = setInterval(() => {
-                let randomPosition = Math.random();
-
-                if (randomPosition < 0.75) {
-                    // 75% chance for left or right
-                    let isLeftSide = Math.random() < 0.5; // 50% for left, 50% for right
-                    if (isLeftSide) {
-                        lightningGifImage.style.left = "10px";
-                        lightningGifImage.style.transform = "scaleX(1)";
-                    } else {
-                        lightningGifImage.style.left = "calc(100% - 100px)";
-                        lightningGifImage.style.transform = "scaleX(-1)";
-                    }
-                } else if (randomPosition < 0.9) {
-                    // 15% chance for middle-left or middle-right (split equally)
-                    let isMiddleLeft = Math.random() < 0.5; // 50% for middle-left, 50% for middle-right
-                    if (isMiddleLeft) {
-                        lightningGifImage.style.left = "calc(25% - 50px)";
-                        lightningGifImage.style.transform = "scaleX(1)";
-                        lightningGifImage.style.transformOrigin = "center";
-                    } else {
-                        lightningGifImage.style.left = "calc(75% - 50px)";
-                        lightningGifImage.style.transform = "scaleX(-1)";
-                        lightningGifImage.style.transformOrigin = "center";
-                    }
-                } else {
-                    // 5% chance for pure middle
-                    lightningGifImage.style.left = "calc(50% - 50px)";
-                    lightningGifImage.style.transform = "scaleX(1)";
-                    lightningGifImage.style.transformOrigin = "center";
-                }
-
-                lightningGifImage.style.opacity = "1";  // Show
-                setTimeout(() => lightningGifImage.style.opacity = "0", 350);
-            }, 750); // Every 750ms (0.75s)
-        }
-    }
-
-    if (weatherButtonsStorm) {
-        weatherButtonsStorm.addEventListener("click", enableStorm);
-    }
 
     // ------------ END OF WEATHER BUTTONS JS ------------------
 
@@ -4838,7 +5017,6 @@ if (auth) {
         sec.innerHTML = String(seconds).padStart(2, '0');
         ampm.innerHTML = meridian;
 
-        // Format date: e.g., Monday, April 7, 2025
         let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         dateEl.innerHTML = currentTime.toLocaleDateString(undefined, options);
     }
