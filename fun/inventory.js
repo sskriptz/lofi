@@ -1,5 +1,9 @@
+// inventory.js
 import { getAuth, getFirestore } from '../firebase/firebase-config.js';
 import STORE_ITEMS from './store-items.js';
+import { ProfileEffectManager, handleProfileEffects } from './profile-effects/profile-effects-manager.js';
+
+const profileEffectManager = new ProfileEffectManager();
 
 export function initializeInventory() {
     const auth = getAuth();
@@ -60,7 +64,9 @@ export function initializeInventory() {
 
         // Set initial active category
         const categoryItems = inventorySidebar.querySelectorAll('li');
-        categoryItems[0].classList.add('active');
+        if (categoryItems.length > 0) {
+            categoryItems[0].classList.add('active');
+        }
 
         // Category selection functionality
         categoryItems.forEach(item => {
@@ -94,7 +100,7 @@ export function initializeInventory() {
     inventorySearch.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
         const inventoryCards = document.querySelectorAll('.inventory-card');
-        const activeCategory = document.querySelector('.inventory-categories li.active').getAttribute('data-category');
+        const activeCategory = document.querySelector('.inventory-categories li.active')?.getAttribute('data-category') || 'All';
         
         inventoryCards.forEach(card => {
             const itemName = card.querySelector('h3').textContent.toLowerCase();
@@ -111,61 +117,6 @@ export function initializeInventory() {
             }
         });
     });
-
-    // Attach inventory listeners
-    function attachInventoryListeners() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                const userRef = db.collection("users").doc(user.uid);
-
-                // Set up real-time listener for user's inventory
-                const unsubscribe = userRef.onSnapshot((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        const inventory = userData.inventory || [];
-
-                        // Generate categories first
-                        generateCategories(inventory);
-
-                        // Generate inventory items
-                        generateInventoryItems(inventory);
-
-                        // Attach toggle listeners
-                        const toggleSwitches = document.querySelectorAll('.inventory-toggle input');
-                        toggleSwitches.forEach(toggle => {
-                            toggle.addEventListener('change', async (e) => {
-                                const itemId = e.target.getAttribute('data-item-id');
-                                const isEnabled = e.target.checked;
-
-                                // Update the specific item's enabled status in the inventory
-                                const updatedInventory = inventory.map(item => 
-                                    item.id === itemId 
-                                        ? {...item, enabled: isEnabled} 
-                                        : item
-                                );
-
-                                // Update Firestore with the new inventory state
-                                try {
-                                    await userRef.update({
-                                        inventory: updatedInventory
-                                    });
-                                } catch (error) {
-                                    console.error('Error updating item status:', error);
-                                    // Revert toggle if update fails
-                                    e.target.checked = !isEnabled;
-                                }
-                            });
-                        });
-                    }
-                }, (error) => {
-                    console.error('Error listening to inventory changes:', error);
-                });
-
-                // Store unsubscribe function to clean up listener when needed
-                return unsubscribe;
-            }
-        });
-    }
 
     // Generate inventory items
     function generateInventoryItems(inventory) {
@@ -200,13 +151,87 @@ export function initializeInventory() {
         });
     }
 
+    // Attach inventory listeners
+    function attachInventoryListeners() {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const userRef = db.collection("users").doc(user.uid);
+
+                const unsubscribe = userRef.onSnapshot((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        const inventory = userData.inventory || [];
+
+                        // Generate categories first
+                        generateCategories(inventory);
+
+                        // Generate inventory items
+                        generateInventoryItems(inventory);
+
+                        // Handle profile effects
+                        const profilePanel = document.getElementById('profilePanel');
+                        if (profilePanel) {
+                            handleProfileEffects(inventory, profilePanel, profileEffectManager);
+                        }
+
+                        // Attach toggle listeners (remove old ones first to prevent duplicates)
+                        const toggleSwitches = document.querySelectorAll('.inventory-toggle input');
+                        toggleSwitches.forEach(toggle => {
+                            // Remove existing event listeners by cloning the element
+                            const newToggle = toggle.cloneNode(true);
+                            toggle.parentNode.replaceChild(newToggle, toggle);
+                            
+                            newToggle.addEventListener('change', async (e) => {
+                                const itemId = e.target.getAttribute('data-item-id');
+                                const isEnabled = e.target.checked;
+
+                                // Update the specific item's enabled status in the inventory
+                                const updatedInventory = inventory.map(item => 
+                                    item.id === itemId 
+                                        ? {...item, enabled: isEnabled} 
+                                        : item
+                                );
+
+                                // Update Firestore with the new inventory state
+                                try {
+                                    await userRef.update({
+                                        inventory: updatedInventory
+                                    });
+
+                                    // Handle profile effects after inventory update
+                                    const profilePanel = document.getElementById('profilePanel');
+                                    if (profilePanel) {
+                                        handleProfileEffects(updatedInventory, profilePanel, profileEffectManager);
+                                    }
+
+                                } catch (error) {
+                                    console.error('Error updating item status:', error);
+                                    // Revert toggle if update fails
+                                    e.target.checked = !isEnabled;
+                                }
+                            });
+                        });
+                    }
+                }, (error) => {
+                    console.error('Error listening to inventory changes:', error);
+                });
+
+                return unsubscribe;
+            }
+        });
+    }
+
     // Initialize inventory listeners
     const unsubscribe = attachInventoryListeners();
 
-    // Optional: Clean up listener when component unmounts
+    // Return cleanup function
     return () => {
-        if (unsubscribe) {
+        if (typeof unsubscribe === 'function') {
             unsubscribe();
+        }
+        // Clean up all effects when component unmounts
+        if (profileEffectManager && profileEffectManager.activeEffects) {
+            profileEffectManager.activeEffects.forEach(effect => effect.destroy());
         }
     };
 }
