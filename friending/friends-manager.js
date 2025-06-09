@@ -8,8 +8,6 @@ import {
     showBadgePopup,
 } from '../fun/badges.js';
 
-
-
 // This is for viewing friend's coins
 
 function formatCoins(coins) {
@@ -138,7 +136,6 @@ async function loadFriendRequests() {
     const auth = getAuth();
     const db = getFirestore();
     
-    console.log("Loading friend requests...");
     const currentUser = auth.currentUser;
     if (!currentUser) {
         console.error("No current user found");
@@ -156,7 +153,6 @@ async function loadFriendRequests() {
         }
         
         const userData = userDoc.data();
-        console.log("User data loaded:", userData);
         
         // Clear existing notifications
         frNotificationContainer.innerHTML = '';
@@ -203,7 +199,6 @@ async function loadFriendRequests() {
                         `;
                         
                         frNotificationContainer.appendChild(friendRequestnotification);
-                        console.log("Added notification to DOM");
                     } catch (innerError) {
                         console.error("Error processing request:", innerError);
                     }
@@ -211,12 +206,10 @@ async function loadFriendRequests() {
             } else {
                 // No pending requests
                 frNotificationContainer.innerHTML = '<p style="color: white; padding-left: 20px;">No friend requests</p>';
-                console.log("No pending requests found");
             }
         } else {
             // No friend requests at all
             frNotificationContainer.innerHTML = '<p style="color: white; padding-left: 20px;">No friend requests</p>';
-            console.log("No friend requests array found or it's empty");
         }
     } catch (error) {
         console.error("Error in loadFriendRequests:", error);
@@ -900,6 +893,12 @@ function openFriendProfile(userId, username) {
     // Ensure the panel exists in the DOM
     addFriendProfilePanelToDOM();
     
+    // Clean up any existing effects before opening - now targeting the entire panel
+    const friendProfilePanel = document.getElementById('friendProfilePanel');
+    if (friendProfilePanel && window.friendProfileEffectManager) {
+        window.friendProfileEffectManager.removeAllEffectsFromProfile(friendProfilePanel);
+    }
+    
     // Get profile information
     getFriendProfileInfo(userId, username).then(() => {
         const friendProfilePanel = document.getElementById('friendProfilePanel');
@@ -927,12 +926,18 @@ function openFriendProfile(userId, username) {
     });
 }
 
+
 // Function to close friend profile panel
 function closeFriendProfilePanel() {
     const friendProfilePanel = document.getElementById('friendProfilePanel');
     const friendProfilePanelOverlay = document.getElementById('friendProfilePanelOverlay');
     
     if (friendProfilePanel && friendProfilePanelOverlay) {
+        // Clean up profile effects before closing - now targeting the entire panel
+        if (window.friendProfileEffectManager) {
+            window.friendProfileEffectManager.removeAllEffectsFromProfile(friendProfilePanel);
+        }
+        
         friendProfilePanel.style.opacity = '0';
         friendProfilePanel.style.pointerEvents = 'none';
         friendProfilePanelOverlay.style.opacity = '0';
@@ -953,7 +958,6 @@ async function getFriendProfileInfo(userId, username) {
         }
         
         const friendData = friendDoc.data();
-
 
         // Update badges section
         const badgesContainer = document.querySelector('.badges-container-fp');
@@ -992,18 +996,12 @@ async function getFriendProfileInfo(userId, username) {
             badgesContainer.innerHTML = '<p style="color: white; margin: 0; text-align: center;">No badges earned</p>';
         }
 
-
-
-
-        
         // Update profile panel with friend's information
         const fpUserInfo = document.getElementById('fp-user-info');
         fpUserInfo.innerHTML = `
             <img src="${friendData.profilePicture || 'https://www.gravatar.com/avatar/?d=mp'}" alt="Profile">
             <p>${friendData.username}</p>
         `;
-
-
 
         // Update coins section
         const coinsElement = document.getElementById('coins-fp');
@@ -1017,7 +1015,6 @@ async function getFriendProfileInfo(userId, username) {
             coinsElement.style.cursor = 'help';
         }
 
-
         // Update day streak section
         const streakElement = document.getElementById('streak-fp');
         const currentStreak = friendData.dayStreak || 0;
@@ -1027,7 +1024,6 @@ async function getFriendProfileInfo(userId, username) {
             streakElement.setAttribute('title', `${friendData.username}'s current login streak`);
             streakElement.style.cursor = 'help';
         }
-
         
         // Apply the friend's banner if available
         if (friendData.bannerURL) {
@@ -1046,8 +1042,8 @@ async function getFriendProfileInfo(userId, username) {
             // Reset to default if no banner is available
             const friendProfileHeader = document.getElementById('friendProfilePanelHeader');
             if (friendProfileHeader) {
-                friendProfileHeader.style.backgroundImage = 'none';
-                friendProfileHeader.style.backgroundColor = "black"; // Or your default color
+                friendProfileHeader.style.backgroundImage = 'url("https://i.pinimg.com/originals/6b/43/c3/6b43c3a7991332d25fb37bf8e0099bf7.gif")';
+                friendProfileHeader.style.backgroundColor = "transparent";
             }
             
             const friendBanner = document.getElementById('friendBanner');
@@ -1102,6 +1098,33 @@ async function getFriendProfileInfo(userId, username) {
         } else {
             // Fallback if creation date is not available
             accCreationElement.textContent = 'Account creation date not available';
+        }
+
+        // *** Apply friend's profile effects to the entire profile panel ***
+        if (friendProfilePanel && friendData.inventory) {
+            // Import the profile effect functions
+            const { handleProfileEffects, ProfileEffectManager } = await import('../fun/profile-effects/profile-effects-manager.js');
+            
+            // Create a new effect manager for the friend's profile
+            if (!window.friendProfileEffectManager) {
+                window.friendProfileEffectManager = new ProfileEffectManager();
+            }
+            
+            // Clear any existing effects first from the entire panel
+            window.friendProfileEffectManager.removeAllEffectsFromProfile(friendProfilePanel);
+            
+            // Apply the friend's enabled profile effects to the entire profile panel
+            handleProfileEffects(friendData.inventory || [], friendProfilePanel, window.friendProfileEffectManager);
+            
+            // === ADD SPECIAL FRIEND PROFILE EFFECT HANDLING HERE ===
+            // If you want different behavior for friend profiles vs your own profile:
+            // const specialFriendEffects = friendData.inventory.filter(item => 
+            //     item.category === 'special-friend-effects' && item.enabled
+            // );
+            // specialFriendEffects.forEach(effect => {
+            //     // Handle special friend-only effects
+            // });
+            // === END SPECIAL FRIEND EFFECTS SECTION ===
         }
         
     } catch (error) {
