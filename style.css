@@ -146,7 +146,7 @@ main {
     padding-bottom: 2vh;
     font-family: 'Roboto Mono', sans-serif;
     color: white;
-
+    background-color: black;
     animation: gradientAnimation 6s infinite ease-in-out;
     transition: transform 0.5s ease-in-out, backdrop-filter 0.5s ease-in-out, box-shadow 0.5s ease-in-out, filter 0.5s ease-in-out;
 }
